@@ -48,3 +48,13 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+# Project colour scheme
+
+Brand core:
+* Primary (Yellow): #FFC629 → rgb(255, 198, 41)
+* Secondary (Black): #1D252C → rgb(29, 37, 44)
+* Tertiary (Soft white/Pollen/Gold):
+   - Soft White: #FEFBED → rgb(254, 251, 237)
+   - Pollen: #FFF7DE → rgb(255, 247, 222)
+   - Golden Honey: #E3AA1F → rgb(227, 170, 31)

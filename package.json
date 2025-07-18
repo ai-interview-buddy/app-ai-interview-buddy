@@ -77,7 +77,8 @@
     "eslint-config-expo": "~9.2.0",
     "jscodeshift": "^0.15.2",
     "supabase": "^2.31.4",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "expo-dev-client": "~5.2.4"
   },
   "private": true
 }

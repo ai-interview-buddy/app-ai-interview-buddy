@@ -44,6 +44,12 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="job-position"
+        options={{
+          headerShown: false
+        }}
+      />
     </Tabs>
   );
 }

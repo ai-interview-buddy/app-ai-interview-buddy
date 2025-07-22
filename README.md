@@ -13,9 +13,12 @@ npm install
 2. Start the app
 
 ```bash
+npx supabase start
 npx expo start
 
+adb reverse tcp:54321 tcp:54321
 npx expo run:android
+
 npx expo run:ios
 ```
 
@@ -55,6 +58,26 @@ Join our community of developers creating universal apps.
 # Setup env
 https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&platform=android&device=simulated
 
+# Setup Auth
+
+1. Create a google cloud project and then setup `3` Google OAuth 2.0 Client IDs
+2. `Ai Interview Buddy - Web`: 
+   - The value "Client ID" is used in .env
+   - Also client and secret are used in `supabase/.env`
+   - Important, in the toml file, `skip_nonce_check` should be true
+3. `Ai Interview Buddy - Ios`: The value "iOS URL scheme" it's used in `.env` iosUrlScheme
+4. `Ai Interview Buddy - Android`: The value "Client ID" is used in `android/app/.../strings.xml`
+   - To get the sha1 certificate can be found by: `keytool -keystore ./android/app/debug.keystore -list -v`
+   - The password is default, `android`
+   - Then use the value SHA1
+
+References:
+- https://react-native-google-signin.github.io/docs/install
+- https://www.youtube.com/watch?v=vojHmGUGUGc
+- https://supabase.com/docs/guides/auth/social-login/auth-google
+- https://developers.google.com/android/guides/client-auth
+- https://github.com/flemingvincent/expo-supabase-starter/blob/main/context/supabase-provider.tsx
+
 # Project colour scheme
 
 Brand core:
@@ -64,3 +87,8 @@ Brand core:
    - Soft White: #FEFBED → rgb(254, 251, 237)
    - Pollen: #FFF7DE → rgb(255, 247, 222)
    - Golden Honey: #E3AA1F → rgb(227, 170, 31)
+
+ # Backlog
+ - [ ] Seed two fake users in supabase with demo data and create a login option
+ - [ ] Create the onboarding experience and use the variable hasCompletedOnboarding
+ - [ ] Add authentication with LinkedIn

@@ -1,7 +1,5 @@
 {
   "expo": {
-    "name": "app-ai-interview-buddy",
-    "slug": "app-ai-interview-buddy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

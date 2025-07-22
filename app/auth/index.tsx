@@ -1,66 +1,60 @@
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
-import { HStack } from "@/components/ui/hstack";
-import { LinkText } from "@/components/ui/link";
+import GoogleAuth from "@/components/auth/GoogleAuth";
+import { ItemListBox } from "@/components/boxes/ItemListBox";
+import { RoundedShadowBox } from "@/components/boxes/RoundedShadowBox";
+import { FancyContainer } from "@/components/container/FancyContainer";
+import { LogoRadialBg } from "@/components/logo/LogoRadialBg";
+import { Box } from "@/components/ui/box";
+import { ExternalLink } from "@/components/ui/external-link";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 
-import { GoogleIcon } from "@/components/ui/custom-icons/google";
-import { Image } from "@/components/ui/image";
-import { Link } from "expo-router";
-import React from "react";
-import { ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-export const SignIn = () => {
+export default function PremiumLogin() {
   return (
-        <SafeAreaView className="w-full h-full">
-      <ScrollView className="w-full h-full" contentContainerStyle={{ flexGrow: 1 }}>
-        <HStack className="w-full h-full bg-background-0 flex-grow justify-center">
-          <VStack className="relative hidden md:flex h-full w-full flex-1  items-center  justify-center" space="md">
-            <Image source={require("@/assets/images/radialGradient.png")} className="object-cover h-full w-full" alt="Radial Gradient" />
-          </VStack>
-          <VStack className="md:items-center md:justify-center flex-1 w-full  p-9 md:gap-10 gap-16 md:m-auto md:w-1/2 h-full">
-            <VStack className="max-w-[440px] w-full" space="md">
-              <VStack className="md:items-center" space="md">
-          
-                <VStack>
-                  <Heading className="md:text-center" size="3xl">
-                    Log in
-                  </Heading>
-                  <Text>Login to start using gluestack</Text>
-                </VStack>
-              </VStack>
-              <VStack className="w-full">
-         
-                <VStack className="w-full my-7 " space="lg">
-                  <Button className="w-full" onPress={() => console.log("clicked")}>
-                    <ButtonText className="font-medium">Log in</ButtonText>
-                  </Button>
-                  <Button variant="outline" action="secondary" className="w-full gap-1" onPress={() => {}}>
-                    <ButtonText className="font-medium">Continue with Google</ButtonText>
-                    <ButtonIcon as={GoogleIcon} />
-                  </Button>
-                </VStack>
-                <HStack className="self-center" space="sm">
-                  <Text size="md">Don't have an account?</Text>
-                  <Link href="/" asChild>
-                    <LinkText
-                      className="font-medium text-primary-700 group-hover/link:text-primary-600  group-hover/pressed:text-primary-700"
-                      size="md"
-                    >
-                      Sign up
-                    </LinkText>
-                  </Link>
-                </HStack>
-              </VStack>
+    <FancyContainer>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1">
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="px-6 pt-20 pb-10" showsVerticalScrollIndicator={false}>
+          <Box className="items-center mb-12">
+            <LogoRadialBg />
+            <Text className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2" numberOfLines={1} adjustsFontSizeToFit={false}>
+              AI Interview Buddy
+            </Text>
+            <Text className="text-base font-medium dark:text-yellow-300 text-yellow-600 text-center">
+              Master your next interview with AI
+            </Text>
+          </Box>
+          <RoundedShadowBox>
+            <View className="mb-10 items-center">
+              <Text className="text-2xl font-extrabold dark:text-white text-gray-900 mb-3">Welcome</Text>
+              <Text className="text-sm font-medium text-gray-800 dark:text-gray-200 text-center leading-6 opacity-80">
+                Choose your preferred way to continue
+              </Text>
+            </View>
+
+            <VStack className="pb-4" space="md">
+              <GoogleAuth />
             </VStack>
-          </VStack>
-        </HStack>
-      </ScrollView>
-    </SafeAreaView>
+
+            <ItemListBox
+              title="What you'll get:"
+              items={["AI-powered interview practice", "Personalized feedback & tips", "Track your progress"]}
+            />
+          </RoundedShadowBox>
+
+          <View className="px-4 items-center">
+            <Text className="text-xs font-medium text-yellow-600 dark:text-yellow-300 opacity-80 text-center leading-5">
+              By continuing, you agree to our{" "}
+              <ExternalLink href="https://aiinterviewbuddy.com/terms-of-service" className="text-yellow-600 dark:text-yellow-300">
+                Terms of Service
+              </ExternalLink>{" "}
+              and{" "}
+              <ExternalLink href="https://aiinterviewbuddy.com/privacy-policy" className="text-yellow-600 dark:text-yellow-300">
+                Privacy Policy
+              </ExternalLink>
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </FancyContainer>
   );
-};
-
-export default SignIn;
-
+}

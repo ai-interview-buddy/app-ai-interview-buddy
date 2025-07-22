@@ -52,7 +52,7 @@ export default function Index() {
             </Link>
           </Box>
           <Box className="flex flex-row">
-            <Link href="/auth/signin"  asChild>
+            <Link href="/auth"  asChild>
               <Button action="primary">
                 <ButtonText>B1</ButtonText>
               </Button>

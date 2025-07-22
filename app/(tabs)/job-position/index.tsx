@@ -1,3 +1,4 @@
+import { MainContainer } from "@/components/container/MainContainer";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack } from "expo-router";
 import { useColorScheme } from "nativewind";
@@ -369,9 +370,7 @@ const JobPositionList: React.FC = () => {
     <>
       <Stack.Screen options={{ headerShown: false }} />
 
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
-        <StatusBar barStyle={barStyle} backgroundColor="#FEFBED" />
-
+      <MainContainer>
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={["#FFC629"]} tintColor="#FFC629" />}
@@ -472,10 +471,9 @@ const JobPositionList: React.FC = () => {
         >
           <Ionicons name="add" size={32} color="#1D252C" />
         </TouchableOpacity>
-      </SafeAreaView>
+      </MainContainer>
     </>
   );
 };
 
 export default JobPositionList;
-

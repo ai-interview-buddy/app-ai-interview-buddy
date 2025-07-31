@@ -1,9 +1,10 @@
 import { MainContainer } from "@/components/container/MainContainer";
+import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
-import { Alert, Image, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 // Types
 type FeedbackStatus = "NEW" | "UPLOADING" | "PROCESSING" | "ANALYSING" | "FAILED" | "FINISHED";
@@ -603,12 +604,11 @@ const JobPositionDetails: React.FC = () => {
 
   if (loading || !jobPosition) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
-        <StatusBar barStyle={barStyle} backgroundColor="#FEFBED" />
+      <MainContainer>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <Text style={{ fontSize: 16, color: "#6B7280", fontWeight: "500" }}>Loading position details...</Text>
         </View>
-      </SafeAreaView>
+      </MainContainer>
     );
   }
 
@@ -616,48 +616,7 @@ const JobPositionDetails: React.FC = () => {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
-        {/* Navigation Header */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            paddingTop: 16,
-            paddingBottom: 24,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 1,
-            }}
-          >
-            <Ionicons name="chevron-back" size={24} color="#1D252C" />
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "700",
-              color: "#1D252C",
-            }}
-          >
-            Position Details
-          </Text>
-
-          <View style={{ width: 40 }} />
-        </View>
+        <TitleBackHeader pageTitle="details" />
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
           {renderHeader()}

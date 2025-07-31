@@ -14,6 +14,7 @@ npm install
 
 ```bash
 npx supabase start
+npx supabase functions serve
 npx expo start
 
 adb reverse tcp:54321 tcp:54321
@@ -58,6 +59,26 @@ Join our community of developers creating universal apps.
 # Setup env
 https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&platform=android&device=simulated
 
+# Supabase
+
+```
+# start/restart
+npx supabase stop && npx supabase start
+
+# db migrations
+npx supabase migration new career-profiles
+npx supabase migration up 
+
+# functions
+npx supabase functions new api
+npx supabase functions serve
+
+# functions debugging 
+npx supabase functions serve --inspect-mode brk
+chrome://inspect/
+-> 127.0.0.1:54321
+```
+
 # Setup Auth
 
 1. Create a google cloud project and then setup `3` Google OAuth 2.0 Client IDs
@@ -92,3 +113,7 @@ Brand core:
  - [ ] Seed two fake users in supabase with demo data and create a login option
  - [ ] Create the onboarding experience and use the variable hasCompletedOnboarding
  - [ ] Add authentication with LinkedIn
+ - [ ] Delete account, removing db-data, storage files, auth user
+ - [ ] Use uppy to upload big files https://github.com/transloadit/uppy/tree/main/examples/react-native-expo
+-  [ ] Change the "delete" career track option to allow replacing positions that uses it
+-  [ ] Add a feature to re-import and re-process a cv

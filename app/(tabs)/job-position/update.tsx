@@ -1,4 +1,5 @@
 import { MainContainer } from "@/components/container/MainContainer";
+import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { FormControl, FormControlError, FormControlErrorText, FormControlLabel, FormControlLabelText } from "@/components/ui/form-control";
 import { ChevronDownIcon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
@@ -15,11 +16,10 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
-import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useEffect, useState } from "react";
-import { Alert, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 // Types
 type CareerTrack = "FRONTEND" | "BACKEND" | "FULLSTACK" | "MOBILE" | "DEVOPS" | "DATA" | "DESIGN" | "PRODUCT" | "QA";
@@ -197,70 +197,18 @@ const UpdateJobPosition: React.FC = () => {
 
   if (loading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
-        <StatusBar barStyle={barStyle} backgroundColor="#FEFBED" />
+      <MainContainer>
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <Text style={{ fontSize: 16, color: "#6B7280", fontWeight: "500" }}>Loading position details...</Text>
         </View>
-      </SafeAreaView>
+      </MainContainer>
     );
   }
 
   return (
     <MainContainer>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-        {/* Header */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            paddingTop: 16,
-            paddingBottom: 24,
-          }}
-        >
-          <TouchableOpacity
-            onPress={handleCancel}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: "white",
-              justifyContent: "center",
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.05,
-              shadowRadius: 4,
-              elevation: 1,
-            }}
-          >
-            <Ionicons name="chevron-back" size={24} color="#1D252C" />
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "700",
-              color: "#1D252C",
-            }}
-          >
-            Update Position
-          </Text>
-
-          <TouchableOpacity onPress={handleCancel} style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "600",
-                color: "#6B7280",
-              }}
-            >
-              Cancel
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <TitleBackHeader pageTitle="Update Position" />
 
         <ScrollView
           style={{ flex: 1 }}

@@ -12,8 +12,9 @@ import {
 } from "./supabaseLogin";
 
 export type UserInfo = {
-  accessToken: string;
+  id: string;
   name: string;
+  accessToken: string;
   avatar?: string;
   expiresAt?: number;
 };

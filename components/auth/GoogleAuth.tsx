@@ -46,7 +46,7 @@ export default function GoogleAuth() {
       <ButtonText className="ml-2">
         <Box className="flex flex-row place-items-center gap-1">
           <IconGoogle />
-          <Text className="flex-1 text-base font-bold dark:text-white text-gray-900 tracking-wide">Continue with Google tsx</Text>
+          <Text className="flex-1 text-base font-bold dark:text-white text-gray-900 tracking-wide">Continue with Google</Text>
           <IconArrowForward />
         </Box>
       </ButtonText>

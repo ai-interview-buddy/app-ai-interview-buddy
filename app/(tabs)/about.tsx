@@ -1,19 +1,10 @@
+import { MainContainer } from "@/components/container/MainContainer";
+import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 type CreationMethod = "url" | "description" | null;
 
@@ -374,144 +365,79 @@ const CreateJobPosition: React.FC = () => {
   );
 
   return (
-    <>
-      <Stack.Screen options={{ headerShown: false }} />
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
-        <StatusBar barStyle={barStyle} backgroundColor="#FEFBED" />
+    <MainContainer>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <TitleBackHeader pageTitle="New Position" />
 
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-          {/* Header */}
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            paddingBottom: 40,
+            flexGrow: 1,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          {renderStepIndicator()}
+
+          {currentStep === 1 ? renderStep1() : renderStep2()}
+        </ScrollView>
+
+        {/* Bottom Action Button - Only show in Step 2 */}
+        {currentStep === 2 && (
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
               paddingHorizontal: 20,
-              paddingTop: 16,
-              paddingBottom: 24,
+              paddingVertical: 20,
+              backgroundColor: "#FEFBED",
             }}
           >
             <TouchableOpacity
-              onPress={currentStep === 1 ? undefined : handleBack}
+              onPress={handleSave}
+              disabled={isLoading}
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: "white",
+                backgroundColor: "#FFC629",
+                borderRadius: 16,
+                paddingVertical: 18,
                 justifyContent: "center",
                 alignItems: "center",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 1,
-                opacity: currentStep === 1 ? 0.5 : 1,
-              }}
-              disabled={currentStep === 1}
-            >
-              <Ionicons name="chevron-back" size={24} color="#1D252C" />
-            </TouchableOpacity>
-
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "700",
-                color: "#1D252C",
+                shadowColor: "#FFC629",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 8,
+                elevation: 4,
+                opacity: isLoading ? 0.7 : 1,
               }}
             >
-              New Position
-            </Text>
-
-            <Link href="/" asChild>
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 8,
-                  paddingHorizontal: 16,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "600",
-                    color: "#6B7280",
-                  }}
-                >
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            </Link>
-          </View>
-
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{
-              paddingHorizontal: 20,
-              paddingBottom: 40,
-              flexGrow: 1,
-            }}
-            showsVerticalScrollIndicator={false}
-          >
-            {renderStepIndicator()}
-
-            {currentStep === 1 ? renderStep1() : renderStep2()}
-          </ScrollView>
-
-          {/* Bottom Action Button - Only show in Step 2 */}
-          {currentStep === 2 && (
-            <View
-              style={{
-                paddingHorizontal: 20,
-                paddingVertical: 20,
-                backgroundColor: "#FEFBED",
-              }}
-            >
-              <TouchableOpacity
-                onPress={handleSave}
-                disabled={isLoading}
-                style={{
-                  backgroundColor: "#FFC629",
-                  borderRadius: 16,
-                  paddingVertical: 18,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  shadowColor: "#FFC629",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 8,
-                  elevation: 4,
-                  opacity: isLoading ? 0.7 : 1,
-                }}
-              >
-                {isLoading ? (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        fontWeight: "700",
-                        color: "#1D252C",
-                        marginRight: 12,
-                      }}
-                    >
-                      Processing...
-                    </Text>
-                  </View>
-                ) : (
+              {isLoading ? (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Text
                     style={{
                       fontSize: 18,
                       fontWeight: "700",
                       color: "#1D252C",
+                      marginRight: 12,
                     }}
                   >
-                    Save Position
+                    Processing...
                   </Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          )}
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </>
+                </View>
+              ) : (
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: "700",
+                    color: "#1D252C",
+                  }}
+                >
+                  Save Position
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
+      </KeyboardAvoidingView>
+    </MainContainer>
   );
 };
 

@@ -1,7 +1,6 @@
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
-import { LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 
@@ -43,12 +42,7 @@ export const SignIn = () => {
                 <HStack className="self-center" space="sm">
                   <Text size="md">Don't have an account?</Text>
                   <Link href="/" asChild>
-                    <LinkText
-                      className="font-medium text-primary-700 group-hover/link:text-primary-600  group-hover/pressed:text-primary-700"
-                      size="md"
-                    >
-                      Sign up
-                    </LinkText>
+                    Sign up
                   </Link>
                 </HStack>
               </VStack>

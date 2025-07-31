@@ -3,6 +3,7 @@
     "@openai/agents": "npm:@openai/agents@^0.0.13",
     "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.52.1",
     "@supabase/functions-js": "jsr:@supabase/functions-js@^2.4.5",
+    "@types/express": "npm:@types/express@^5.0.3",
     "camelcase-keys": "npm:camelcase-keys@^9.1.3",
     "express": "npm:express@^5.1.0",
     "pdfjs-serverless": "npm:pdfjs-serverless@0.4.2",

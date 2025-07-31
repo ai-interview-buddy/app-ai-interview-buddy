@@ -28,11 +28,13 @@ export const useCareerProfile = (token?: string, id?: string): UseQueryResult<Ca
 };
 
 const invalidateQueries = (queryClient: QueryClient, id: string) => {
-  // revalide useCareerProfiles
+  // CareerProfile
   queryClient.invalidateQueries({ queryKey: ["career-profiles"] });
-
-  // revalide useCareerProfile
   queryClient.invalidateQueries({ queryKey: ["career-profile", id] });
+
+  // JobPosition
+  queryClient.invalidateQueries({ queryKey: ["job-positions"] });
+  queryClient.invalidateQueries({ queryKey: ["job-position"] });
 };
 
 export const useCreateCareerProfile = (queryClient: QueryClient, token?: string) => {

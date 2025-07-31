@@ -1,7 +1,7 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
 import React, { useState } from "react";
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -365,79 +365,83 @@ const CreateJobPosition: React.FC = () => {
   );
 
   return (
-    <MainContainer>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-        <TitleBackHeader pageTitle="New Position" />
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
 
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{
-            paddingHorizontal: 20,
-            paddingBottom: 40,
-            flexGrow: 1,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          {renderStepIndicator()}
+      <MainContainer>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
+          <TitleBackHeader pageTitle="New Position" handleBack={() => handleBack()} />
 
-          {currentStep === 1 ? renderStep1() : renderStep2()}
-        </ScrollView>
-
-        {/* Bottom Action Button - Only show in Step 2 */}
-        {currentStep === 2 && (
-          <View
-            style={{
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{
               paddingHorizontal: 20,
-              paddingVertical: 20,
-              backgroundColor: "#FEFBED",
+              paddingBottom: 40,
+              flexGrow: 1,
             }}
+            showsVerticalScrollIndicator={false}
           >
-            <TouchableOpacity
-              onPress={handleSave}
-              disabled={isLoading}
+            {renderStepIndicator()}
+
+            {currentStep === 1 ? renderStep1() : renderStep2()}
+          </ScrollView>
+
+          {/* Bottom Action Button - Only show in Step 2 */}
+          {currentStep === 2 && (
+            <View
               style={{
-                backgroundColor: "#FFC629",
-                borderRadius: 16,
-                paddingVertical: 18,
-                justifyContent: "center",
-                alignItems: "center",
-                shadowColor: "#FFC629",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 8,
-                elevation: 4,
-                opacity: isLoading ? 0.7 : 1,
+                paddingHorizontal: 20,
+                paddingVertical: 20,
+                backgroundColor: "#FEFBED",
               }}
             >
-              {isLoading ? (
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity
+                onPress={handleSave}
+                disabled={isLoading}
+                style={{
+                  backgroundColor: "#FFC629",
+                  borderRadius: 16,
+                  paddingVertical: 18,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  shadowColor: "#FFC629",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 8,
+                  elevation: 4,
+                  opacity: isLoading ? 0.7 : 1,
+                }}
+              >
+                {isLoading ? (
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "700",
+                        color: "#1D252C",
+                        marginRight: 12,
+                      }}
+                    >
+                      Processing...
+                    </Text>
+                  </View>
+                ) : (
                   <Text
                     style={{
                       fontSize: 18,
                       fontWeight: "700",
                       color: "#1D252C",
-                      marginRight: 12,
                     }}
                   >
-                    Processing...
+                    Save Position
                   </Text>
-                </View>
-              ) : (
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "700",
-                    color: "#1D252C",
-                  }}
-                >
-                  Save Position
-                </Text>
-              )}
-            </TouchableOpacity>
-          </View>
-        )}
-      </KeyboardAvoidingView>
-    </MainContainer>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
+        </KeyboardAvoidingView>
+      </MainContainer>
+    </>
   );
 };
 

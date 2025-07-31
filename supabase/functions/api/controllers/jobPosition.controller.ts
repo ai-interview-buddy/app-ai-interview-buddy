@@ -1,0 +1,44 @@
+import { Request, Response } from "express";
+import * as service from "../services/jobPosition.service.ts";
+import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
+
+export const getAll = async (req: Request, res: Response) => {
+  const { data, error } = await service.getAll(req.supabase);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+};
+
+export const getById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { data, error } = await service.getById(req.supabase, id);
+  if (error) return res.status(404).json({ error: error.message });
+  res.json(data);
+};
+
+export const createByUrl = async (req: Request, res: Response) => {
+  const payload = req.body as JobPositionCreateByUrl;
+  const { data, error } = await service.createByUrl(req.supabase, req.user, payload);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(201).json(data);
+};
+
+export const createByDescription = async (req: Request, res: Response) => {
+  const payload = req.body as JobPositionCreateByDescription;
+  const { data, error } = await service.createByDescription(req.supabase, req.user, payload);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(201).json(data);
+};
+
+export const update = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { data, error } = await service.update(req.supabase, id, req.body);
+  if (error) return res.status(400).json({ error: error.message });
+  res.json(data);
+};
+
+export const remove = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { error } = await service.remove(req.supabase, id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).send();
+};

@@ -27,12 +27,12 @@ ${pdfContent.content}
 `;
 
 export const cvScoringWeight = {
-  ats: 0.3,          // ATS: 30%, 
-  content: 0.25,     // Content: 25% 
-  structure: 0.2,    // Structure: 20%
-  grammar: 0.15,     // Grammar: 25%
-  pages: 0.1,        // Length: 10%
-}
+  ats: 0.3, // ATS: 30%,
+  content: 0.25, // Content: 25%
+  structure: 0.2, // Structure: 20%
+  grammar: 0.15, // Grammar: 25%
+  pages: 0.1, // Length: 10%
+};
 
 const FeedbackItemSchema = z.object({
   item: z.enum(["ats", "grammar", "pages", "structure", "content"]),
@@ -45,14 +45,14 @@ const OverallSchema = z.object({
   jobTitle: z.string(),
 });
 
-export async function cvScoringAgent(pdfContent: PdfContent) {
-  const agent = new Agent({
-    name: "CV Scoring",
-    model: "gpt-4.1",
-    outputType: OverallSchema,
-    instructions: prompt,
-  });
+const agent = new Agent({
+  name: "CV Scoring",
+  model: "gpt-4.1",
+  outputType: OverallSchema,
+  instructions: prompt,
+});
 
+export async function cvScoringAgent(pdfContent: PdfContent) {
   const content = userMessage(pdfContent);
   const result = await run(agent, [{ role: "user", content: content }]);
 

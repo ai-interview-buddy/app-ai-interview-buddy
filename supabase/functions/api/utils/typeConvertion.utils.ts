@@ -1,31 +1,8 @@
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import camelcaseKeys from "npm:camelcase-keys";
 import snakecaseKeys from "npm:snakecase-keys";
-import { ServiceResponse, ServiceResponseFailure, ServiceError } from "../types/ServiceResponse.ts";
-import { PostgrestResponseFailure } from "npm:@supabase/postgrest-js@1.19.4";
-import { StorageError } from "npm:@supabase/storage-js@2.7.1";
-
-const convertPostgrestError = <T>(query: PostgrestResponseFailure): ServiceResponseFailure => {
-  const error = new ServiceError({
-    message: query.error.message,
-    details: query.error.details,
-    hint: query.error.hint,
-    code: query.error.code,
-  });
-
-  return { error, data: null, count: null };
-};
-
-export const convertStorageError = (error: StorageError): ServiceResponseFailure => {
-  const serviceError = new ServiceError({
-    message: error.message,
-    details: error.cause,
-    hint: undefined,
-    code: undefined,
-  });
-
-  return { error: serviceError, data: null, count: null };
-};
+import { ServiceResponse } from "../types/ServiceResponse.ts";
+import { convertPostgrestError } from "./error.utils.ts";
 
 export const convertOne = <T>(query: PostgrestSingleResponse<Record<string, unknown>>): ServiceResponse<T> => {
   if (query.error) return convertPostgrestError(query);

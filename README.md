@@ -61,7 +61,7 @@ https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-buil
 
 # Supabase
 
-```
+```sh
 # start/restart
 npx supabase stop && npx supabase start
 

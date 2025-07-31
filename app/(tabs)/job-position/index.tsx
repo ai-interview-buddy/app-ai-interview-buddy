@@ -83,7 +83,7 @@ const JobPositionList: React.FC = () => {
           )}
         </ScrollView>
 
-        <FloatingActionLink href="/(tabs)/career-profile/create" />
+        <FloatingActionLink href="/about" />
       </MainContainer>
     </>
   );

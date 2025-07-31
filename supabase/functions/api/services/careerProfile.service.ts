@@ -2,8 +2,9 @@ import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
 import { cvScoringAgent, cvScoringWeight } from "../agents/cvScoring.agent.ts";
 import { CareerProfile, CareerProfileCreate, CareerProfileUpdate } from "../types/CareerProfile.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
+import { convertStorageError } from "../utils/error.utils.ts";
 import { readPdf } from "../utils/pdf.utils.ts";
-import { convertMany, convertOne, convertStorageError, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
+import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
 
 export const getAll = async (supabase: SupabaseClient): Promise<ServiceResponse<CareerProfile[]>> => {
   const query = await supabase.from("career_profile").select("id,title,curriculum_path,curriculum_score,updated_at");

@@ -15,6 +15,7 @@
     "@expo/react-native-action-sheet": "^4.1.1",
     "@expo/vector-icons": "^14.1.0",
     "@gluestack-ui/actionsheet": "^0.2.53",
+    "@gluestack-ui/avatar": "^0.1.18",
     "@gluestack-ui/button": "^1.0.14",
     "@gluestack-ui/checkbox": "^0.1.39",
     "@gluestack-ui/form-control": "^0.1.19",

@@ -1,0 +1,41 @@
+@base_url = http://127.0.0.1:54321/functions/v1
+@token = ADD_TOKEN_HERE
+
+
+### List all career profiles
+GET {{base_url}}/api/career-profiles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get a specific career profile
+GET {{base_url}}/api/career-profiles/9ba19541-8c9d-4984-9350-e654b4df780d
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Download a career profile PDF
+GET {{base_url}}/api/career-profiles/3fbca1ec-b761-4359-9cc8-39e831b55cf0/download
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Create a career profile with curriculumPath
+POST {{base_url}}/api/career-profiles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "curriculumPath": "2d94e0e4-a15c-400b-bebb-922e6f27b225/1753652782218.pdf"
+}
+
+### Update a career profile
+PATCH {{base_url}}/api/career-profiles/3fbca1ec-b761-4359-9cc8-39e831b55cf0
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Software engineer x5"
+}
+
+### Delete a career profile
+DELETE {{base_url}}/api/career-profiles/9ba19541-8c9d-4984-9350-e654b4df780d
+Content-Type: application/json
+Authorization: Bearer {{token}}

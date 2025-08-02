@@ -3,27 +3,27 @@ import { Text, TouchableOpacity, View } from "react-native";
 
 type MainActionProps = {
   disabled?: boolean;
-  uploading?: boolean;
+  isLoading?: boolean;
   children?: ReactNode;
-  uploadingText?: ReactNode;
+  loadingText?: ReactNode;
   onPress: () => Promise<void>;
 };
 
 export const MainAction = ({
   disabled = false,
-  uploading = false,
+  isLoading = false,
   children = <>Save</>,
-  uploadingText = <>Analyzing CV...</>,
+  loadingText = <>Analyzing CV...</>,
   onPress,
 }: MainActionProps) => {
-  const isActive = !disabled && !uploading;
+  const isActive = !disabled && !isLoading;
 
-  const backgroundColor = isActive ? "#FFC629" : uploading ? "#FFD876" : "#E5E7EB";
+  const backgroundColor = isActive ? "#FFC629" : isLoading ? "#FFD876" : "#E5E7EB";
   const textColor = disabled ? "#9CA3AF" : "#1D252C";
 
   const shadowOpacity = isActive ? 0.3 : 0;
   const elevation = isActive ? 4 : 0;
-  const buttonOpacity = uploading ? 0.7 : 1;
+  const buttonOpacity = isLoading ? 0.7 : 1;
 
   return (
     <TouchableOpacity
@@ -44,7 +44,7 @@ export const MainAction = ({
         opacity: buttonOpacity,
       }}
     >
-      {uploading ? (
+      {isLoading ? (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text
             style={{
@@ -54,7 +54,7 @@ export const MainAction = ({
               marginRight: 12,
             }}
           >
-            {uploadingText}
+            {loadingText}
           </Text>
         </View>
       ) : (

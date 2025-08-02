@@ -22,9 +22,9 @@ const JobPositionList: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<JobPositionFilterType>("all");
 
   // Filter counts
-  const allCount = data?.filter((p) => !p.archived).length;
-  const offersCount = data?.filter((p) => p.offerReceived).length;
-  const archivedCount = data?.filter((p) => p.archived).length;
+  const allCount = data?.filter((p) => !p.archived).length || 0;
+  const offersCount = data?.filter((p) => p.offerReceived).length || 0;
+  const archivedCount = data?.filter((p) => p.archived).length || 0;
 
   if (isLoading) {
     return <PageLoading />;
@@ -83,7 +83,7 @@ const JobPositionList: React.FC = () => {
           )}
         </ScrollView>
 
-        <FloatingActionLink href="/about" />
+        <FloatingActionLink href="/job-position/create-step1" />
       </MainContainer>
     </>
   );

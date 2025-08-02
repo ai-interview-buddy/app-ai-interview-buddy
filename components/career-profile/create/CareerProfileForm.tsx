@@ -239,8 +239,8 @@ const CareerProfileForm = ({
         <MainAction
           onPress={handleSave}
           disabled={uploading || !selectedFile || selectedFile.canceled}
-          uploading={uploading}
-          uploadingText={<>Analyzing CV...</>}
+          isLoading={uploading}
+          loadingText={<>Analyzing CV...</>}
         />
 
         {/* Supported formats info */}

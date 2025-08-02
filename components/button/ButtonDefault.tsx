@@ -1,6 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import { Text, TouchableOpacity } from "react-native";
-import { ButtonMainProps } from "./ButtonMain";
+import { ButtonMainLinkProps, ButtonMainProps } from "./ButtonMain";
+
+export const ButtonDefaultLink = ({ label, icon, disabled = false, visible, href, flex = 1 }: ButtonMainLinkProps) => {
+  return (
+    <Link href={href} push asChild>
+      <ButtonDefault label={label} icon={icon} disabled={disabled} visible={visible} flex={flex} />
+    </Link>
+  );
+};
 
 export const ButtonDefault = ({ label, onPress, icon, visible, disabled, flex = 1 }: ButtonMainProps) => {
   if (visible == false) return null;

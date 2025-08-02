@@ -1,8 +1,8 @@
-import { Avatar, AvatarFallbackText, AvatarImage } from "@/components/ui/avatar";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import { Link } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { JobPositionCompanyAvatar } from "../JobPositionCompanyAvatar";
 
 type JobPositionItemProps = {
   item: JobPosition;
@@ -10,7 +10,7 @@ type JobPositionItemProps = {
 
 export const JobPositionItem = ({ item }: JobPositionItemProps) => {
   return (
-    <Link href="/(tabs)/job-position/details" key={item.id} push asChild>
+    <Link href={`/job-position/${item.id}`} key={item.id} push asChild>
       <TouchableOpacity
         style={{
           marginHorizontal: 20,
@@ -26,13 +26,7 @@ export const JobPositionItem = ({ item }: JobPositionItemProps) => {
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-          <Avatar size="md" style={{ backgroundColor: "#F3F4F6", marginRight: 16 }}>
-            {item.companyLogo ? (
-              <AvatarImage resizeMode="contain" source={{ uri: item.companyLogo }} />
-            ) : (
-              <AvatarFallbackText style={{ color: "#1D252C" }}>{item.companyName}</AvatarFallbackText>
-            )}
-          </Avatar>
+          <JobPositionCompanyAvatar record={item} />
 
           <View style={{ flex: 1 }}>
             <View

@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Href, Link } from "expo-router";
 import { Text, TouchableOpacity } from "react-native";
 
 export type ButtonMainProps = {
@@ -8,6 +9,23 @@ export type ButtonMainProps = {
   disabled?: boolean;
   flex?: number | false;
   onPress?: () => void;
+};
+
+export type ButtonMainLinkProps = {
+  label?: string;
+  icon?: keyof typeof Ionicons.glyphMap;
+  visible?: boolean;
+  disabled?: boolean;
+  flex?: number | false;
+  href: Href;
+};
+
+export const ButtonMainLink = ({ label, icon, disabled = false, visible, href, flex = 1 }: ButtonMainLinkProps) => {
+  return (
+    <Link href={href} push asChild>
+      <ButtonMain label={label} icon={icon} disabled={disabled} visible={visible} flex={flex} />
+    </Link>
+  );
 };
 
 export const ButtonMain = ({ label, icon, disabled = false, visible, onPress, flex = 1 }: ButtonMainProps) => {

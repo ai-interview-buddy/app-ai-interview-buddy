@@ -39,7 +39,7 @@ export default function CreateStep2Url() {
           profileId: value.profileId.trim(),
           jobUrl: value.jobUrl.trim(),
         });
-        router.push(`/(tabs)/job-position/details/${saved.id}`);
+        router.push(`/(tabs)/job-position/${saved.id}`);
       } catch (err) {
         console.error(err);
         AlertPolyfill("Error", "Failed to create job position. Please try again.");

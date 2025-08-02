@@ -20,7 +20,7 @@ import { Alert, Platform, ScrollView, Text, View } from "react-native";
 
 const CareerProfileDetails = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams(); // from /career-profile/details/[id]
+  const { id } = useLocalSearchParams(); 
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
 
@@ -28,12 +28,12 @@ const CareerProfileDetails = () => {
   const [showRename, setShowRename] = useState(false);
 
   const { data: record, isLoading, error } = useCareerProfile(user?.accessToken, id as string);
-  const { mutateAsync } = useUpdateCareerProfile(queryClient, user?.accessToken);
+  const { mutateAsync: updateMutateAsync } = useUpdateCareerProfile(queryClient, user?.accessToken);
   const { mutateAsync: deleteMutateAsync } = useDeleteCareerProfile(queryClient, user?.accessToken);
 
   const handleRename = async (newValue: string) => {
     try {
-      await mutateAsync({
+      await updateMutateAsync({
         id: record?.id,
         data: { title: newValue },
       });

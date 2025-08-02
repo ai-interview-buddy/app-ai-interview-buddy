@@ -14,7 +14,7 @@ export const ProfileListItem = ({ item }: ProfileListItemProps) => {
   const scoreLabel = getScoreLabel(item.curriculumScore);
 
   return (
-    <Link href={`/(tabs)/career-profile/details/${item.id}`} push asChild>
+    <Link href={`/(tabs)/career-profile/${item.id}`} push asChild>
       <TouchableOpacity
         key={item.id}
         style={{

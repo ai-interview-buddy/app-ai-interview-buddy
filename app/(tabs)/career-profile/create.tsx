@@ -29,7 +29,7 @@ const CreateCareerProfile = () => {
       if (error) throw error;
 
       const saved = await mutateAsync({ curriculumPath });
-      router.push(`/(tabs)/career-profile/details/${saved.id}`);
+      router.push(`/(tabs)/career-profile/${saved.id}`);
     } catch (error) {
       console.log(error);
       AlertPolyfill("Error", "Failed to upload CV. Please try again.");

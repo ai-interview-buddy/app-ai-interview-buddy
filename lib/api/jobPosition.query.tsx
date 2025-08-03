@@ -1,17 +1,18 @@
 import {
-    JobPosition,
-    JobPositionCreateByDescription,
-    JobPositionCreateByUrl,
-    JobPositionUpdate,
+  JobPosition,
+  JobPositionCreateByDescription,
+  JobPositionCreateByUrl,
+  JobPositionUpdate,
 } from "@/supabase/functions/api/types/JobPosition";
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
-    createJobPositionByDescription,
-    createJobPositionByUrl,
-    deleteJobPosition,
-    fetchJobPosition,
-    fetchJobPositions,
-    updateJobPosition,
+  archiveJobPosition,
+  createJobPositionByDescription,
+  createJobPositionByUrl,
+  deleteJobPosition,
+  fetchJobPosition,
+  fetchJobPositions,
+  updateJobPosition,
 } from "./jobPosition.fetch";
 
 export const useJobPositions = (token?: string) => {
@@ -76,5 +77,17 @@ export const useDeleteJobPosition = (queryClient: QueryClient, token?: string) =
       return deleteJobPosition(token, id);
     },
     onSuccess: (_, id) => invalidateJobQueries(queryClient, id),
+  });
+};
+
+export const useArchiveJobPosition = (queryClient: QueryClient, token?: string) => {
+  return useMutation<boolean, Error, string[]>({
+    mutationFn: (ids: string[]) => {
+      if (!token) throw new Error("Missing token");
+      return archiveJobPosition(token, ids);
+    },
+    onSuccess: (_, ids: string[]) => {
+      ids.forEach(id => invalidateJobQueries(queryClient, id));
+    },
   });
 };

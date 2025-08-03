@@ -11,13 +11,15 @@ export type JobPositionCreationMethod = "jobUrl" | "jobDescription" | null;
 const CreateStep1: React.FC = () => {
   const router = useRouter();
 
+  const handleCancel = () => router.push("/job-position");
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
 
       <MainContainer>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-          <TitleBackHeader pageTitle="New Position" />
+          <TitleBackHeader pageTitle="New Position" handleBack={handleCancel} handleCancel={handleCancel} />
 
           <ScrollView
             style={{ flex: 1 }}

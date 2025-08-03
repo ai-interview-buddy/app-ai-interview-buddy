@@ -6,7 +6,7 @@ import { JobDescriptionHeader } from "@/components/job-position/details/JobDescr
 import { JobDescriptionQuickActions } from "@/components/job-position/details/JobDescriptionQuickActions";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
 import { PageLoading } from "@/components/views/PageLoading";
-import { useDeleteJobPosition, useJobPosition } from "@/lib/api/jobPosition.query";
+import { useArchiveJobPosition, useDeleteJobPosition, useJobPosition } from "@/lib/api/jobPosition.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { useQueryClient } from "@tanstack/react-query";
@@ -23,12 +23,15 @@ const JobPositionDetails: React.FC = () => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   const { data: record, isLoading, error } = useJobPosition(user?.accessToken, id as string);
+  const { mutateAsync: archiveMutateAsync } = useArchiveJobPosition(queryClient, user?.accessToken);
   const { mutateAsync: deleteMutateAsync } = useDeleteJobPosition(queryClient, user?.accessToken);
 
+  const archiveLabel = record?.archived ? "Unarchive" : "Archive";
+
   const showActions = () => {
-    const options = ["Edit", "Cancel", "Delete"];
-    const cancelButtonIndex = 1;
-    const destructiveButtonIndex = 2;
+    const options = ["Edit", archiveLabel, "Cancel", "Delete"];
+    const cancelButtonIndex = 2;
+    const destructiveButtonIndex = 3;
 
     showActionSheetWithOptions(
       {
@@ -41,6 +44,10 @@ const JobPositionDetails: React.FC = () => {
         switch (selectedIndex) {
           case 0:
             router.push(`/job-position/${id}/update`);
+            break;
+
+          case 1:
+            handleArchive();
             break;
 
           case destructiveButtonIndex:
@@ -62,6 +69,20 @@ const JobPositionDetails: React.FC = () => {
         style: "destructive",
         onPress: () => {
           deleteMutateAsync(record?.id!);
+          router.replace("/job-position");
+        },
+      },
+    ]);
+  };
+
+  const handleArchive = () => {
+    AlertPolyfill(archiveLabel, "Are you sure?", [
+      { text: "Cancel", style: "cancel", onPress: () => {} },
+      {
+        text: "Yes",
+        style: record?.archived ? "default" : "destructive",
+        onPress: () => {
+          archiveMutateAsync([record?.id!]);
           router.replace("/job-position");
         },
       },
@@ -99,7 +120,7 @@ const JobPositionDetails: React.FC = () => {
             <JobDescriptionHeader record={record} />
 
             <View style={{ flexDirection: "row", gap: 12 }}>
-              <ButtonMainLink label="View Position Details" icon="create-outline" href={`/job-position/${id}/job-description`} />
+              <ButtonMainLink label="View Job Description" icon="briefcase-outline" href={`/job-position/${id}/job-description`} />
               <ButtonDefault icon="ellipsis-horizontal" onPress={showActions} flex={false} />
             </View>
           </View>

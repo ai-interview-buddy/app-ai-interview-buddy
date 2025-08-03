@@ -120,3 +120,28 @@ export const remove = async (supabase: SupabaseClient, id: string): Promise<Serv
     throw error;
   }
 };
+
+export const archiveMany = async (supabase: SupabaseClient, ids: string[]): Promise<ServiceResponse<null>> => {
+  try {
+    const { data, error } = await supabase.from("job_position").select("id, archived").in("id", ids);
+    console.log(data);
+
+    if (error) return genericError(error.message);
+    if (!data || data.length !== ids.length) {
+      return genericError("One or more job positions not found or do not belong to user");
+    }
+
+    const updatePromises = data.map((item: { id: string; archived: boolean }) =>
+      supabase.from("job_position").update({ archived: !item.archived, updated_at: new Date().toISOString() }).eq("id", item.id)
+    );
+
+    const results = await Promise.all(updatePromises);
+
+    const anyErrors = results.find((r) => r.error);
+    if (anyErrors) return genericError(anyErrors.error.message);
+
+    return { error: null, data: null, count: null };
+  } catch (err) {
+    return genericError("Failed to archive job positions", String(err));
+  }
+};

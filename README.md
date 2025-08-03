@@ -76,7 +76,7 @@ npx supabase functions serve
 # functions debugging 
 npx supabase functions serve --inspect-mode brk
 chrome://inspect/
--> 127.0.0.1:54321
+-> 127.0.0.1:8083
 ```
 
 # Setup Auth

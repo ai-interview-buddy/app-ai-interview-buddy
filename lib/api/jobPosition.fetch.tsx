@@ -1,8 +1,8 @@
 import {
-    JobPosition,
-    JobPositionCreateByDescription,
-    JobPositionCreateByUrl,
-    JobPositionUpdate,
+  JobPosition,
+  JobPositionCreateByDescription,
+  JobPositionCreateByUrl,
+  JobPositionUpdate,
 } from "@/supabase/functions/api/types/JobPosition";
 import { API_BASE_URL, defaultHeaders } from "./api";
 
@@ -64,5 +64,16 @@ export const deleteJobPosition = async (token: string, id: string): Promise<bool
   });
 
   if (!res.ok) throw new Error(`Failed to delete job position ${id}`);
+  return true;
+};
+
+export const archiveJobPosition = async (token: string, ids: string[]): Promise<boolean> => {
+  const res = await fetch(`${API_BASE_URL}/job-positions/archive`, {
+    method: "PATCH",
+    headers: defaultHeaders(token),
+    body: JSON.stringify(ids),
+  });
+
+  if (!res.ok) throw new Error(`Failed to archive job position ${ids}`);
   return true;
 };

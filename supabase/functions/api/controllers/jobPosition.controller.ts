@@ -42,3 +42,12 @@ export const remove = async (req: Request, res: Response) => {
   if (error) return res.status(400).json({ error: error.message });
   res.status(204).send();
 };
+
+export const archiveMany = async (req: Request, res: Response) => {
+  const ids = req.body as string[];
+  if (!Array.isArray(ids) || ids.length === 0) return res.status(400).json({ error: "Request body must be a non-empty array of IDs" });
+
+  const { error } = await service.archiveMany(req.supabase, ids);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(204).end();
+};

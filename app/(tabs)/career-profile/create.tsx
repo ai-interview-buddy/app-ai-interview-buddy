@@ -36,11 +36,13 @@ const CreateCareerProfile = () => {
     }
   };
 
+  const handleBack = () => router.push(`/career-profile`);
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
-        <TitleBackHeader pageTitle="New Career Profile" />
+        <TitleBackHeader pageTitle="New Career Profile" handleBack={handleBack} handleCancel={handleBack} />
 
         <CareerProfileForm
           title="Please inform your CV"

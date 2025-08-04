@@ -20,9 +20,10 @@ type Props = {
   formSchema?: any;
   placeholder?: string;
   helper?: string;
+  className?: string;
 };
 
-export const FormFieldInput = ({ form, name, label, placeholder, helper, formSchema }: Props) => {
+export const FormFieldInput = ({ form, name, label, placeholder, helper, formSchema, className }: Props) => {
   const required = isFieldRequired(formSchema, name);
   return (
     <form.Field
@@ -35,7 +36,7 @@ export const FormFieldInput = ({ form, name, label, placeholder, helper, formSch
               <FormControlLabelText>{label}</FormControlLabelText>
             </FormControlLabel>
 
-            <Input size="md">
+            <Input size="md" className={className}>
               <InputField placeholder={placeholder} value={field.state.value} onChangeText={field.handleChange} autoCapitalize="none" />
             </Input>
 
@@ -57,4 +58,3 @@ export const FormFieldInput = ({ form, name, label, placeholder, helper, formSch
     ></form.Field>
   );
 };
-

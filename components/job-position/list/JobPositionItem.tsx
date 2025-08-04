@@ -1,29 +1,33 @@
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
-import { Link } from "expo-router";
-import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import React, { forwardRef } from "react";
+import { Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { JobPositionCompanyAvatar } from "../JobPositionCompanyAvatar";
 
 type JobPositionItemProps = {
   item: JobPosition;
 };
 
-export const JobPositionItem = ({ item }: JobPositionItemProps) => {
-  return (
-    <Link href={`/job-position/${item.id}`} key={item.id} push asChild>
+export const JobPositionItem = forwardRef<React.ComponentRef<typeof TouchableOpacity>, JobPositionItemProps & TouchableOpacityProps>(
+  ({ item, ...touchableProps }, ref) => {
+    return (
       <TouchableOpacity
-        style={{
-          marginHorizontal: 20,
-          marginBottom: 16,
-          backgroundColor: "white",
-          borderRadius: 16,
-          padding: 20,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.04,
-          shadowRadius: 8,
-          elevation: 2,
-        }}
+        ref={ref}
+        {...touchableProps}
+        style={[
+          {
+            marginHorizontal: 20,
+            marginBottom: 16,
+            backgroundColor: "white",
+            borderRadius: 16,
+            padding: 20,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.04,
+            shadowRadius: 8,
+            elevation: 2,
+          },
+          touchableProps.style,
+        ]}
       >
         <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
           <JobPositionCompanyAvatar record={item} />
@@ -85,18 +89,6 @@ export const JobPositionItem = ({ item }: JobPositionItemProps) => {
               {item.companyName}
             </Text>
 
-            <Text
-              style={{
-                fontSize: 14,
-                color: "#9CA3AF",
-                lineHeight: 20,
-                marginBottom: 16,
-              }}
-              numberOfLines={2}
-            >
-              {item.jobDescription}
-            </Text>
-
             <View
               style={{
                 flexDirection: "row",
@@ -108,10 +100,10 @@ export const JobPositionItem = ({ item }: JobPositionItemProps) => {
                 style={{
                   fontSize: 16,
                   fontWeight: "700",
-                  color: "#F59E0B",
+                  color: item.expectedSalary ? "#10B981" : "#F59E0B",
                 }}
               >
-                {item.salaryRange}
+                {item.expectedSalary ? item.expectedSalary : item.salaryRange}
               </Text>
 
               <Text
@@ -131,6 +123,8 @@ export const JobPositionItem = ({ item }: JobPositionItemProps) => {
           </View>
         </View>
       </TouchableOpacity>
-    </Link>
-  );
-};
+    );
+  }
+);
+
+JobPositionItem.displayName = "JobPositionItem";

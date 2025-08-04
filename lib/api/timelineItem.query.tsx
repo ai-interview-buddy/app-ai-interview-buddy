@@ -1,8 +1,17 @@
-import { TimelineCoverLetter, TimelineCreateText, TimelineItem, TimelineType } from "@/supabase/functions/api/types/TimelineItem";
+import {
+  TimelineCoverLetter,
+  TimelineCreateText,
+  TimelineItem,
+  TimelineLinkedinIntro,
+  TimelineReplyEmail,
+  TimelineType,
+} from "@/supabase/functions/api/types/TimelineItem";
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
   createTimelineCoverLetter,
+  createTimelineLinkedinIntro,
   createTimelineNote,
+  createTimelineReplyEmail,
   deleteTimelineItem,
   fetchTimelineItem,
   fetchTimelineItems,
@@ -55,6 +64,26 @@ export const useCreateTimelineCoverLetter = (queryClient: QueryClient, token?: s
     mutationFn: (data) => {
       if (!token) throw new Error("Missing token");
       return createTimelineCoverLetter(token, data);
+    },
+    onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
+  });
+};
+
+export const useCreateTimelineLinkedinIntro = (queryClient: QueryClient, token?: string) => {
+  return useMutation<TimelineItem, Error, TimelineLinkedinIntro>({
+    mutationFn: (data) => {
+      if (!token) throw new Error("Missing token");
+      return createTimelineLinkedinIntro(token, data);
+    },
+    onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
+  });
+};
+
+export const useCreateTimelineReplyEmail = (queryClient: QueryClient, token?: string) => {
+  return useMutation<TimelineItem, Error, TimelineReplyEmail>({
+    mutationFn: (data) => {
+      if (!token) throw new Error("Missing token");
+      return createTimelineReplyEmail(token, data);
     },
     onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
   });

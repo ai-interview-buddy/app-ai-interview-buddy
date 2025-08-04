@@ -3,6 +3,7 @@ import { extractPositionFromDescription, extractPositionFromUrl } from "../agent
 import { JobPosition, JobPositionCreateByDescription, JobPositionCreateByUrl, JobPositionUpdate } from "../types/JobPosition.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { genericError } from "../utils/error.utils.ts";
+import { isUrlReachable } from "../utils/fetch.utils.ts";
 import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
 
 export const getAll = async (supabase: SupabaseClient): Promise<ServiceResponse<JobPosition[]>> => {
@@ -17,6 +18,16 @@ export const getAll = async (supabase: SupabaseClient): Promise<ServiceResponse<
 export const getById = async (supabase: SupabaseClient, id: string): Promise<ServiceResponse<JobPosition>> => {
   const query = await supabase.from("job_position").select("*").eq("id", id).single();
   return convertOne(query);
+};
+
+const cleanInvalidURLs = async (url: string | null): Promise<string | null> => {
+  if (!url) return null;
+  const ok = await isUrlReachable(url);
+  if (!ok) {
+    console.log("Invalid URL " + url)
+    return null;
+  }
+  return url;
 };
 
 export const createByUrl = async (
@@ -36,8 +47,8 @@ export const createByUrl = async (
       accountId: user.id,
       careerProfileId: params.profileId,
       companyName: extracted.companyName,
-      companyLogo: extracted.companyLogo,
-      companyWebsite: extracted.companyWebsite,
+      companyLogo: await cleanInvalidURLs(extracted.companyLogo),
+      companyWebsite: await cleanInvalidURLs(extracted.companyWebsite),
       jobUrl: params.jobUrl,
       jobTitle: extracted.jobTitle,
       jobDescription: extracted.jobDescription,
@@ -75,8 +86,8 @@ export const createByDescription = async (
       accountId: user.id,
       careerProfileId: params.profileId,
       companyName: extracted.companyName,
-      companyLogo: extracted.companyLogo,
-      companyWebsite: extracted.companyWebsite,
+      companyLogo: await cleanInvalidURLs(extracted.companyLogo),
+      companyWebsite: await cleanInvalidURLs(extracted.companyWebsite),
       jobUrl: null,
       jobTitle: extracted.jobTitle,
       jobDescription: extracted.jobDescription,

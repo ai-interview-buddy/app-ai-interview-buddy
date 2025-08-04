@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import * as service from "../services/timelineItem.service.ts";
-import { TimelineCoverLetter, TimelineCreateText } from "../types/TimelineItem.ts";
-import { TimelineFilter } from "../types/TimelineItem.ts";
+import { TimelineCoverLetter, TimelineCreateText, TimelineFilter, TimelineLinkedinIntro, TimelineReplyEmail } from "../types/TimelineItem.ts";
 
 export const getAll = async (req: Request, res: Response) => {
   const params: TimelineFilter = {
@@ -35,6 +34,20 @@ export const createNote = async (req: Request, res: Response) => {
 export const createCoverLetter = async (req: Request, res: Response) => {
   const payload = req.body as TimelineCoverLetter;
   const { data, error } = await service.createCoverLetter(req.supabase, req.user, payload);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(201).json(data);
+};
+
+export const createLinkedinIntro = async (req: Request, res: Response) => {
+  const payload = req.body as TimelineLinkedinIntro;
+  const { data, error } = await service.createLinkedinIntro(req.supabase, req.user, payload);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(201).json(data);
+};
+
+export const createReplyEmail = async (req: Request, res: Response) => {
+  const payload = req.body as TimelineReplyEmail;
+  const { data, error } = await service.createReplyEmail(req.supabase, req.user, payload);
   if (error) return res.status(400).json({ error: error.message });
   res.status(201).json(data);
 };

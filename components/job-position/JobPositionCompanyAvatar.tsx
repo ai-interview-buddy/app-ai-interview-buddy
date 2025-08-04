@@ -11,7 +11,7 @@ export const JobPositionCompanyAvatar = ({ record , size = "md" }: Props) => {
   return (
     <Avatar size={size} style={{ backgroundColor: "#F3F4F6", marginRight: 16 }}>
       {record.companyLogo ? (
-        <AvatarImage resizeMode="contain" source={{ uri: record.companyLogo }} />
+        <AvatarImage resizeMode="contain" source={{ uri: record.companyLogo, cache: 'force-cache' }} />
       ) : (
         <AvatarFallbackText style={{ color: "#1D252C" }}>{record.companyName}</AvatarFallbackText>
       )}

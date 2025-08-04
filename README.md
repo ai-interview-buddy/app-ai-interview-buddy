@@ -117,3 +117,8 @@ Brand core:
  - [ ] Use uppy to upload big files https://github.com/transloadit/uppy/tree/main/examples/react-native-expo
 -  [ ] Change the "delete" career track option to allow replacing positions that uses it
 -  [ ] Add a feature to re-import and re-process a cv
+-  [ ] Create an inbox where users can forward the recruiter's email 
+-  [ ] About Job Position Timeline:
+   -  [ ] Add the CV_ANALYSE: an utilitary to compare the position vs the cv and analyse in scores similar to the cvScore
+   -  [ ] Add the INTERVIEW_STEP: an utilitary to add schedulled interviews
+   -  [ ] Start saving the "custom instructions" and allow users to "re-play" with twicking the instructions

@@ -20,9 +20,10 @@ type Props = {
   formSchema?: any;
   placeholder?: string;
   helper?: string;
+  className?: string;
 };
 
-export const FormFieldTextArea = ({ form, name, label, placeholder, helper, formSchema }: Props) => {
+export const FormFieldTextArea = ({ form, name, label, placeholder, helper, formSchema, className = "h-40" }: Props) => {
   const required = isFieldRequired(formSchema, name);
   return (
     <form.Field
@@ -35,7 +36,7 @@ export const FormFieldTextArea = ({ form, name, label, placeholder, helper, form
               <FormControlLabelText>{label}</FormControlLabelText>
             </FormControlLabel>
 
-            <Textarea size="md" isReadOnly={false} isInvalid={false} isDisabled={false} className="w-100 h-40">
+            <Textarea size="md" isReadOnly={false} isInvalid={false} isDisabled={false} className={`w-100 ${className}`}>
               <TextareaInput placeholder={placeholder} value={field.state.value} onChangeText={field.handleChange} />
             </Textarea>
 

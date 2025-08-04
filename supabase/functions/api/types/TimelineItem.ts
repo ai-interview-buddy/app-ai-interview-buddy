@@ -1,6 +1,8 @@
 export enum TimelineType {
   COVER_LETTER = "COVER_LETTER",
+  LINKEDIN_INTRO = "LINKEDIN_INTRO",
   NOTE = "NOTE",
+  REPLY_EMAIL = "REPLY_EMAIL",
   CV_ANALYSE = "CV_ANALYSE",
   INTERVIEW_STEP = "INTERVIEW_STEP",
   INTERVIEW_ANALYSE = "INTERVIEW_ANALYSE",
@@ -13,7 +15,7 @@ export interface TimelineItem {
   title: string;
   type: TimelineType;
 
-  // For COVER_LETTER / NOTE
+  // For COVER_LETTER / NOTE / LINKEDIN_INTRO / REPLY_EMAIL
   text?: string;
 
   // For INTERVIEW_STEP
@@ -45,5 +47,17 @@ export interface TimelineCreateText {
 
 export interface TimelineCoverLetter {
   positionId: string;
+  customInstructions: string;
+}
+
+export interface TimelineLinkedinIntro {
+  positionId: string;
+  greeting?: string;
+  customInstructions: string;
+}
+
+export interface TimelineReplyEmail {
+  positionId: string;
+  emailBody: string;
   customInstructions: string;
 }

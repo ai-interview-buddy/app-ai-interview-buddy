@@ -2,17 +2,17 @@ import { MainContainer } from "@/components/container/MainContainer";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { MarkdownCopyView } from "@/components/misc/MarkdownCopyView";
 import { PageLoading } from "@/components/views/PageLoading";
-import { useJobPosition } from "@/lib/api/jobPosition.query";
+import { useTimelineItem } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 
-export default function JobDescription() {
+export default function TimelineItemView() {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id, timelineItemId } = useLocalSearchParams();
   const { user } = useAuthStore();
 
-  const { data: record, isLoading, error } = useJobPosition(user?.accessToken, id as string);
+  const { data: record, isLoading, error } = useTimelineItem(user?.accessToken, timelineItemId as string);
 
   if (isLoading || !record) {
     return <PageLoading />;
@@ -21,13 +21,18 @@ export default function JobDescription() {
   const handleBack = () => router.push(`/job-position/${id}`);
   const handleCancel = () => router.push("/job-position");
 
+  const isMarkdown =
+    record.type == "COVER_LETTER" || record.type == "NOTE" || record.type == "LINKEDIN_INTRO" || record.type == "REPLY_EMAIL";
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
-        <TitleBackHeader pageTitle="Job Description" handleBack={handleBack} handleCancel={handleCancel} />
+        <TitleBackHeader pageTitle={record.title} handleBack={handleBack} handleCancel={handleCancel} />
 
-        <MarkdownCopyView markdownText={record.jobDescription} />
+        {isMarkdown && <MarkdownCopyView markdownText={record.text} />}
+
+        {/* CV_ANALYSE INTERVIEW_STEP INTERVIEW_ANALYSE */}
       </MainContainer>
     </>
   );

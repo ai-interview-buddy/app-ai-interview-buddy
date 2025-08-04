@@ -1,5 +1,5 @@
 @base_url = http://127.0.0.1:54321/functions/v1
-@token = YOUR_TOKEN_HERE
+@token = ADD_TOKEN_HERE
 
 
 ### List all job positions

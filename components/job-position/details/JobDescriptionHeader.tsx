@@ -76,26 +76,26 @@ export const JobDescriptionHeader = ({ record }: Props) => {
               style={{
                 fontSize: 16,
                 fontWeight: "700",
-                color: "#F59E0B",
+                color: record?.expectedSalary ? "#6B7280" : "#F59E0B",
               }}
             >
               {record?.salaryRange}
             </Text>
           )}
+
+          {record?.expectedSalary && (
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "700",
+                color: "#10B981",
+              }}
+            >
+              {record?.expectedSalary}
+            </Text>
+          )}
         </View>
       </View>
-
-      <Text
-        style={{
-          fontSize: 14,
-          color: "#6B7280",
-          lineHeight: 20,
-          marginBottom: 20,
-        }}
-        numberOfLines={3}
-      >
-        {record?.jobDescription}
-      </Text>
     </>
   );
 };

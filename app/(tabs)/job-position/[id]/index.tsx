@@ -3,6 +3,7 @@ import { ButtonMainLink } from "@/components/button/ButtonMain";
 import { MainContainer } from "@/components/container/MainContainer";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { JobDescriptionHeader } from "@/components/job-position/details/JobDescriptionHeader";
+import { JobDescriptionInterviewTimeline } from "@/components/job-position/details/JobDescriptionInterviewTimeline";
 import { JobDescriptionQuickActions } from "@/components/job-position/details/JobDescriptionQuickActions";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
 import { PageLoading } from "@/components/views/PageLoading";
@@ -126,6 +127,7 @@ const JobPositionDetails: React.FC = () => {
           </View>
 
           <JobDescriptionQuickActions record={record} />
+          <JobDescriptionInterviewTimeline record={record} />
         </ScrollView>
       </MainContainer>
     </>

@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/views/EmptyState";
 import { PageLoading } from "@/components/views/PageLoading";
 import { useCareerProfiles } from "@/lib/api/careerProfile.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
+import { Link } from "expo-router";
 import React from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
@@ -35,8 +36,10 @@ const CareerProfileList: React.FC = () => {
 
         {!isEmpty && (
           <View>
-            {data?.map((item, index) => (
-              <ProfileListItem item={item} key={index} />
+            {data?.map((item) => (
+              <Link key={item.id} href={`/(tabs)/career-profile/${item.id}`} push asChild>
+                <ProfileListItem item={item} />
+              </Link>
             ))}
           </View>
         )}

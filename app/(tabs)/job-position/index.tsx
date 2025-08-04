@@ -9,7 +9,7 @@ import { PageLoading } from "@/components/views/PageLoading";
 import { useJobPositions } from "@/lib/api/jobPosition.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import React, { useState } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
@@ -75,8 +75,10 @@ const JobPositionList: React.FC = () => {
                 onSelect={setSelectedFilter}
               />
               <View>
-                {filteredPositions?.map((item, index) => (
-                  <JobPositionItem item={item} key={index} />
+                {filteredPositions?.map((item) => (
+                  <Link key={item.id} href={`/job-position/${item.id}`} push asChild>
+                    <JobPositionItem item={item} />
+                  </Link>
                 ))}
               </View>
             </>

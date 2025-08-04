@@ -1,8 +1,21 @@
 import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
+import { generateCoverLetter } from "../agents/coverLetter.agent.ts";
+import { generateLinkedinIntro } from "../agents/linkedinIntro.agent.ts";
+import { generateReplyEmail } from "../agents/replyEmail.agent.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
-import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
-import { TimelineFilter, TimelineCoverLetter, TimelineCreateText, TimelineItem, TimelineType } from "../types/TimelineItem.ts";
+import {
+  TimelineCoverLetter,
+  TimelineCreateText,
+  TimelineFilter,
+  TimelineItem,
+  TimelineLinkedinIntro,
+  TimelineReplyEmail,
+  TimelineType,
+} from "../types/TimelineItem.ts";
 import { genericError } from "../utils/error.utils.ts";
+import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
+import { getById as getCareerProfileById } from "./careerProfile.service.ts";
+import { getById as getJobPositionById } from "./jobPosition.service.ts";
 
 export const getAll = async (supabase: SupabaseClient, params: TimelineFilter): Promise<ServiceResponse<TimelineItem[]>> => {
   let query = supabase
@@ -63,19 +76,82 @@ export const createCoverLetter = async (
   body: TimelineCoverLetter
 ): Promise<ServiceResponse<TimelineItem>> => {
   try {
+    const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
+
+    const letter = await generateCoverLetter(careerPosition!.curriculumText, jobPosition!.jobDescription, body.customInstructions);
+
     const record = {
       accountId: user.id,
       positionId: body.positionId,
       title: "Cover Letter",
       type: TimelineType.COVER_LETTER,
-      text: body.customInstructions,
+      text: letter,
       createdAt: new Date().toISOString(),
     };
     const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
     return convertOne(result);
   } catch (err) {
     console.error(`Error creating COVER_LETTER timeline item: ${safeErrorLog(err)}`);
-    return genericError("Failed to archive job positions", String(err));
+    return genericError("Failed to create a timeline item", String(err));
+  }
+};
+
+export const createLinkedinIntro = async (
+  supabase: SupabaseClient,
+  user: User,
+  body: TimelineLinkedinIntro
+): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
+
+    const output = await generateLinkedinIntro(
+      careerPosition!.curriculumText,
+      jobPosition!.jobDescription,
+      body.customInstructions,
+      body.greeting
+    );
+
+    const record = {
+      accountId: user.id,
+      positionId: body.positionId,
+      title: "LinkedIn Intro",
+      type: TimelineType.LINKEDIN_INTRO,
+      text: output,
+      createdAt: new Date().toISOString(),
+    };
+    const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
+    return convertOne(result);
+  } catch (err) {
+    console.error(`Error creating LINKEDIN_INTRO timeline item: ${safeErrorLog(err)}`);
+    return genericError("Failed to create a timeline item", String(err));
+  }
+};
+
+export const createReplyEmail = async (
+  supabase: SupabaseClient,
+  user: User,
+  body: TimelineReplyEmail
+): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+
+    const output = await generateReplyEmail(jobPosition!.jobDescription, body.customInstructions, body.emailBody);
+
+    const record = {
+      accountId: user.id,
+      positionId: body.positionId,
+      title: output?.emailSubject || "Reply to an email",
+      type: TimelineType.REPLY_EMAIL,
+      text: output?.emailBody,
+      createdAt: new Date().toISOString(),
+    };
+    const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
+    return convertOne(result);
+  } catch (err) {
+    console.error(`Error creating REPLY_EMAIL timeline item: ${safeErrorLog(err)}`);
+    return genericError("Failed to create a timeline item", String(err));
   }
 };
 

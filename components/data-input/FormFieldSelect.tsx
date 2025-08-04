@@ -1,25 +1,25 @@
 import {
-    FormControl,
-    FormControlError,
-    FormControlErrorIcon,
-    FormControlErrorText,
-    FormControlHelper,
-    FormControlHelperText,
-    FormControlLabel,
-    FormControlLabelText,
+  FormControl,
+  FormControlError,
+  FormControlErrorIcon,
+  FormControlErrorText,
+  FormControlHelper,
+  FormControlHelperText,
+  FormControlLabel,
+  FormControlLabelText,
 } from "@/components/ui/form-control";
 import { AlertCircleIcon, ChevronDownIcon } from "@/components/ui/icon";
 import {
-    Select,
-    SelectBackdrop,
-    SelectContent,
-    SelectDragIndicator,
-    SelectDragIndicatorWrapper,
-    SelectIcon,
-    SelectInput,
-    SelectItem,
-    SelectPortal,
-    SelectTrigger,
+  Select,
+  SelectBackdrop,
+  SelectContent,
+  SelectDragIndicator,
+  SelectDragIndicatorWrapper,
+  SelectIcon,
+  SelectInput,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
 } from "@/components/ui/select";
 import { isFieldRequired, isFormFieldInvalid } from "@/lib/utils/validation.utils";
 import React from "react";
@@ -37,9 +37,10 @@ export type Props = {
   formSchema?: any;
   placeholder?: string;
   helper?: string;
+  className?: string;
 };
 
-export const FormFieldSelect = ({ form, name, label, options, placeholder, helper, formSchema }: Props) => {
+export const FormFieldSelect = ({ form, name, label, options, placeholder, helper, formSchema, className }: Props) => {
   const required = isFieldRequired(formSchema, name);
   const currentOption = options.find((opt) => String(opt.value) === String(form.getFieldValue(name)));
   return (
@@ -60,7 +61,7 @@ export const FormFieldSelect = ({ form, name, label, options, placeholder, helpe
               isInvalid={isInvalid}
               isRequired={required}
             >
-              <SelectTrigger size="md" variant="outline">
+              <SelectTrigger size="md" variant="outline" className={className}>
                 <SelectInput placeholder={placeholder || "Select option"} />
                 <SelectIcon className="mr-3" as={ChevronDownIcon} />
               </SelectTrigger>

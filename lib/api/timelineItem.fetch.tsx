@@ -1,4 +1,11 @@
-import { TimelineCoverLetter, TimelineCreateText, TimelineItem, TimelineType } from "@/supabase/functions/api/types/TimelineItem";
+import {
+  TimelineCoverLetter,
+  TimelineCreateText,
+  TimelineItem,
+  TimelineLinkedinIntro,
+  TimelineReplyEmail,
+  TimelineType,
+} from "@/supabase/functions/api/types/TimelineItem";
 import { API_BASE_URL, defaultHeaders } from "./api";
 
 export const fetchTimelineItems = async (
@@ -61,6 +68,26 @@ export const createTimelineCoverLetter = async (token: string, body: TimelineCov
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error("Failed to create timeline cover letter");
+  return await res.json();
+};
+
+export const createTimelineLinkedinIntro = async (token: string, body: TimelineLinkedinIntro): Promise<TimelineItem> => {
+  const res = await fetch(`${API_BASE_URL}/timeline-items/linkedin-intro`, {
+    method: "POST",
+    headers: defaultHeaders(token),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error("Failed to create timeline linkedin intro");
+  return await res.json();
+};
+
+export const createTimelineReplyEmail = async (token: string, body: TimelineReplyEmail): Promise<TimelineItem> => {
+  const res = await fetch(`${API_BASE_URL}/timeline-items/reply-email`, {
+    method: "POST",
+    headers: defaultHeaders(token),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error("Failed to create timeline reply email");
   return await res.json();
 };
 

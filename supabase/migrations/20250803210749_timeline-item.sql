@@ -1,6 +1,8 @@
 create type public.timeline_type as enum (
   'COVER_LETTER',
+  'LINKEDIN_INTRO',
   'NOTE',
+  'REPLY_EMAIL',
   'CV_ANALYSE',
   'INTERVIEW_STEP',
   'INTERVIEW_ANALYSE'
@@ -13,7 +15,7 @@ create table public.timeline_item (
   title                          text            not null,
   type                           public.timeline_type not null,
 
-  -- for COVER_LETTER / NOTE
+  -- for COVER_LETTER / NOTE / LINKEDIN_INTRO / REPLY_EMAIL
   text                           text,
 
   -- for INTERVIEW_STEP

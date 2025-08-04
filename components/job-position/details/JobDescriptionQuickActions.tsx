@@ -1,3 +1,4 @@
+import { LightHeader } from "@/components/headers/LightHeader";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import { Ionicons } from "@expo/vector-icons";
 import { Href, Link } from "expo-router";
@@ -20,19 +21,25 @@ const actions: Action[] = [
     icon: "document-text",
     title: "Write me a cover letter",
     subtitle: "Generate a personalized cover letter",
-    getLink: (record: JobPosition) => `/?${record.id}`,
+    getLink: (record: JobPosition) => `/job-position/${record.id}/timeline-create-cover-letter`,
   },
   {
     icon: "logo-linkedin",
     title: "Write me a LinkedIn Intro msg",
     subtitle: "Craft a connection message",
-    getLink: (record: JobPosition) => `/?${record.id}`,
+    getLink: (record: JobPosition) => `/job-position/${record.id}/timeline-create-linkedin-intro`,
   },
   {
-    icon: "help-circle",
-    title: "Answer a question",
-    subtitle: "Practice interview questions",
-    getLink: (record: JobPosition) => `/?${record.id}`,
+    icon: "bookmark-outline",
+    title: "Add a note",
+    subtitle: "Save information about the interview",
+    getLink: (record: JobPosition) => `/job-position/${record.id}/timeline-create-note`,
+  },
+  {
+    icon: "mail-outline",
+    title: "Email Reply",
+    subtitle: "Generate an answer in seconds",
+    getLink: (record: JobPosition) => `/job-position/${record.id}/timeline-create-reply-email`,
   },
 ];
 
@@ -41,16 +48,7 @@ export const JobDescriptionQuickActions = ({ record }: Props) => {
 
   return (
     <View style={{ marginHorizontal: 20, marginBottom: 32 }}>
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: "700",
-          color: "#1D252C",
-          marginBottom: 16,
-        }}
-      >
-        Quick Actions
-      </Text>
+      <LightHeader title="Quick Actions" />
 
       <View style={{ gap: 12 }}>
         {actions.map((action, index) => (

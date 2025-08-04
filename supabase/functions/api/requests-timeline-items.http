@@ -37,6 +37,28 @@ Authorization: Bearer {{token}}
   "customInstructions":"Use the information in my cv, mathing the main points from the job description and write me a cover letter."
 }
 
+### Create a timeline type LINKEDIN_INTRO; Type TimelineLinkedinIntro
+POST {{base_url}}/api/timeline-items/linkedin-intro
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "positionId":"a1d89ebf-9c40-435b-833a-c65e1b1a2a96",
+  "greeting":"hi there!",
+  "customInstructions":"Create a short and direct introductory message. Highlight my experience and the aspects I have in common with the position."
+}
+
+### Create a timeline type REPLY_EMAIL; Type TimelineReplyEmail
+POST {{base_url}}/api/timeline-items/reply-email
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "positionId":"a1d89ebf-9c40-435b-833a-c65e1b1a2a96",
+  "emailBody":"Hello, Thanks for applying for Rochec Inc, we are glad to inform you that we would like to book a meeting. Would you be able to send us 3 timeslots on Monday or Tuesday. Please read the attached candidate manual. Looking forward to see you.",
+  "customInstructions":"Please keep the tone warm and enthusiastic, but still professional. Mention that I believe my background aligns well with the position."
+}
+
 ### Delete a timeline item
 DELETE {{base_url}}/api/timeline-items/9ba19541-8c9d-4984-9350-e654b4df780d
 Content-Type: application/json

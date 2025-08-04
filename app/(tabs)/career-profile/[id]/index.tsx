@@ -20,7 +20,7 @@ import { Alert, Platform, ScrollView, Text, View } from "react-native";
 
 const CareerProfileDetails = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams(); 
+  const { id } = useLocalSearchParams();
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
 
@@ -127,9 +127,11 @@ const CareerProfileDetails = () => {
     );
   }
 
+  const handleBack = () => router.push(`/career-profile`);
+
   return (
     <MainContainer>
-      <TitleBackHeader pageTitle="Career Profile" />
+      <TitleBackHeader pageTitle="Career Profile" handleBack={handleBack} handleCancel={handleBack} />
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
         <View

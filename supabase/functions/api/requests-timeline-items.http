@@ -1,0 +1,43 @@
+@base_url = http://127.0.0.1:54321/functions/v1
+@token = ADD_TOKEN_HERE
+
+
+### List all timeline items | Filter: type {page?: number; size?: number; unpaged?: boolean; jobPositionId?: string; type: TimelineType}
+### IF page/size are present then should return filtering it
+### IF unpaged=true then it should return all records
+### And error if page/size nor unpaged are present
+### should select only: id, position_id, title, type, text, interview_scheduled_date, interview_interviewer_name, interview_score, created_at 
+GET {{base_url}}/api/timeline-items?page=0&size=20&jobPositionId=9ba19541-8c9d-4984-9350-e654b4df780d&type=COVER_LETTER
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get a specific timeline item
+GET {{base_url}}/api/timeline-items/9ba19541-8c9d-4984-9350-e654b4df780d
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Create a timeline type NOTE; Type TimelineCreateText
+POST {{base_url}}/api/timeline-items/note
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "positionId": "78d6f20b-5180-49e5-9f8e-9ca1eeb830ae",
+  "title": "Interview stages overview",
+  "text": "1) a screening with recruinter; 2) deep dive on the technical background; 3) Interview with hiring manager; 4) Final round with CEO"
+}
+
+### Create a timeline type COVER_LETTER; Type TimelineCoverLetter
+POST {{base_url}}/api/timeline-items/cover-letter
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "positionId":"a1d89ebf-9c40-435b-833a-c65e1b1a2a96",
+  "customInstructions":"Use the information in my cv, mathing the main points from the job description and write me a cover letter."
+}
+
+### Delete a timeline item
+DELETE {{base_url}}/api/timeline-items/9ba19541-8c9d-4984-9350-e654b4df780d
+Content-Type: application/json
+Authorization: Bearer {{token}}

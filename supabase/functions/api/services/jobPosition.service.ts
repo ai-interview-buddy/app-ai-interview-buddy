@@ -138,7 +138,7 @@ export const archiveMany = async (supabase: SupabaseClient, ids: string[]): Prom
     const results = await Promise.all(updatePromises);
 
     const anyErrors = results.find((r) => r.error);
-    if (anyErrors) return genericError(anyErrors.error.message);
+    if (anyErrors) return genericError(anyErrors.error!.message);
 
     return { error: null, data: null, count: null };
   } catch (err) {

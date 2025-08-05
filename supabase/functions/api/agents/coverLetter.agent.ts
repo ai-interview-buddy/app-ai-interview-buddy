@@ -1,4 +1,4 @@
-import { Agent, run } from "npm:@openai/agents";
+import { Agent, AgentInputItem, run } from "npm:@openai/agents";
 
 const prompt = `You are an expert career coach and professional writer.
 
@@ -53,10 +53,11 @@ const agent = new Agent({
 export async function generateCoverLetter(
   cvContent: string,
   jobDescription: string,
-  customInstructions: string
+  customInstructions: string,
+  extraMessages?: AgentInputItem[]
 ): Promise<string | undefined> {
   const content = userMessage(cvContent, jobDescription, customInstructions);
-  const result = await run(agent, [{ role: "user", content: content }]);
+  const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
 
   return result.finalOutput;
 }

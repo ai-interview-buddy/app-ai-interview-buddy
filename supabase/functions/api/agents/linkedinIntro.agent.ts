@@ -1,4 +1,4 @@
-import { Agent, run } from "npm:@openai/agents";
+import { Agent, AgentInputItem, run } from "npm:@openai/agents";
 
 const prompt = `You are a professional career coach and expert in networking communication.
 
@@ -59,9 +59,10 @@ export async function generateLinkedinIntro(
   jobDescription: string,
   customInstructions: string,
   greeting?: string,
+  extraMessages?: AgentInputItem[]
 ): Promise<string | undefined> {
   const content = userMessage(cvContent, jobDescription, customInstructions, greeting);
-  const result = await run(agent, [{ role: "user", content: content }]);
+  const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
 
   return result.finalOutput;
 }

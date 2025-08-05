@@ -6,6 +6,7 @@ import { ServiceResponse } from "../types/ServiceResponse.ts";
 import {
   TimelineCoverLetter,
   TimelineCreateText,
+  TimelineCustomInstructionsUpdate,
   TimelineFilter,
   TimelineItem,
   TimelineLinkedinIntro,
@@ -16,11 +17,13 @@ import { genericError } from "../utils/error.utils.ts";
 import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
 import { getById as getCareerProfileById } from "./careerProfile.service.ts";
 import { getById as getJobPositionById } from "./jobPosition.service.ts";
+import { AgentInputItem } from "@openai/agents";
 
 export const getAll = async (supabase: SupabaseClient, params: TimelineFilter): Promise<ServiceResponse<TimelineItem[]>> => {
   let query = supabase
     .from("timeline_item")
-    .select(`id,position_id,title,type,text,interview_scheduled_date,interview_interviewer_name,interview_score,created_at`);
+    .select(`id,position_id,title,type,text,interview_scheduled_date,interview_interviewer_name,interview_score,created_at`)
+    .order("created_at");
 
   if (params.jobPositionId) {
     query = query.eq("position_id", params.jobPositionId);
@@ -152,6 +155,64 @@ export const createReplyEmail = async (
   } catch (err) {
     console.error(`Error creating REPLY_EMAIL timeline item: ${safeErrorLog(err)}`);
     return genericError("Failed to create a timeline item", String(err));
+  }
+};
+
+export const updateCustomInstructions = async (
+  supabase: SupabaseClient,
+  id: string,
+  body: TimelineCustomInstructionsUpdate
+): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    const { data: record } = await getById(supabase, id);
+    if (!record) throw Error(`Failed to retrieve timeline item ${id}`);
+
+    const extraMessages: AgentInputItem[] = [
+      { role: "assistant", status: "completed", content: [{ type: "output_text", text: record.text || "" }] },
+      { role: "user", content: [{ type: "input_text", text: body.customInstructions }] },
+    ];
+
+    const { data: jobPosition } = await getJobPositionById(supabase, record.positionId);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
+
+    let output: string | undefined;
+
+    switch (record.type) {
+      case TimelineType.LINKEDIN_INTRO:
+        output = await generateLinkedinIntro(
+          careerPosition!.curriculumText,
+          jobPosition!.jobDescription,
+          record?.customInstructions || "",
+          "",
+          extraMessages
+        );
+        break;
+
+      case TimelineType.COVER_LETTER:
+        output = await generateCoverLetter(careerPosition!.curriculumText, jobPosition!.jobDescription, body.customInstructions);
+        break;
+
+      case TimelineType.REPLY_EMAIL: {
+        const result = await generateReplyEmail(jobPosition!.jobDescription, body.customInstructions, "not available");
+        output = result?.emailBody;
+        break;
+      }
+
+      default:
+        throw new Error("invalid type");
+    }
+
+    const payload = oneToDbCase({
+      text: output,
+      customInstructions: body.customInstructions,
+      updatedAt: new Date().toISOString(),
+    });
+
+    const result = await supabase.from("timeline_item").update(payload).eq("id", id).select().single();
+    return convertOne(result);
+  } catch (err) {
+    console.error(`Error updating custom instructions: ${safeErrorLog(err)}`);
+    return genericError("Failed to update timeline item", String(err));
   }
 };
 

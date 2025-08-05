@@ -1,6 +1,7 @@
 import {
   TimelineCoverLetter,
   TimelineCreateText,
+  TimelineCustomInstructionsUpdate,
   TimelineItem,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
@@ -88,6 +89,17 @@ export const createTimelineReplyEmail = async (token: string, body: TimelineRepl
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error("Failed to create timeline reply email");
+  return await res.json();
+};
+
+export const updateCustomInstructions = async (token: string, id: string, body: TimelineCustomInstructionsUpdate): Promise<TimelineItem> => {
+  const res = await fetch(`${API_BASE_URL}/timeline-items/${id}/custom-instructions`, {
+    method: "PATCH",
+    headers: defaultHeaders(token),
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) throw new Error(`Failed to update job position ${id}`);
   return await res.json();
 };
 

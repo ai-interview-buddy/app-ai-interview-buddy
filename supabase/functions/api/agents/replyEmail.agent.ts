@@ -1,4 +1,4 @@
-import { Agent, run } from "npm:@openai/agents";
+import { Agent, AgentInputItem, run } from "npm:@openai/agents";
 import { z } from "zod";
 
 const ReplyEmailSchema = z.object({
@@ -75,10 +75,11 @@ const agent = new Agent({
 export async function generateReplyEmail(
   jobDescription: string,
   customInstructions: string,
-  emailBody: string
+  emailBody: string,
+  extraMessages?: AgentInputItem[]
 ): Promise<ReplyEmail | undefined> {
   const content = userMessage(jobDescription, customInstructions, emailBody);
-  const result = await run(agent, [{ role: "user", content: content }]);
+  const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
 
   return result.finalOutput;
 }

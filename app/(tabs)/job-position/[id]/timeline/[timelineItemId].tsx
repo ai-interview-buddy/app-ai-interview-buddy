@@ -1,6 +1,7 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { MarkdownCopyView } from "@/components/misc/MarkdownCopyView";
+import { CustomInstructionsUpdate } from "@/components/timeline-item/details/CustomInstructionsUpdate";
 import { PageLoading } from "@/components/views/PageLoading";
 import { useTimelineItem } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
@@ -24,13 +25,19 @@ export default function TimelineItemView() {
   const isMarkdown =
     record.type == "COVER_LETTER" || record.type == "NOTE" || record.type == "LINKEDIN_INTRO" || record.type == "REPLY_EMAIL";
 
+  const isCustomInstructionsUpdatable = record.type == "COVER_LETTER" || record.type == "LINKEDIN_INTRO" || record.type == "REPLY_EMAIL";
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
         <TitleBackHeader pageTitle={record.title} handleBack={handleBack} handleCancel={handleCancel} />
 
-        {isMarkdown && <MarkdownCopyView markdownText={record.text} />}
+        {isMarkdown && (
+          <MarkdownCopyView markdownText={record.text}>
+            {isCustomInstructionsUpdatable && <CustomInstructionsUpdate record={record} />}
+          </MarkdownCopyView>
+        )}
 
         {/* CV_ANALYSE INTERVIEW_STEP INTERVIEW_ANALYSE */}
       </MainContainer>

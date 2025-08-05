@@ -1,15 +1,16 @@
 import { ButtonMain } from "@/components/button/ButtonMain";
 import * as Clipboard from "expo-clipboard";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Markdown, { MarkdownIt } from "react-native-markdown-display";
 import { EmptyState } from "../views/EmptyState";
 
 interface Props {
   markdownText?: string;
+  children?: ReactNode;
 }
 
-export const MarkdownCopyView = ({ markdownText }: Props) => {
+export const MarkdownCopyView = ({ markdownText, children }: Props) => {
   const originalLabel = "Copy to clipboard";
   const [label, setLabel] = useState(originalLabel);
 
@@ -70,6 +71,8 @@ export const MarkdownCopyView = ({ markdownText }: Props) => {
         <Markdown rules={rules} style={markdownStyles}>
           {markdownText}
         </Markdown>
+
+        {children && <View style={{ marginTop: 20 }}>{children}</View>}
       </View>
     </ScrollView>
   );
@@ -78,7 +81,7 @@ export const MarkdownCopyView = ({ markdownText }: Props) => {
 const markdownStyles = StyleSheet.create({
   // Body text
   text: {
-    color: "#1D252C", 
+    color: "#1D252C",
     fontSize: 16,
     lineHeight: 24,
   },

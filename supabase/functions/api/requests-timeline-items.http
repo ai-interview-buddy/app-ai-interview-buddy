@@ -59,6 +59,15 @@ Authorization: Bearer {{token}}
   "customInstructions":"Please keep the tone warm and enthusiastic, but still professional. Mention that I believe my background aligns well with the position."
 }
 
+### Update the custom instructions; TimelineCustomInstructionsUpdate
+PATCH {{base_url}}/api/timeline-items/99c60056-083c-40d6-af94-597362633913/custom-instructions
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "customInstructions": "Mark is my name, the recruiter is paul "
+}
+
 ### Delete a timeline item
 DELETE {{base_url}}/api/timeline-items/9ba19541-8c9d-4984-9350-e654b4df780d
 Content-Type: application/json

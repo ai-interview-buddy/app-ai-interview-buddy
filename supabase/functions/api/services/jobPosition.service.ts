@@ -11,7 +11,8 @@ export const getAll = async (supabase: SupabaseClient): Promise<ServiceResponse<
     .from("job_position")
     .select(
       `id,career_profile_id,company_name,company_logo,company_website,job_url,job_title,salary_range,expected_salary,offer_received,archived,created_at,updated_at`
-    );
+    )
+    .order("updated_at", { ascending: false });
   return convertMany(query);
 };
 
@@ -24,7 +25,7 @@ const cleanInvalidURLs = async (url: string | null): Promise<string | null> => {
   if (!url) return null;
   const ok = await isUrlReachable(url);
   if (!ok) {
-    console.log("Invalid URL " + url)
+    console.log("Invalid URL " + url);
     return null;
   }
   return url;

@@ -1,6 +1,7 @@
 import {
   TimelineCoverLetter,
   TimelineCreateText,
+  TimelineCustomInstructionsUpdate,
   TimelineItem,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
@@ -15,6 +16,7 @@ import {
   deleteTimelineItem,
   fetchTimelineItem,
   fetchTimelineItems,
+  updateCustomInstructions,
 } from "./timelineItem.fetch";
 
 export const useTimelineItems = (
@@ -84,6 +86,17 @@ export const useCreateTimelineReplyEmail = (queryClient: QueryClient, token?: st
     mutationFn: (data) => {
       if (!token) throw new Error("Missing token");
       return createTimelineReplyEmail(token, data);
+    },
+    onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
+  });
+};
+
+export const useUpdateCustomInstructions = (queryClient: QueryClient, id?: string, token?: string) => {
+  return useMutation<TimelineItem, Error, TimelineCustomInstructionsUpdate>({
+    mutationFn: (data) => {
+      if (!token) throw new Error("Missing token");
+      if (!id) throw new Error("Missing id");
+      return updateCustomInstructions(token, id, data);
     },
     onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
   });

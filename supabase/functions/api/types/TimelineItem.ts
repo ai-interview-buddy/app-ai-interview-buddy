@@ -17,6 +17,7 @@ export interface TimelineItem {
 
   // For COVER_LETTER / NOTE / LINKEDIN_INTRO / REPLY_EMAIL
   text?: string;
+  customInstructions?: string;
 
   // For INTERVIEW_STEP
   interviewInstructions?: string;
@@ -29,6 +30,7 @@ export interface TimelineItem {
   interviewScore?: number;
 
   createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface TimelineFilter {
@@ -59,5 +61,9 @@ export interface TimelineLinkedinIntro {
 export interface TimelineReplyEmail {
   positionId: string;
   emailBody: string;
+  customInstructions: string;
+}
+
+export interface TimelineCustomInstructionsUpdate {
   customInstructions: string;
 }

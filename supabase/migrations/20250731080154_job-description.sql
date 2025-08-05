@@ -1,6 +1,6 @@
 create table public.job_position (
   id                 uuid        not null primary key default gen_random_uuid(),
-  account_id         uuid        not null references auth.users(id),
+  account_id         uuid        not null references auth.users(id) on delete cascade,
   career_profile_id  uuid        not null references public.career_profile(id),
   company_name       text        not null,
   company_logo       text,
@@ -18,7 +18,22 @@ create table public.job_position (
 
 alter table public.job_position enable row level security;
 
-create policy "Users can manage own job positions"
+create policy "Users can select own job positions."
   on public.job_position
-  using (account_id = auth.uid())
-  with check (account_id = auth.uid());
+  for select
+  using ((select auth.uid()) = account_id);
+
+create policy "Users can insert own job position."
+  on public.job_position
+  for insert
+  with check ((select auth.uid()) = account_id);
+
+create policy "Users can update own job position."
+  on public.job_position
+  for update
+  using ((select auth.uid()) = account_id);
+
+create policy "Users can delete own job position."
+  on public.job_position
+  for delete
+  using ((select auth.uid()) = account_id);

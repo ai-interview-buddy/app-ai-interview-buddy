@@ -10,13 +10,14 @@ create type public.timeline_type as enum (
 
 create table public.timeline_item (
   id                             uuid            not null primary key default gen_random_uuid(),
-  account_id                     uuid            not null references auth.users(id),
-  position_id                    uuid            not null references public.job_position(id),
+  account_id                     uuid            not null references auth.users(id) on delete cascade,
+  position_id                    uuid            not null references public.job_position(id) on delete cascade,
   title                          text            not null,
   type                           public.timeline_type not null,
 
   -- for COVER_LETTER / NOTE / LINKEDIN_INTRO / REPLY_EMAIL
   text                           text,
+  custom_instructions            text,
 
   -- for INTERVIEW_STEP
   interview_instructions         text,
@@ -28,7 +29,8 @@ create table public.timeline_item (
   interview_speech_to_text_path  text,
   interview_score                integer,
 
-  created_at                     timestamptz     not null default now()
+  created_at                     timestamptz     not null default now(),
+  updated_at                     timestamptz not null default now()
 );
 
 alter table public.timeline_item

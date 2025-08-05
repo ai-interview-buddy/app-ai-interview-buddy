@@ -68,6 +68,7 @@ npx supabase stop && npx supabase start
 # db migrations
 npx supabase migration new career-profiles
 npx supabase migration up 
+# npx supabase db reset 
 
 # functions
 npx supabase functions new api

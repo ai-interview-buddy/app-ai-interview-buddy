@@ -1,6 +1,6 @@
 create table public.career_profile (
-  id                uuid                        not null primary key default gen_random_uuid(),
-  account_id        uuid      references auth.users not null,
+  id                uuid      not null primary key default gen_random_uuid(),
+  account_id        uuid      not null references auth.users on delete cascade,
   title             text      not null,
   curriculum_path   text      not null,
   curriculum_text   text      not null,

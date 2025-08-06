@@ -136,7 +136,6 @@ export const remove = async (supabase: SupabaseClient, id: string): Promise<Serv
 export const archiveMany = async (supabase: SupabaseClient, ids: string[]): Promise<ServiceResponse<null>> => {
   try {
     const { data, error } = await supabase.from("job_position").select("id, archived").in("id", ids);
-    console.log(data);
 
     if (error) return genericError(error.message);
     if (!data || data.length !== ids.length) {
@@ -155,5 +154,29 @@ export const archiveMany = async (supabase: SupabaseClient, ids: string[]): Prom
     return { error: null, data: null, count: null };
   } catch (err) {
     return genericError("Failed to archive job positions", String(err));
+  }
+};
+
+export const markOfferReceived = async (supabase: SupabaseClient, ids: string[]): Promise<ServiceResponse<null>> => {
+  try {
+    const { data, error } = await supabase.from("job_position").select("id").in("id", ids);
+
+    if (error) return genericError(error.message);
+    if (!data || data.length !== ids.length) {
+      return genericError("One or more job positions not found or do not belong to user");
+    }
+
+    const updatePromises = data.map((item: { id: string }) =>
+      supabase.from("job_position").update({ offer_received: true, updated_at: new Date().toISOString() }).eq("id", item.id)
+    );
+
+    const results = await Promise.all(updatePromises);
+
+    const anyErrors = results.find((r) => r.error);
+    if (anyErrors) return genericError(anyErrors.error!.message);
+
+    return { error: null, data: null, count: null };
+  } catch (err) {
+    return genericError("Failed to mark offer received for job positions", String(err));
   }
 };

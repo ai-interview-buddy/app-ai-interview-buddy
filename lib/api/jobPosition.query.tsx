@@ -12,6 +12,7 @@ import {
   deleteJobPosition,
   fetchJobPosition,
   fetchJobPositions,
+  markJobPositionOfferReceived,
   updateJobPosition,
 } from "./jobPosition.fetch";
 
@@ -85,6 +86,18 @@ export const useArchiveJobPosition = (queryClient: QueryClient, token?: string) 
     mutationFn: (ids: string[]) => {
       if (!token) throw new Error("Missing token");
       return archiveJobPosition(token, ids);
+    },
+    onSuccess: (_, ids: string[]) => {
+      ids.forEach(id => invalidateJobQueries(queryClient, id));
+    },
+  });
+};
+
+export const useMarkJobPositionOfferReceived = (queryClient: QueryClient, token?: string) => {
+  return useMutation<boolean, Error, string[]>({
+    mutationFn: (ids: string[]) => {
+      if (!token) throw new Error("Missing token");
+      return markJobPositionOfferReceived(token, ids);
     },
     onSuccess: (_, ids: string[]) => {
       ids.forEach(id => invalidateJobQueries(queryClient, id));

@@ -1,13 +1,14 @@
 import { ButtonDefault } from "@/components/button/ButtonDefault";
-import { ButtonMainLink } from "@/components/button/ButtonMain";
+import { ButtonMain, ButtonMainLink } from "@/components/button/ButtonMain";
 import { MainContainer } from "@/components/container/MainContainer";
+import { LightHeader } from "@/components/headers/LightHeader";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { JobDescriptionHeader } from "@/components/job-position/details/JobDescriptionHeader";
 import { JobDescriptionInterviewTimeline } from "@/components/job-position/details/JobDescriptionInterviewTimeline";
 import { JobDescriptionQuickActions } from "@/components/job-position/details/JobDescriptionQuickActions";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
 import { PageLoading } from "@/components/views/PageLoading";
-import { useArchiveJobPosition, useDeleteJobPosition, useJobPosition } from "@/lib/api/jobPosition.query";
+import { useArchiveJobPosition, useDeleteJobPosition, useJobPosition, useMarkJobPositionOfferReceived } from "@/lib/api/jobPosition.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { useQueryClient } from "@tanstack/react-query";
@@ -25,6 +26,7 @@ const JobPositionDetails: React.FC = () => {
 
   const { data: record, isLoading, error } = useJobPosition(user?.accessToken, id as string);
   const { mutateAsync: archiveMutateAsync } = useArchiveJobPosition(queryClient, user?.accessToken);
+  const { mutateAsync: offerMutateAsync } = useMarkJobPositionOfferReceived(queryClient, user?.accessToken);
   const { mutateAsync: deleteMutateAsync } = useDeleteJobPosition(queryClient, user?.accessToken);
 
   const archiveLabel = record?.archived ? "Unarchive" : "Archive";
@@ -90,6 +92,19 @@ const JobPositionDetails: React.FC = () => {
     ]);
   };
 
+  const handleOfferRecieved = () => {
+    AlertPolyfill("Offer received", "Are you sure?", [
+      { text: "Cancel", style: "cancel", onPress: () => {} },
+      {
+        text: "Yes",
+        onPress: () => {
+          offerMutateAsync([record?.id!]);
+          router.replace(`/job-position/${id}/offer-received`);
+        },
+      },
+    ]);
+  };
+
   if (isLoading || !record) {
     return <PageLoading />;
   }
@@ -128,6 +143,10 @@ const JobPositionDetails: React.FC = () => {
 
           <JobDescriptionQuickActions record={record} />
           <JobDescriptionInterviewTimeline record={record} />
+          <View style={{ marginHorizontal: 20, marginBottom: 32 }}>
+            <LightHeader title="Offer" />
+            <ButtonMain icon="ribbon-outline" onPress={handleOfferRecieved} flex={false} label="Offer Received" />
+          </View>
         </ScrollView>
       </MainContainer>
     </>

@@ -111,7 +111,7 @@ const TimelineCreateNote: React.FC = () => {
             borderRadius: 12,
           }}
         >
-          <MainAction isLoading={saving} onPress={form.handleSubmit} loadingText="Saving...">
+          <MainAction isLoading={saving} onPress={form.handleSubmit}>
             Create Note
           </MainAction>
         </View>

@@ -57,3 +57,10 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ["a1d89ebf-9c40-435b-833a-c65e1b1a2a96"]
+
+### mark a JobPosition.offerReceived = true
+PATCH  {{base_url}}/api/job-positions/offer
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+["a1d89ebf-9c40-435b-833a-c65e1b1a2a96"]

@@ -77,3 +77,14 @@ export const archiveJobPosition = async (token: string, ids: string[]): Promise<
   if (!res.ok) throw new Error(`Failed to archive job position ${ids}`);
   return true;
 };
+
+export const markJobPositionOfferReceived = async (token: string, ids: string[]): Promise<boolean> => {
+  const res = await fetch(`${API_BASE_URL}/job-positions/offer`, {
+    method: "PATCH",
+    headers: defaultHeaders(token),
+    body: JSON.stringify(ids),
+  });
+
+  if (!res.ok) throw new Error(`Failed to mark offer received for job positions ${ids}`);
+  return true;
+};

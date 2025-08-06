@@ -92,12 +92,15 @@ export const JobPositionItem = forwardRef<React.ComponentRef<typeof TouchableOpa
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
               <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
                 style={{
+                  minWidth: 0,
+                  flex: 1,
                   fontSize: 16,
                   fontWeight: "700",
                   color: item.expectedSalary ? "#10B981" : "#F59E0B",
@@ -111,6 +114,7 @@ export const JobPositionItem = forwardRef<React.ComponentRef<typeof TouchableOpa
                   fontSize: 12,
                   color: "#D1D5DB",
                   fontWeight: "500",
+                  flexShrink: 0,
                 }}
               >
                 {new Date(item.createdAt).toLocaleDateString("en-US", {

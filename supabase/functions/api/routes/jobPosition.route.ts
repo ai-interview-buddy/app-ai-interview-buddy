@@ -9,6 +9,7 @@ router.get("/:id", controller.getById);
 router.post("/by-url", userContext, controller.createByUrl);
 router.post("/by-description", userContext, controller.createByDescription);
 router.patch("/archive", controller.archiveMany);
+router.patch("/offer", controller.markOfferReceived);
 router.patch("/:id", controller.update);
 router.delete("/:id", controller.remove);
 

@@ -1,3 +1,4 @@
+import { LightHeader } from "@/components/headers/LightHeader";
 import { TimelineItemList } from "@/components/timeline-item/list/TimelineItemList";
 import { useTimelineItems } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
@@ -18,16 +19,7 @@ export const JobDescriptionInterviewTimeline = ({ record }: Props) => {
 
   return (
     <View style={{ marginHorizontal: 20, marginBottom: 40 }}>
-      <Text
-        style={{
-          fontSize: 18,
-          fontWeight: "700",
-          color: "#1D252C",
-          marginBottom: 20,
-        }}
-      >
-        Interview Timeline
-      </Text>
+      <LightHeader title="Interview Timeline" />
 
       <View style={{ position: "relative" }}>
         {/* Timeline Line */}

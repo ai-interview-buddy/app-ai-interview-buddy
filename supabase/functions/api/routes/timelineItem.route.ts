@@ -10,6 +10,7 @@ router.post("/note", userContext, controller.createNote);
 router.post("/cover-letter", userContext, controller.createCoverLetter);
 router.post("/linkedin-intro", userContext, controller.createLinkedinIntro);
 router.post("/reply-email", userContext, controller.createReplyEmail);
+router.post("/analyse-interview", userContext, controller.createInterviewAnalyse);
 router.patch("/:id/custom-instructions", controller.updateCustomInstructions);
 router.delete("/:id", controller.remove);
 

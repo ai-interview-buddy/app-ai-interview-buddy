@@ -2,6 +2,7 @@ import {
   TimelineCoverLetter,
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
+  TimelineInterviewAnalyse,
   TimelineItem,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
@@ -10,6 +11,7 @@ import {
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
   createTimelineCoverLetter,
+  createTimelineInterviewAnalyse,
   createTimelineLinkedinIntro,
   createTimelineNote,
   createTimelineReplyEmail,
@@ -86,6 +88,16 @@ export const useCreateTimelineReplyEmail = (queryClient: QueryClient, token?: st
     mutationFn: (data) => {
       if (!token) throw new Error("Missing token");
       return createTimelineReplyEmail(token, data);
+    },
+    onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
+  });
+};
+
+export const useCreateTimelineInterviewAnalyse = (queryClient: QueryClient, token?: string) => {
+  return useMutation<TimelineItem, Error, TimelineInterviewAnalyse>({
+    mutationFn: (data) => {
+      if (!token) throw new Error("Missing token");
+      return createTimelineInterviewAnalyse(token, data);
     },
     onSuccess: (record) => invalidateTimelineQueries(queryClient, record.id),
   });

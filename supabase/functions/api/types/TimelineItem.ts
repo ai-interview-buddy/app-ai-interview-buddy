@@ -64,6 +64,11 @@ export interface TimelineReplyEmail {
   customInstructions: string;
 }
 
+export interface TimelineInterviewAnalyse {
+  positionId: string;
+  interviewPath: string;
+}
+
 export interface TimelineCustomInstructionsUpdate {
   customInstructions: string;
 }

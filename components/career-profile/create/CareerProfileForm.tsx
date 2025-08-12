@@ -18,6 +18,16 @@ const typeNames: { [key: string]: string } = {
   "application/pdf": "PDF",
   "application/msword": "DOC",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "DOCX",
+  "audio/mpeg": ".mp3",
+  "audio/mp4": ".mp4",
+  "audio/aac": ".aac",
+  "audio/wav": ".wav",
+  "audio/flac": ".flac",
+  "audio/pcm": ".pcm",
+  "audio/x-m4a": ".m4a",
+  "audio/ogg": ".ogg",
+  "audio/opus": ".opus",
+  "audio/webm": ".webm",
 };
 
 const CareerProfileForm = ({
@@ -35,8 +45,8 @@ const CareerProfileForm = ({
     try {
       const result = await getDocumentAsync({
         type: allowedTypes,
-        copyToCacheDirectory: true,
-        multiple: false,
+        copyToCacheDirectory: false,
+        multiple: true,
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
@@ -95,7 +105,7 @@ const CareerProfileForm = ({
   const supportedFormats = allowedTypes.map((el) => typeNames[el] || el).join(", ");
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: "center" }}>
+    <View>
       <View
         style={{
           backgroundColor: "white",

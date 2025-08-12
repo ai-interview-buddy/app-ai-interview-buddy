@@ -1,0 +1,21 @@
+@base_url = http://127.0.0.1:54321/functions/v1
+@token = ADD_TOKEN_HERE
+
+
+### List all interview-questions | Filter: type {page?: number; size?: number; unpaged?: boolean; timelineItemId?: string; questionType: QuestionType}
+### IF page/size are present then should return filtering it
+### IF unpaged=true then it should return all records
+### And error if page/size nor unpaged are present
+GET {{base_url}}/api/interview-questions?unpaged=true&timelineItemId=c4d5e4bb-a259-4725-8c1c-c6feb61723dd
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get a specific timeline item
+GET {{base_url}}/api/interview-questions/e6f38b07-6d59-43d4-b0e0-bb6b5e376616
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Delete a timeline item
+DELETE {{base_url}}/api/interview-questions/9ba19541-8c9d-4984-9350-e654b4df780d
+Content-Type: application/json
+Authorization: Bearer {{token}}

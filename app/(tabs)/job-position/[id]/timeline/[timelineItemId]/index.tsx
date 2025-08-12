@@ -2,6 +2,7 @@ import { MainContainer } from "@/components/container/MainContainer";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { MarkdownCopyView } from "@/components/misc/MarkdownCopyView";
 import { CustomInstructionsUpdate } from "@/components/timeline-item/details/CustomInstructionsUpdate";
+import { InterviewQuestionMain } from "@/components/timeline-item/interview-question/InterviewQuestionMain";
 import { PageLoading } from "@/components/views/PageLoading";
 import { useTimelineItem } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
@@ -27,6 +28,8 @@ export default function TimelineItemView() {
 
   const isCustomInstructionsUpdatable = record.type == "COVER_LETTER" || record.type == "LINKEDIN_INTRO" || record.type == "REPLY_EMAIL";
 
+  const isInterviewQuestion = record.type == "INTERVIEW_ANALYSE";
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -39,7 +42,7 @@ export default function TimelineItemView() {
           </MarkdownCopyView>
         )}
 
-        {/* CV_ANALYSE INTERVIEW_STEP INTERVIEW_ANALYSE */}
+        {isInterviewQuestion && <InterviewQuestionMain timelineItem={record} />}
       </MainContainer>
     </>
   );

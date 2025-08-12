@@ -5,6 +5,7 @@ import {
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
   TimelineFilter,
+  TimelineInterviewAnalyse,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
 } from "../types/TimelineItem.ts";
@@ -55,6 +56,13 @@ export const createLinkedinIntro = async (req: Request, res: Response) => {
 export const createReplyEmail = async (req: Request, res: Response) => {
   const payload = req.body as TimelineReplyEmail;
   const { data, error } = await service.createReplyEmail(req.supabase, req.user, payload);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(201).json(data);
+};
+
+export const createInterviewAnalyse = async (req: Request, res: Response) => {
+  const payload = req.body as TimelineInterviewAnalyse;
+  const { data, error } = await service.createInterviewAnalyse(req.supabase, req.user, payload);
   if (error) return res.status(400).json({ error: error.message });
   res.status(201).json(data);
 };

@@ -1,3 +1,4 @@
+import { AgentInputItem } from "@openai/agents";
 import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
 import { generateCoverLetter } from "../agents/coverLetter.agent.ts";
 import { generateLinkedinIntro } from "../agents/linkedinIntro.agent.ts";
@@ -8,6 +9,7 @@ import {
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
   TimelineFilter,
+  TimelineInterviewAnalyse,
   TimelineItem,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
@@ -16,8 +18,8 @@ import {
 import { genericError } from "../utils/error.utils.ts";
 import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
 import { getById as getCareerProfileById } from "./careerProfile.service.ts";
+import { parseQuestionsByAudio } from "./interviewQuestion.service.ts";
 import { getById as getJobPositionById } from "./jobPosition.service.ts";
-import { AgentInputItem } from "@openai/agents";
 
 export const getAll = async (supabase: SupabaseClient, params: TimelineFilter): Promise<ServiceResponse<TimelineItem[]>> => {
   let query = supabase
@@ -57,6 +59,9 @@ export const createNote = async (
   body: TimelineCreateText
 ): Promise<ServiceResponse<TimelineItem>> => {
   try {
+    const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
+
     const record = {
       accountId: user.id,
       positionId: body.positionId,
@@ -80,6 +85,7 @@ export const createCoverLetter = async (
 ): Promise<ServiceResponse<TimelineItem>> => {
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
     const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
 
     const letter = await generateCoverLetter(careerPosition!.curriculumText, jobPosition!.jobDescription, body.customInstructions);
@@ -90,6 +96,7 @@ export const createCoverLetter = async (
       title: "Cover Letter",
       type: TimelineType.COVER_LETTER,
       text: letter,
+      customInstructions: body.customInstructions,
       createdAt: new Date().toISOString(),
     };
     const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
@@ -107,6 +114,7 @@ export const createLinkedinIntro = async (
 ): Promise<ServiceResponse<TimelineItem>> => {
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
     const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
 
     const output = await generateLinkedinIntro(
@@ -122,6 +130,7 @@ export const createLinkedinIntro = async (
       title: "LinkedIn Intro",
       type: TimelineType.LINKEDIN_INTRO,
       text: output,
+      customInstructions: body.customInstructions,
       createdAt: new Date().toISOString(),
     };
     const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
@@ -139,6 +148,7 @@ export const createReplyEmail = async (
 ): Promise<ServiceResponse<TimelineItem>> => {
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
 
     const output = await generateReplyEmail(jobPosition!.jobDescription, body.customInstructions, body.emailBody);
 
@@ -148,6 +158,7 @@ export const createReplyEmail = async (
       title: output?.emailSubject || "Reply to an email",
       type: TimelineType.REPLY_EMAIL,
       text: output?.emailBody,
+      customInstructions: body.customInstructions,
       createdAt: new Date().toISOString(),
     };
     const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
@@ -155,6 +166,53 @@ export const createReplyEmail = async (
   } catch (err) {
     console.error(`Error creating REPLY_EMAIL timeline item: ${safeErrorLog(err)}`);
     return genericError("Failed to create a timeline item", String(err));
+  }
+};
+
+export const createInterviewAnalyse = async (
+  supabase: SupabaseClient,
+  user: User,
+  body: TimelineInterviewAnalyse
+): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    console.log(`interviewAnalyse: starting to process ${body.interviewPath} for position ${body.positionId}`);
+
+    const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+    if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
+
+    const record = {
+      accountId: user.id,
+      positionId: body.positionId,
+      title: "Interview Feedback",
+      type: TimelineType.INTERVIEW_ANALYSE,
+      interviewOriginalAudioPath: body.interviewPath,
+    };
+
+    const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
+    const saved: ServiceResponse<TimelineItem> = convertOne(result);
+    console.log(`interviewAnalyse: saved timeline_item ${saved.data?.id}; ${saved.error?.message}; starting background-tasks`);
+
+    EdgeRuntime.waitUntil(parseQuestionsByAudio(supabase, saved.data!));
+
+    return saved;
+  } catch (err) {
+    console.error(`Error creating REPLY_EMAIL timeline item: ${safeErrorLog(err)}`);
+    return genericError("Failed to create a timeline item", String(err));
+  }
+};
+
+export const update = async (supabase: SupabaseClient, id: string, updates: TimelineItem): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    const payload = oneToDbCase({
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    });
+
+    const query = await supabase.from("timeline_item").update(payload).eq("id", id).select().single();
+    return convertOne(query);
+  } catch (error) {
+    console.error(`Failed to update timeline item ${id}: ${safeErrorLog(error)}`);
+    throw error;
   }
 };
 

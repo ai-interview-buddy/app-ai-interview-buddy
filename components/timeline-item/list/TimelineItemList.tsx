@@ -1,6 +1,7 @@
 import { TimelineItem, TimelineType } from "@/supabase/functions/api/types/TimelineItem";
 import { default as React } from "react";
 import { View } from "react-native";
+import { TimelineItemListAnalyse } from "./types/TimelineItemListAnalyse";
 import { TimelineItemListSimple } from "./types/TimelineItemListSimple";
 
 const getStatusColor = (type: TimelineType) => {
@@ -39,6 +40,7 @@ export const TimelineItemList = ({ timelineItem }: Props) => {
   return (
     <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
       {isSimple && <TimelineItemListSimple timelineItem={timelineItem} bgColor={bgColor} />}
+      {timelineItem.type === TimelineType.INTERVIEW_ANALYSE && <TimelineItemListAnalyse timelineItem={timelineItem} bgColor={bgColor} />}
     </View>
   );
 };

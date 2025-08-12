@@ -59,6 +59,16 @@ Authorization: Bearer {{token}}
   "customInstructions":"Please keep the tone warm and enthusiastic, but still professional. Mention that I believe my background aligns well with the position."
 }
 
+### Create a timeline type INTERVIEW_ANALYSE; Type TimelineInterviewAnalyse
+POST {{base_url}}/api/timeline-items/analyse-interview
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "positionId":"08c2f59a-4feb-4c7c-90d5-f885efc8ef79",
+  "interviewPath":"fa9851bd-ec29-4dc9-82e1-dcebe40aeebd/1754653862227.mp3"
+}
+
 ### Update the custom instructions; TimelineCustomInstructionsUpdate
 PATCH {{base_url}}/api/timeline-items/99c60056-083c-40d6-af94-597362633913/custom-instructions
 Content-Type: application/json

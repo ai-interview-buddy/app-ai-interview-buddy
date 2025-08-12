@@ -1,3 +1,4 @@
+import { formatDateShort } from "@/lib/utils/format.utils";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import React, { forwardRef } from "react";
 import { Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
@@ -117,11 +118,7 @@ export const JobPositionItem = forwardRef<React.ComponentRef<typeof TouchableOpa
                   flexShrink: 0,
                 }}
               >
-                {new Date(item.createdAt).toLocaleDateString("en-US", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
+                {formatDateShort(item.createdAt)}
               </Text>
             </View>
           </View>

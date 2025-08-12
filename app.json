@@ -15,6 +15,10 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "android.permission.FOREGROUND_SERVICE_MICROPHONE",
+        "android.permission.FOREGROUND_SERVICE_DATA_SYNC"
+      ],
       "edgeToEdgeEnabled": true,
       "package": "com.aiinterviewbuddy.appinterviewbuddy"
     },

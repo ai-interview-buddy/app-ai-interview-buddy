@@ -41,6 +41,12 @@ const actions: Action[] = [
     subtitle: "Generate an answer in seconds",
     getLink: (record: JobPosition) => `/job-position/${record.id}/timeline-create-reply-email`,
   },
+  {
+    icon: "mic-outline",
+    title: "Interview feedback",
+    subtitle: "Capture your interview and get AI powered feedback",
+    getLink: (record: JobPosition) => `/job-position/${record.id}/timeline-create-interview-analyse-step1`,
+  },
 ];
 
 export const JobDescriptionQuickActions = ({ record }: Props) => {

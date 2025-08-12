@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@deepgram/sdk": "npm:@deepgram/sdk@^4.11.2",
     "@openai/agents": "npm:@openai/agents@^0.0.13",
     "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.52.1",
     "@supabase/functions-js": "jsr:@supabase/functions-js@^2.4.5",

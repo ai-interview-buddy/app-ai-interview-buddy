@@ -123,3 +123,5 @@ Brand core:
    -  [ ] Add the CV_ANALYSE: an utilitary to compare the position vs the cv and analyse in scores similar to the cvScore
    -  [ ] Add the INTERVIEW_STEP: an utilitary to add schedulled interviews
    -  [ ] Start saving the "custom instructions" and allow users to "re-play" with twicking the instructions
+-  [ ] tech: extract all forms in a proper file; 
+-  [ ] tech: review all exceptions to the controllers and proper logging; 

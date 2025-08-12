@@ -9,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { DocumentPickerAsset } from "expo-document-picker";
 import { Stack, router } from "expo-router";
 import React from "react";
+import { View } from "react-native";
 
 const CreateCareerProfile = () => {
   const { user } = useAuthStore();
@@ -43,13 +44,14 @@ const CreateCareerProfile = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
         <TitleBackHeader pageTitle="New Career Profile" handleBack={handleBack} handleCancel={handleBack} />
-
-        <CareerProfileForm
-          title="Please inform your CV"
-          subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
-          allowedTypes={["application/pdf"]}
-          onConfirm={handleSave}
-        />
+        <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: "center" }}>
+          <CareerProfileForm
+            title="Please inform your CV"
+            subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
+            allowedTypes={["application/pdf"]}
+            onConfirm={handleSave}
+          />
+        </View>
       </MainContainer>
     </>
   );

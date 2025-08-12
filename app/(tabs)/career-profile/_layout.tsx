@@ -7,10 +7,6 @@ export default function JobPositionsStack() {
         name="index"
         options={{ title: 'Job positions'}}
       />
-      <Stack.Screen
-        name="details"
-        options={{ title: 'Details'}}
-      />
     </Stack>
   );
 }

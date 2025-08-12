@@ -1,3 +1,4 @@
+import { AudioRecorder } from "expo-audio";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { DetailedError, Upload } from "tus-js-client";
@@ -28,13 +29,16 @@ export const uploadFile = async (
   user: UserInfo,
   bucketName: string,
   filename: string,
-  pickerAsset: ImagePicker.ImagePickerAsset | DocumentPicker.DocumentPickerAsset,
+  pickerAsset: ImagePicker.ImagePickerAsset | DocumentPicker.DocumentPickerAsset | AudioRecorder,
   onProgress: (bytesUploaded: number, bytesTotal: number) => Promise<void> = onProgressDefault,
   onError: (error: Error | DetailedError) => Promise<void> = onErrorDefault,
   onSuccess: () => Promise<void> = onSuccessDefault
 ): Promise<void> => {
+  const uri = (pickerAsset as { uri: string }).uri; // <<<---- this works for ImagePickerAsset, DocumentPickerAsset AND AudioRecorder
+  const mimeType = (pickerAsset as { mimeType?: string }).mimeType || "application/octet-stream";
+
   return new Promise<void>(async (resolve, reject) => {
-    const blob = await fetch(pickerAsset.uri).then((res) => res.blob());
+    const blob = await fetch(uri).then((res) => res.blob());
     let upload = new Upload(blob, {
       endpoint: `${supabaseUrl}/storage/v1/upload/resumable`,
       retryDelays: [0, 3000, 5000, 10000, 20000],
@@ -48,7 +52,7 @@ export const uploadFile = async (
         bucketName: bucketName,
         // @ts-ignore TODO: check why types are acting up here.
         objectName: filename,
-        contentType: pickerAsset.mimeType || "application/octet-stream",
+        contentType: mimeType,
         cacheControl: "3600",
       },
       chunkSize: 6 * 1024 * 1024, // NOTE: it must be set to 6MB (for now) do not change it

@@ -1,11 +1,12 @@
 import { ConfigContext, ExpoConfig } from "expo/config";
+const withForegroundService = require("./android-manifest.plugin");
 
 const iosUrlScheme = process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME;
 
 export default ({ config }: ConfigContext): ExpoConfig => {
   const googleSignInPlugin: [string, any] = ["@react-native-google-signin/google-signin", { iosUrlScheme: iosUrlScheme }];
 
-  return {
+  const next = {
     ...config,
     name: "app-ai-interview-buddy",
     slug: "app-ai-interview-buddy",
@@ -14,4 +15,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       googleSignInPlugin, // inject google with iosUrlScheme
     ],
   };
+
+  return withForegroundService(next);
 };

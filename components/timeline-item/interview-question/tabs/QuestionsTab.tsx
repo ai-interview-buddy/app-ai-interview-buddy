@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/views/EmptyState";
 import { InterviewQuestion } from "@/supabase/functions/api/types/InterviewQuestion";
 import { TimelineItem } from "@/supabase/functions/api/types/TimelineItem";
 import { Link } from "expo-router";
@@ -11,16 +12,24 @@ interface Props {
 }
 
 export const QuestionsTab = ({ timelineItem, questions }: Props) => {
+  const isEmpty = questions.length === 0;
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
       <View style={{ padding: 20 }}>
-        {questions.map((question, index) => (
-          <Link href={`/job-position/${timelineItem?.positionId}/timeline/${timelineItem?.id}/${question?.id}`} key={index} push asChild>
-            <TouchableOpacity key={index}>
-              <QuestionHeader question={question} key={index} />
-            </TouchableOpacity>
-          </Link>
-        ))}
+        {isEmpty && (
+          <EmptyState title="No Questions" icon="help-circle-outline">
+            It's possible your recording has failed, or, the interview didn't have the structure of Quenstions & Answers.
+          </EmptyState>
+        )}
+
+        {!isEmpty &&
+          questions.map((question, index) => (
+            <Link href={`/job-position/${timelineItem?.positionId}/timeline/${timelineItem?.id}/${question?.id}`} key={index} push asChild>
+              <TouchableOpacity key={index}>
+                <QuestionHeader question={question} key={index} />
+              </TouchableOpacity>
+            </Link>
+          ))}
       </View>
     </ScrollView>
   );

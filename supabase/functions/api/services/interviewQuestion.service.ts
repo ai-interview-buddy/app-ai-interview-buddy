@@ -150,7 +150,7 @@ export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRe
   const text = paragraphs
     ?.map((s) => {
       const speaker = s.speaker === candidateSpeakerId ? "You" : "Interviewer";
-      const sentence = s.sentences.join(" ");
+      const sentence = s.sentences.map(s => s.text).join(" ");
       const time = formatTime(s.start);
       return `**${speaker} [${time}]** \n\n ${sentence}`;
     })

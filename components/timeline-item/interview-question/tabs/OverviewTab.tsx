@@ -18,7 +18,7 @@ export const OverviewTab = ({ timelineItem, questions }: Props) => {
     const avgScore = questions.length > 0 ? questions.reduce((sum, q) => sum + (q[key] as number), 0) / questions.length : 0;
     return { key: key, label: metric.label, score: avgScore };
   });
-  console.log(questions);
+  
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
       <View style={{ padding: 20 }}>

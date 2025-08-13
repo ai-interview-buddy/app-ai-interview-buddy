@@ -39,3 +39,6 @@ supabase/functions/.env
 *.tsbuildinfo
 
 app-example
+
+# editors
+.idea/

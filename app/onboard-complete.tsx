@@ -33,12 +33,7 @@ const CreateCareerProfile = () => {
             />
           </View>
           <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: "center" }}>
-            <CareerProfileForm
-              title="Please inform your CV"
-              subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
-              allowedTypes={["application/pdf"]}
-              onConfirm={handleSave}
-            />
+            <CareerProfileForm onConfirm={handleSave} />
           </View>
         </ScrollView>
       </MainContainer>

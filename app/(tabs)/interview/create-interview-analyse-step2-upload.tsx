@@ -1,5 +1,5 @@
-import CareerProfileForm from "@/components/career-profile/create/CareerProfileForm";
 import { MainContainer } from "@/components/container/MainContainer";
+import UploadFileForm from "@/components/data-input/UploadFileForm";
 import { UploadProgressDialog } from "@/components/dialogs/UploadProgressDialog";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { StepIndicator } from "@/components/misc/StepIndicator";
@@ -78,9 +78,9 @@ const CreateStep2Upload: React.FC = () => {
           >
             <StepIndicator currentStep={2} totalSteps={2} />
 
-            <CareerProfileForm
-              title="Please inform your CV"
-              subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
+            <UploadFileForm
+              title="Upload a recording of an interview"
+              subtitle="Please select the audio file containing the recording of your interview"
               allowedTypes={[
                 "audio/mpeg", // .mp3, .mp2
                 "audio/mp4", // .mp4

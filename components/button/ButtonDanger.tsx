@@ -21,6 +21,8 @@ export const ButtonDanger = ({ label, icon = "trash-outline", visible, disabled,
       style={{
         flex: flex == false ? undefined : flex,
         backgroundColor: "#FEF2F2",
+        borderWidth: 1,
+        borderColor: "#FECACA",
         borderRadius: 12,
         paddingVertical: 14,
         paddingHorizontal: 15,

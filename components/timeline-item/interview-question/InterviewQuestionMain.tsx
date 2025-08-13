@@ -12,10 +12,11 @@ import { TranscriptTab } from "./tabs/TranscriptTab";
 
 interface Props {
   timelineItem: TimelineItem;
+  linkType: "job-position" | "interview";
 }
 const { width } = Dimensions.get("window");
 
-export const InterviewQuestionMain = ({ timelineItem }: Props) => {
+export const InterviewQuestionMain = ({ timelineItem, linkType}: Props) => {
   const { user } = useAuthStore();
 
   const [index, setIndex] = useState(0);
@@ -37,7 +38,7 @@ export const InterviewQuestionMain = ({ timelineItem }: Props) => {
 
   const renderScene = SceneMap({
     overview: () => <OverviewTab timelineItem={timelineItem} questions={questions} />,
-    questions: () => <QuestionsTab timelineItem={timelineItem} questions={questions} />,
+    questions: () => <QuestionsTab timelineItem={timelineItem} questions={questions} linkType={linkType} />,
     transcript: () => <TranscriptTab timelineItem={timelineItem} />,
   });
 

@@ -142,7 +142,9 @@ const JobPositionDetails: React.FC = () => {
           </View>
 
           <JobDescriptionQuickActions record={record} />
+
           <JobDescriptionInterviewTimeline record={record} />
+
           <View style={{ marginHorizontal: 20, marginBottom: 32 }}>
             <LightHeader title="Offer" />
             <ButtonMain icon="ribbon-outline" onPress={handleOfferRecieved} flex={false} label="Offer Received" />

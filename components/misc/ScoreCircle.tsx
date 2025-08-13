@@ -3,7 +3,7 @@ import React from "react";
 import { Text, View } from "react-native";
 
 type ScoreCircleProps = {
-  score: number;
+  score?: number;
   size?: number; // Outer diameter (default 100)
 };
 
@@ -48,9 +48,9 @@ export const ScoreCircle = ({ score, size = 100 }: ScoreCircleProps) => {
           borderWidth,
           borderColor: color,
           borderTopColor: "transparent",
-          borderRightColor: score < 2.5 ? "transparent" : color,
-          borderBottomColor: score < 5 ? "transparent" : color,
-          borderLeftColor: score < 7.5 ? "transparent" : color,
+          borderRightColor: (score || 0) < 2.5 ? "transparent" : color,
+          borderBottomColor: (score || 0) < 5 ? "transparent" : color,
+          borderLeftColor: (score || 0) < 7.5 ? "transparent" : color,
           transform: [{ rotate }],
         }}
       />

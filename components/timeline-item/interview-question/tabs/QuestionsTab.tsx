@@ -1,7 +1,7 @@
 import { EmptyState } from "@/components/views/EmptyState";
 import { InterviewQuestion } from "@/supabase/functions/api/types/InterviewQuestion";
 import { TimelineItem } from "@/supabase/functions/api/types/TimelineItem";
-import { Link } from "expo-router";
+import { Href, Link } from "expo-router";
 import React from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import QuestionHeader from "../QuestionHeader";
@@ -9,10 +9,12 @@ import QuestionHeader from "../QuestionHeader";
 interface Props {
   timelineItem: TimelineItem;
   questions: InterviewQuestion[];
+  linkType: "job-position" | "interview";
 }
 
-export const QuestionsTab = ({ timelineItem, questions }: Props) => {
+export const QuestionsTab = ({ timelineItem, questions, linkType }: Props) => {
   const isEmpty = questions.length === 0;
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
       <View style={{ padding: 20 }}>
@@ -23,13 +25,19 @@ export const QuestionsTab = ({ timelineItem, questions }: Props) => {
         )}
 
         {!isEmpty &&
-          questions.map((question, index) => (
-            <Link href={`/job-position/${timelineItem?.positionId}/timeline/${timelineItem?.id}/${question?.id}`} key={index} push asChild>
-              <TouchableOpacity key={index}>
-                <QuestionHeader question={question} key={index} />
-              </TouchableOpacity>
-            </Link>
-          ))}
+          questions.map((question, index) => {
+            const href: Href =
+              linkType === "job-position"
+                ? `/job-position/${timelineItem?.positionId}/timeline/${timelineItem?.id}/${question?.id}`
+                : `/interview/${timelineItem?.id}/${question?.id}`;
+            return (
+              <Link href={href} key={index} push asChild>
+                <TouchableOpacity key={index}>
+                  <QuestionHeader question={question} key={index} />
+                </TouchableOpacity>
+              </Link>
+            );
+          })}
       </View>
     </ScrollView>
   );

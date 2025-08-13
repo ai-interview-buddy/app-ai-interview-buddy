@@ -177,8 +177,10 @@ export const createInterviewAnalyse = async (
   try {
     console.log(`interviewAnalyse: starting to process ${body.interviewPath} for position ${body.positionId}`);
 
-    const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
-    if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
+    if (body.positionId) {
+      const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
+      if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
+    }
 
     const record = {
       accountId: user.id,
@@ -224,6 +226,7 @@ export const updateCustomInstructions = async (
   try {
     const { data: record } = await getById(supabase, id);
     if (!record) throw Error(`Failed to retrieve timeline item ${id}`);
+    if (!record.positionId) throw new Error("Can't updateCustomInstructions for a TimelineItem with no jobPosition");
 
     const extraMessages: AgentInputItem[] = [
       { role: "assistant", status: "completed", content: [{ type: "output_text", text: record.text || "" }] },

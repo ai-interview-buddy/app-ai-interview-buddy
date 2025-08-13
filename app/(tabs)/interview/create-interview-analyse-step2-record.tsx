@@ -44,7 +44,7 @@ export const STT_RECORDING_OPTIONS: RecordingOptions = {
 
 const RecordInterview: React.FC = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { jobPositionId } = useLocalSearchParams();
 
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
@@ -256,9 +256,9 @@ const RecordInterview: React.FC = () => {
       };
 
       await uploadFile(user, "interviews", filename, audioRecorder, onProgress);
-      const timelineItem = await mutateAsync({ positionId: id as string, interviewPath: filename });
+      const timelineItem = await mutateAsync({ positionId: jobPositionId as string, interviewPath: filename });
 
-      router.replace(`/job-position/${id}/timeline/${timelineItem.id}`);
+      router.replace(jobPositionId ? `/job-position/${jobPositionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
     } catch (err) {
       console.error("Failed to stop recording", err);
       Alert.alert("Error", "Failed to stop recording. Please try again.");
@@ -297,8 +297,8 @@ const RecordInterview: React.FC = () => {
     outputRange: [0.1, 0],
   });
 
-  const handleBack = () => router.push(`/job-position/${id}/timeline-create-interview-analyse-step1`);
-  const handleCancel = () => router.push(`/job-position`);
+  const handleBack = () => router.push({ pathname: `/interview/create-interview-analyse-step1`, params: { jobPositionId } });
+  const handleCancel = () => (jobPositionId ? router.push(`/job-position`) : router.push("/interview"));
 
   return (
     <>

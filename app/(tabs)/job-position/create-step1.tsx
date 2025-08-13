@@ -6,8 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useRouter } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-export type JobPositionCreationMethod = "jobUrl" | "jobDescription" | null;
-
 const CreateStep1: React.FC = () => {
   const router = useRouter();
 

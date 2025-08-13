@@ -8,10 +8,17 @@ export const formatTime = (seconds: number): string => {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 };
 
-export const formatDateLong = (date: string | Date | undefined): string => {
-  if (!date) return "";
+export const formatDateLong = (dateString: string | Date | undefined): string => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
 
-  return new Date(date).toLocaleDateString("en-US", {
+  if (diffInHours < 1) return "Just now";
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  if (diffInHours < 48) return "Yesterday";
+
+  return date.toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",
     day: "numeric",

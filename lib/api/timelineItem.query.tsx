@@ -2,11 +2,11 @@ import {
   TimelineCoverLetter,
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
+  TimelineFilter,
   TimelineInterviewAnalyse,
   TimelineItem,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
-  TimelineType,
 } from "@/supabase/functions/api/types/TimelineItem";
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
@@ -21,16 +21,7 @@ import {
   updateCustomInstructions,
 } from "./timelineItem.fetch";
 
-export const useTimelineItems = (
-  token?: string,
-  params?: {
-    page?: number;
-    size?: number;
-    unpaged?: boolean;
-    jobPositionId?: string;
-    type?: TimelineType;
-  }
-): UseQueryResult<TimelineItem[], Error> => {
+export const useTimelineItems = (token?: string, params?: TimelineFilter): UseQueryResult<TimelineItem[], Error> => {
   return useQuery<TimelineItem[], Error>({
     queryKey: ["timeline-items", params],
     enabled: !!token && !!params && (params.unpaged || (params.page !== undefined && params.size !== undefined)),

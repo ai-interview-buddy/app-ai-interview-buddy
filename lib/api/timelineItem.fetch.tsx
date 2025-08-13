@@ -2,24 +2,15 @@ import {
   TimelineCoverLetter,
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
+  TimelineFilter,
   TimelineInterviewAnalyse,
   TimelineItem,
   TimelineLinkedinIntro,
   TimelineReplyEmail,
-  TimelineType,
 } from "@/supabase/functions/api/types/TimelineItem";
 import { API_BASE_URL, defaultHeaders } from "./api";
 
-export const fetchTimelineItems = async (
-  token: string,
-  params: {
-    page?: number;
-    size?: number;
-    unpaged?: boolean;
-    jobPositionId?: string;
-    type?: TimelineType;
-  }
-): Promise<TimelineItem[]> => {
+export const fetchTimelineItems = async (token: string, params: TimelineFilter): Promise<TimelineItem[]> => {
   const query = new URLSearchParams();
 
   if (params.unpaged) {
@@ -103,7 +94,11 @@ export const createTimelineInterviewAnalyse = async (token: string, body: Timeli
   return await res.json();
 };
 
-export const updateCustomInstructions = async (token: string, id: string, body: TimelineCustomInstructionsUpdate): Promise<TimelineItem> => {
+export const updateCustomInstructions = async (
+  token: string,
+  id: string,
+  body: TimelineCustomInstructionsUpdate
+): Promise<TimelineItem> => {
   const res = await fetch(`${API_BASE_URL}/timeline-items/${id}/custom-instructions`, {
     method: "PATCH",
     headers: defaultHeaders(token),

@@ -5,35 +5,51 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        // tabBarActiveTintColor: "#ffd33d",
+        tabBarActiveTintColor: "#ffc629",
         headerStyle: {
           // backgroundColor: "#25292e",
         },
         headerShadowVisible: false,
-        // headerTintColor: "#fff",
+        headerTintColor: "#fff",
         tabBarStyle: {
           // backgroundColor: "#25292e",
         },
       }}
     >
+      <Tabs.Screen name="index" options={{ href: null, headerShown: false }} />
+
       <Tabs.Screen
-        name="index"
+        name="interview"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "home-sharp" : "home-outline"} color={color} size={24} />,
+          title: "Interviews",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "chatbubbles" : "chatbubbles-outline"} color={color} size={28} />,
         }}
       />
       <Tabs.Screen
-        name="about"
+        name="job-position"
         options={{
-          title: "About",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "information-circle" : "information-circle-outline"} color={color} size={24} />
-          ),
+          title: "Job Positions",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "briefcase" : "briefcase-outline"} color={color} size={28} />,
         }}
       />
-      <Tabs.Screen name="job-position" options={{ headerShown: false }} />
-      <Tabs.Screen name="career-profile" options={{ headerShown: false }} />
+      <Tabs.Screen
+        name="career-profile"
+        options={{
+          title: "Career Tracks",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "trending-up" : "trending-up-outline"} color={color} size={28} />,
+        }}
+      />
+      <Tabs.Screen
+        name="account"
+        options={{
+          title: "Account",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "settings" : "settings-outline"} color={color} size={28} />,
+        }}
+      />
     </Tabs>
   );
 }

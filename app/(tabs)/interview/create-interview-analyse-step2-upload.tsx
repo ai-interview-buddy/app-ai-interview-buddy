@@ -21,7 +21,7 @@ import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
 const CreateStep2Upload: React.FC = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { jobPositionId } = useLocalSearchParams();
 
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
@@ -49,8 +49,8 @@ const CreateStep2Upload: React.FC = () => {
       };
 
       await uploadFile(user, "interviews", filename, pickerAsset, onProgress);
-      const timelineItem = await mutateAsync({ positionId: id as string, interviewPath: filename });
-      router.push(`/job-position/${id}/timeline/${timelineItem.id}`);
+      const timelineItem = await mutateAsync({ positionId: jobPositionId as string, interviewPath: filename });
+      router.replace(jobPositionId ? `/job-position/${jobPositionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
     } catch (error) {
       console.log(error);
       AlertPolyfill("Error", "Failed to upload CV. Please try again.");
@@ -60,8 +60,8 @@ const CreateStep2Upload: React.FC = () => {
     }
   };
 
-  const handleBack = () => router.push(`/job-position/${id}/timeline-create-interview-analyse-step1`);
-  const handleCancel = () => router.push(`/job-position`);
+  const handleBack = () => router.push({ pathname: `/interview/create-interview-analyse-step1`, params: { jobPositionId } });
+  const handleCancel = () => (jobPositionId ? router.push(`/job-position`) : router.push("/interview"));
 
   return (
     <>

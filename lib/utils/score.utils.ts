@@ -1,4 +1,5 @@
-export const getScoreColor = (score: number): string => {
+export const getScoreColor = (score?: number): string => {
+  if (!score) return "#242ee7ff";
   if (score >= 8) return "#10B981";
   if (score >= 6) return "#F59E0B";
   if (score >= 4) return "#F97316";

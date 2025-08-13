@@ -11,7 +11,7 @@ export enum TimelineType {
 export interface TimelineItem {
   id: string;
   accountId: string;
-  positionId: string;
+  positionId?: string;
   title: string;
   type: TimelineType;
 
@@ -65,7 +65,7 @@ export interface TimelineReplyEmail {
 }
 
 export interface TimelineInterviewAnalyse {
-  positionId: string;
+  positionId?: string;
   interviewPath: string;
 }
 

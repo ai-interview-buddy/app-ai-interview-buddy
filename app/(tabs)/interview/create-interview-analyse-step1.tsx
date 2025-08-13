@@ -6,14 +6,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-export type JobPositionCreationMethod = "jobUrl" | "jobDescription" | null;
-
 const CreateStep1: React.FC = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { jobPositionId } = useLocalSearchParams();
 
-  const handleBack = () => router.push(`/job-position/${id}`);
-  const handleCancel = () => router.push(`/job-position`);
+  const handleBack = () => (jobPositionId ? router.push(`/job-position/${jobPositionId}`) : router.push("/interview"));
+  const handleCancel = () => (jobPositionId ? router.push(`/job-position`) : router.push("/interview"));
 
   return (
     <>
@@ -38,7 +36,14 @@ const CreateStep1: React.FC = () => {
             />
 
             <View style={{ gap: 16 }}>
-              <Link href={`/job-position/${id}/timeline-create-interview-analyse-step2-record`} push asChild>
+              <Link
+                href={{
+                  pathname: "/interview/create-interview-analyse-step2-record",
+                  params: { jobPositionId: jobPositionId },
+                }}
+                push
+                asChild
+              >
                 <TouchableOpacity
                   style={{
                     backgroundColor: "white",
@@ -77,7 +82,14 @@ const CreateStep1: React.FC = () => {
                   </View>
                 </TouchableOpacity>
               </Link>
-              <Link href={`/job-position/${id}/timeline-create-interview-analyse-step2-upload`} push asChild>
+              <Link
+                href={{
+                  pathname: "/interview/create-interview-analyse-step2-upload",
+                  params: { jobPositionId: jobPositionId },
+                }}
+                push
+                asChild
+              >
                 <TouchableOpacity
                   style={{
                     backgroundColor: "white",

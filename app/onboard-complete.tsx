@@ -6,7 +6,7 @@ import { useAuthStore } from "@/lib/supabase/authStore";
 import { CareerProfile } from "@/supabase/functions/api/types/CareerProfile";
 import { Stack, router } from "expo-router";
 import React from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 const CreateCareerProfile = () => {
   const { completeOnboarding } = useAuthStore();
@@ -25,20 +25,22 @@ const CreateCareerProfile = () => {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
-        <View style={{ paddingHorizontal: 20, paddingTop: 30, marginBottom: -20 }}>
-          <CenteredTextHeading
-            title="Let's get started!"
-            subtitle="Upload your CV. This will help us analyse your experience and give you tailored recommendations for the positions you apply."
-          />
-        </View>
-        <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: "center" }}>
-          <CareerProfileForm
-            title="Please inform your CV"
-            subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
-            allowedTypes={["application/pdf"]}
-            onConfirm={handleSave}
-          />
-        </View>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <View style={{ paddingHorizontal: 20, paddingTop: 10, marginBottom: 0 }}>
+            <CenteredTextHeading
+              title="Let's get started!"
+              subtitle="Upload your CV. This will help us analyse your experience and give you tailored recommendations for the positions you apply."
+            />
+          </View>
+          <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: "center" }}>
+            <CareerProfileForm
+              title="Please inform your CV"
+              subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
+              allowedTypes={["application/pdf"]}
+              onConfirm={handleSave}
+            />
+          </View>
+        </ScrollView>
       </MainContainer>
     </>
   );

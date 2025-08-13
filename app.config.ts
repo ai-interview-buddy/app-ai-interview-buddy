@@ -8,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
 
   const next = {
     ...config,
-    name: "app-ai-interview-buddy",
+    name: "AI Interview Buddy",
     slug: "app-ai-interview-buddy",
     plugins: [
       ...(config.plugins ?? []), // load default plugins

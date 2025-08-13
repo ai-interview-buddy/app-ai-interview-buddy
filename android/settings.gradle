@@ -31,7 +31,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
 }
 expoAutolinking.useExpoModules()
 
-rootProject.name = 'app-ai-interview-buddy'
+rootProject.name = 'AI Interview Buddy'
 
 expoAutolinking.useExpoVersionCatalog()
 

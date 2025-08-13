@@ -1,9 +1,14 @@
 import { MainAction } from "@/components/button/MainAction";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
+import { useCreateCareerProfile } from "@/lib/api/careerProfile.query";
+import { useAuthStore } from "@/lib/supabase/authStore";
+import { supabase } from "@/lib/supabase/supabase";
 import { formatFileSize, getFileExtension } from "@/lib/utils/files.utils";
+import { CareerProfile } from "@/supabase/functions/api/types/CareerProfile";
 import { Ionicons } from "@expo/vector-icons";
-import { DocumentPickerAsset, DocumentPickerResult, getDocumentAsync } from "expo-document-picker";
-import React, { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { DocumentPickerResult, getDocumentAsync } from "expo-document-picker";
+import { default as React, useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 
 type CareerProfileFormProps = {
@@ -11,7 +16,7 @@ type CareerProfileFormProps = {
   subtitle: string;
   maxFileSize?: number; // in bytes
   allowedTypes?: string[];
-  onConfirm: (selectedFile: DocumentPickerAsset) => Promise<void>;
+  onConfirm: (saved: CareerProfile) => Promise<void>;
 };
 
 const typeNames: { [key: string]: string } = {
@@ -37,9 +42,15 @@ const CareerProfileForm = ({
   allowedTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
   onConfirm,
 }: CareerProfileFormProps) => {
+  const { user } = useAuthStore();
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useCreateCareerProfile(queryClient, user?.accessToken);
+
   const [selectedFile, setSelectedFile] = useState<DocumentPickerResult | null>(null);
   const [uploading, setUploading] = useState(false);
   const formattedSize = formatFileSize(maxFileSize);
+
+  if (!user) return null;
 
   const handleFilePicker = async () => {
     try {
@@ -83,7 +94,17 @@ const CareerProfileForm = ({
         return;
       }
 
-      await onConfirm(file);
+      const arraybuffer = await fetch(file.uri).then((res) => res.arrayBuffer());
+      const fileExt = (file.name || file.uri)?.split(".").pop()?.toLowerCase() ?? "pdf";
+      const curriculumPath = `${user.id}/${Date.now()}.${fileExt}`;
+
+      const { error } = await supabase.storage.from("curriculums").upload(curriculumPath, arraybuffer, {
+        contentType: file.mimeType,
+      });
+      if (error) throw error;
+
+      const saved = await mutateAsync({ curriculumPath });
+      await onConfirm(saved);
     } finally {
       setUploading(false);
     }

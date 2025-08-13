@@ -37,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="career-profile"
         options={{
-          title: "Career Tracks",
+          title: "Career Profiles",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "trending-up" : "trending-up-outline"} color={color} size={28} />,
         }}

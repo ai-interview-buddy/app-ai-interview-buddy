@@ -32,11 +32,19 @@ export default function RootLayout() {
       <GluestackUIProvider mode={"system"}>
         <ActionSheetProvider>
           <Stack>
+            <Stack.Protected guard={!hasCompletedOnboarding && !isLogged}>
+              <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+            </Stack.Protected>
+
             <Stack.Protected guard={!isLogged}>
               <Stack.Screen name="auth" options={{ headerShown: false }} />
             </Stack.Protected>
 
-            <Stack.Protected guard={isLogged}>
+            <Stack.Protected guard={!hasCompletedOnboarding && isLogged}>
+              <Stack.Screen name="onboard-complete" options={{ headerShown: false }} />
+            </Stack.Protected>
+
+            <Stack.Protected guard={hasCompletedOnboarding && isLogged}>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack.Protected>
           </Stack>

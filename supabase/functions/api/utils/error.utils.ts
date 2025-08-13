@@ -10,6 +10,8 @@ export const genericError = (message: string, details?: string): ServiceResponse
     code: undefined,
   });
 
+  console.error(message);
+
   return { error, data: null, count: null };
 };
 

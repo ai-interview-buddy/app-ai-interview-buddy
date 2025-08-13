@@ -1,4 +1,5 @@
-import { Agent, run } from "npm:@openai/agents";
+import OpenAI from "jsr:@openai/openai";
+import { zodTextFormat } from "jsr:@openai/openai/helpers/zod";
 import { z } from "zod";
 import { QuestionScoringInput } from "../types/InterviewQuestion.ts";
 
@@ -54,17 +55,25 @@ const userMessage = (input: string): string => `Now analyze this input:
 ${input}
 </question_scoring_input>
 `;
-const agent = new Agent({
-  name: "CV Scoring",
-  model: "gpt-4.1",
-  outputType: QAEvaluationSchema,
-  instructions: prompt,
-});
+
+const client = new OpenAI();
 
 export async function scoreQuestion(questionNumber: number, utterances: QuestionScoringInput[]): Promise<QuestionScoringOutput> {
   const input = JSON.stringify(utterances);
   const content = userMessage(input);
-  const result = await run(agent, [{ role: "user", content: content }]);
 
-  return { qNum: questionNumber, evaluation: result.finalOutput };
+  const response = await client.responses.parse({
+    model: "gpt-5-mini",
+    instructions: prompt,
+    input: [{ role: "user", content: content }],
+    text: {
+      format: zodTextFormat(QAEvaluationSchema, "response"),
+      verbosity: "low",
+    },
+    reasoning: {
+      effort: "minimal",
+    },
+  });
+
+  return { qNum: questionNumber, evaluation: response.output_parsed! };
 }

@@ -53,7 +53,7 @@ const CreateStep2Upload: React.FC = () => {
       router.replace(jobPositionId ? `/job-position/${jobPositionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
     } catch (error) {
       console.log(error);
-      AlertPolyfill("Error", "Failed to upload CV. Please try again.");
+      AlertPolyfill("Error", "Failed to upload recording. Please try again.");
     } finally {
       setProgressPct(false);
       await foregroundServiceStopNotification(notificationId);

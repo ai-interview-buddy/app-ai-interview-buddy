@@ -1,4 +1,5 @@
-import { Agent, run } from "npm:@openai/agents";
+import OpenAI from "jsr:@openai/openai";
+import { zodTextFormat } from "jsr:@openai/openai/helpers/zod";
 import { z } from "zod";
 import { QuestionType, SimplifiedParagraph } from "../types/InterviewQuestion.ts";
 
@@ -92,17 +93,24 @@ ${text}
 </speech_to_text>
 `;
 
-const agent = new Agent({
-  name: "CV Scoring",
-  model: "o4-mini",
-  outputType: QuestionSchema,
-  instructions: prompt,
-});
+const client = new OpenAI();
 
 export async function parseQuestions(paragraph: SimplifiedParagraph[]): Promise<ParsedQuestion | undefined> {
   const text = JSON.stringify(paragraph);
   const content = userMessage(text);
-  const result = await run(agent, [{ role: "user", content: content }]);
 
-  return result.finalOutput;
+  const response = await client.responses.parse({
+    model: "gpt-5-mini",
+    instructions: prompt,
+    input: [{ role: "user", content: content }],
+    text: {
+      format: zodTextFormat(QuestionSchema, "response"),
+      verbosity: "low",
+    },
+    reasoning: {
+      effort: "minimal",
+    },
+  });
+
+  return response.output_parsed!;
 }

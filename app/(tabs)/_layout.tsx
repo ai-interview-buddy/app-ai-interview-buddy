@@ -47,7 +47,7 @@ export default function TabLayout() {
         options={{
           title: "Account",
           headerShown: false,
-          tabBarIcon: ({ color, focused }) => <Ionicons name={focused ? "settings" : "settings-outline"} color={color} size={28} />,
+          tabBarIcon: ({ color }) => <Ionicons name={"settings-outline"} color={color} size={28} />,
         }}
       />
     </Tabs>

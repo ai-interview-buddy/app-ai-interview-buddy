@@ -20,7 +20,7 @@ type OnboardingStep = {
 const onboardingSteps: OnboardingStep[] = [
   {
     title: "Nail your next interview",
-    body: "Record interviews, track roles, and tailor your CVs everything in one place.",
+    body: "Record interviews, review your performance, track roles, and tailor your CVs everything in one place.",
     primaryCTA: "Get started",
     image: require("@/assets/images/onboarding/welcome.png"),
   },

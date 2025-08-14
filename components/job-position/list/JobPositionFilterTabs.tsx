@@ -4,9 +4,9 @@ import { Text, TouchableOpacity, View } from "react-native";
 export type JobPositionFilterType = "all" | "offers" | "archived";
 
 interface Props {
-  allCount?: number ;
-  offersCount?: number ;
-  archivedCount?: number ;
+  allCount?: number;
+  offersCount?: number;
+  archivedCount?: number;
   selectedFilter: JobPositionFilterType;
   onSelect: (key: JobPositionFilterType) => void;
 }
@@ -33,17 +33,20 @@ export const JobPositionFilterTabs: React.FC<Props> = ({ allCount, offersCount, 
             style={{
               flex: 1,
               paddingVertical: 12,
-              paddingHorizontal: 16,
+              paddingHorizontal: 14,
               borderRadius: 8,
               backgroundColor: selectedFilter === filter.key ? "#FFC629" : "transparent",
               alignItems: "center",
+              minWidth: 0, // important so text can shrink/ellipsize inside rows
             }}
           >
             <Text
+              numberOfLines={1}
               style={{
                 fontSize: 14,
                 fontWeight: "600",
                 color: selectedFilter === filter.key ? "#1D252C" : "#6B7280",
+                maxWidth: "100%",
               }}
             >
               {filter.label}

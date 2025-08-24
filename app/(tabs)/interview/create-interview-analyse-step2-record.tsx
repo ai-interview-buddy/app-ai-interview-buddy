@@ -308,12 +308,12 @@ const RecordInterview: React.FC = () => {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
           <TitleBackHeader pageTitle="Record Interview" handleBack={handleBack} handleCancel={handleCancel} />
 
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 40 }}>
+          <View style={{ flex: 1,  alignItems: "center", paddingHorizontal: 40 }}>
             {/* Recording Animation Container */}
             <View
               style={{
                 alignItems: "center",
-                marginBottom: 60,
+                marginVertical: 60,
               }}
             >
               {/* Animated Waves - only show when recording */}
@@ -380,6 +380,8 @@ const RecordInterview: React.FC = () => {
                   }}
                 >
                   <Ionicons name={isRecording ? (isPaused ? "play" : "pause") : "mic"} size={60} color="white" />
+                  <Text style={{color: 'white', paddingTop: 10}}>
+                    {isRecording ? (isPaused ? "Resume" : "Pause") : "Start recording"}</Text>
                 </TouchableOpacity>
               </Animated.View>
             </View>
@@ -471,7 +473,7 @@ const RecordInterview: React.FC = () => {
               <View
                 style={{
                   position: "absolute",
-                  bottom: 40,
+                  bottom: 20,
                   left: 40,
                   right: 40,
                 }}

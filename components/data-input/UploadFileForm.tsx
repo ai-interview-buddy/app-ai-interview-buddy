@@ -45,7 +45,7 @@ const UploadFileForm = ({
     try {
       const result = await getDocumentAsync({
         type: allowedTypes,
-        copyToCacheDirectory: false,
+        copyToCacheDirectory: true,
         multiple: true,
       });
 

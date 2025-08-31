@@ -53,6 +53,7 @@ export const useAuthStore = create(
         }
       },
       logInWithIdToken: async (provider: string, token: string) => {
+        console.log("signIn: received session, starting supabase auth supabaseSignInWithIdToken")
         const { success, session } = await supabaseSignInWithIdToken(provider, token);
         if (success) {
           set((state) => {

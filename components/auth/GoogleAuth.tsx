@@ -24,11 +24,16 @@ export default function GoogleAuth() {
 
   const signIn = async () => {
     try {
+      console.log("signIn: Starting the login process")
       await GoogleSignin.hasPlayServices();
+      console.log("signIn: calling google signIn")
       const userInfo = await GoogleSignin.signIn();
+      console.log("signIn: Logged with success", userInfo)
       await logInWithIdToken("google", userInfo.data?.idToken ?? "");
+      console.log("signIn: navigating to home")
       router.replace("/");
     } catch (error: any) {
+      console.error(error);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         Alert.prompt("Error: sign in cancelled");
       } else if (error.code === statusCodes.IN_PROGRESS) {

@@ -14,7 +14,7 @@ export function FancyContainer({ children }: Props) {
   const { height } = Dimensions.get("window");
 
   return (
-    <View className="flex-1 relative bg-gray-900 dark:bg-white overflow-hidden">
+    <View className="flex-1 relative bg-gray-900 dark:bg-white overflow-hidden w-full">
       <StatusBar barStyle={barStyle} />
 
       <LinearGradient
@@ -34,7 +34,9 @@ export function FancyContainer({ children }: Props) {
       <View className="absolute rounded-full opacity-20 bg-yellow-500 w-36 h-36 bottom-24 -left-8" />
       <View className="absolute rounded-full opacity-20 bg-yellow-100 w-24 h-24" style={{ top: height * 0.3, right: 50 }} />
 
-      {children}
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ width: "100%", height:"100%", maxWidth: 800 }}>{children}</View>
+      </View>
     </View>
   );
 }

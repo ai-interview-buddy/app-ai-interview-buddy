@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { StatusBar, useColorScheme } from "react-native";
+import { StatusBar, useColorScheme, View } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,7 +15,9 @@ export function MainContainer({ children }: Props) {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FEFBED" }}>
       <StatusBar barStyle={barStyle} backgroundColor="#FEFBED" />
 
-      {children}
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ width: "100%", height: "100%", maxWidth: 800 }}>{children}</View>
+      </View>
     </SafeAreaView>
   );
 }

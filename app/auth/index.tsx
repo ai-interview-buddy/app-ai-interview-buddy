@@ -12,7 +12,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 export default function PremiumLogin() {
   return (
     <FancyContainer>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1">
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1 w-full">
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="px-6 pt-20 pb-10" showsVerticalScrollIndicator={false}>
           <Box className="items-center mb-12">
             <LogoRadialBg />

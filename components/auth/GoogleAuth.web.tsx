@@ -16,7 +16,7 @@ export default function SupabaseAuth() {
 
   if (!webClientId) return null;
 
-  const redirectUrl = `${window.location.protocol}//${window.location.host}/auth`;
+  const redirectUrl = `${window?.location?.protocol}//${window?.location?.host}/auth`;
 
   const handleGoogleLogin = async () => {
     const req = await supabase.auth.signInWithOAuth({

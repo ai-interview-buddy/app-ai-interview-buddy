@@ -8,21 +8,11 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from "@/components/ui/form-control";
-import { AlertCircleIcon, ChevronDownIcon } from "@/components/ui/icon";
-import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-} from "@/components/ui/select";
+import { AlertCircleIcon } from "@/components/ui/icon";
 import { isFieldRequired, isFormFieldInvalid } from "@/lib/utils/validation.utils";
 import React from "react";
+import { View } from "react-native";
+import Dropdown from "react-native-input-select";
 
 export type FormFieldSelectOption = {
   label: string;
@@ -43,40 +33,54 @@ export type Props = {
 export const FormFieldSelect = ({ form, name, label, options, placeholder, helper, formSchema, className }: Props) => {
   const required = isFieldRequired(formSchema, name);
   const currentOption = options.find((opt) => String(opt.value) === String(form.getFieldValue(name)));
+
+  const optionsArr = options.map((opt) => ({ label: opt.label, value: opt.value }));
+
   return (
     <form.Field
       name={name}
       children={(field: any) => {
         const isInvalid = isFormFieldInvalid(form, field);
         return (
-          <FormControl isInvalid={isInvalid} isRequired={required} size="md" style={{ marginBottom: 16 }}>
+          <FormControl isInvalid={isInvalid} isRequired={required} style={{ marginBottom: 16 }}>
             <FormControlLabel>
               <FormControlLabelText>{label}</FormControlLabelText>
             </FormControlLabel>
-            <Select
-              initialLabel={currentOption?.label}
-              defaultValue={field.state.value}
-              selectedValue={field.state.value}
-              onValueChange={field.handleChange}
-              isInvalid={isInvalid}
-              isRequired={required}
+
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: "#D1D5DB", // ~ gray-300
+                borderRadius: 12,
+                backgroundColor: "white",
+                height: 42,
+              }}
             >
-              <SelectTrigger size="md" variant="outline" className={className}>
-                <SelectInput placeholder={placeholder || "Select option"} />
-                <SelectIcon className="mr-3" as={ChevronDownIcon} />
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  {options.map((opt) => (
-                    <SelectItem key={opt.value} label={opt.label} value={opt.value} />
-                  ))}
-                </SelectContent>
-              </SelectPortal>
-            </Select>
+              <Dropdown
+                placeholder={placeholder}
+                options={optionsArr}
+                selectedValue={field.state.value}
+                onValueChange={field.handleChange}
+                primaryColor="green"
+                dropdownStyle={{
+                  backgroundColor: "red",
+                  borderColor: "white",
+                  borderWidth: 0,
+                  paddingVertical: 5,
+                  paddingHorizontal: 5,
+                  minHeight: 38,
+                  margin: 0,
+                }}
+                selectedItemStyle={{
+                  paddingHorizontal: 5,
+                }}
+                dropdownIconStyle={{
+                  top: 16,
+                  right: 16,
+                }}
+              />
+            </View>
+
             {helper ? (
               <FormControlHelper>
                 <FormControlHelperText>{helper}</FormControlHelperText>

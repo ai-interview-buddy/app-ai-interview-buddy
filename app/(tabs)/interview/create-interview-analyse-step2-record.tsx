@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import notifee, { AuthorizationStatus } from "@notifee/react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { AudioModule, AudioQuality, IOSOutputFormat, RecordingOptions, useAudioRecorder, useAudioRecorderState } from "expo-audio";
+import * as Haptics from "expo-haptics";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { default as React, useEffect, useRef, useState } from "react";
 import { Alert, Animated, Easing, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from "react-native";
@@ -166,7 +167,7 @@ const RecordInterview: React.FC = () => {
     }
 
     // in android, it uses foreground service, so it requires notification
-    const settings = await notifee.getNotificationSettings();
+    const settings = await notifee.requestPermission();
     const isAndroid = Platform.OS === "android";
     const isNotificationDenfied = settings.authorizationStatus == AuthorizationStatus.DENIED;
     if (isAndroid && isNotificationDenfied) {
@@ -191,6 +192,8 @@ const RecordInterview: React.FC = () => {
       if (!(await requestPermission())) {
         return;
       }
+
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
       setIsRecording(true);
 
@@ -218,6 +221,8 @@ const RecordInterview: React.FC = () => {
 
   const pauseRecording = async () => {
     try {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
       audioRecorder.pause();
       setIsPaused(true);
     } catch (err) {
@@ -227,6 +232,8 @@ const RecordInterview: React.FC = () => {
 
   const resumeRecording = async () => {
     try {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
       audioRecorder.record();
       setIsPaused(false);
     } catch (err) {
@@ -236,6 +243,8 @@ const RecordInterview: React.FC = () => {
 
   const stopRecording = async () => {
     try {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
       await audioRecorder.stop();
       console.log(audioRecorder);
       console.log(audioRecorder.uri);
@@ -308,7 +317,7 @@ const RecordInterview: React.FC = () => {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
           <TitleBackHeader pageTitle="Record Interview" handleBack={handleBack} handleCancel={handleCancel} />
 
-          <View style={{ flex: 1,  alignItems: "center", paddingHorizontal: 40 }}>
+          <View style={{ flex: 1, alignItems: "center", paddingHorizontal: 40 }}>
             {/* Recording Animation Container */}
             <View
               style={{
@@ -380,8 +389,9 @@ const RecordInterview: React.FC = () => {
                   }}
                 >
                   <Ionicons name={isRecording ? (isPaused ? "play" : "pause") : "mic"} size={60} color="white" />
-                  <Text style={{color: 'white', paddingTop: 10}}>
-                    {isRecording ? (isPaused ? "Resume" : "Pause") : "Start recording"}</Text>
+                  <Text style={{ color: "white", paddingTop: 10 }}>
+                    {isRecording ? (isPaused ? "Resume" : "Pause") : "Start recording"}
+                  </Text>
                 </TouchableOpacity>
               </Animated.View>
             </View>

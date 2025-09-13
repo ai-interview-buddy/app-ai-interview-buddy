@@ -1,6 +1,6 @@
 import { MainAction } from "@/components/button/MainAction";
 import { MainContainer } from "@/components/container/MainContainer";
-import { FormFieldInput } from "@/components/data-input/FormFieldInput";
+import { FormFieldUrl } from "@/components/data-input/FormFieldUrl";
 import { SelectCareerProfile } from "@/components/data-input/SelectCareerProfile";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
@@ -85,7 +85,7 @@ export default function CreateStep2Url() {
                 }}
               >
                 <SelectCareerProfile name="profileId" label="Career Profile" form={form} formSchema={formSchema} />
-                <FormFieldInput
+                <FormFieldUrl
                   form={form}
                   formSchema={formSchema}
                   name="jobUrl"

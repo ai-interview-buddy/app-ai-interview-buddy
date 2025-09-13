@@ -1,12 +1,15 @@
 import { Agent, run, webSearchTool } from "npm:@openai/agents";
 import { z } from "zod";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
+import { fetchCleanText } from "./tools/fetchCleanText.ts";
 
 const prompt = `
 You are a job position extraction assistant. Your task is to extract structured information from a job listing provided either as a URL or as raw HTML. 
 
 When an input URL is provided, you are allowed to navigate (webSearchTool) up to 3 times to retrieve the complete listing HTML, following redirects or handling dynamically injected content. Use the provided webSearchTool() to fetch pages and handle each navigation step.
-Do not use webSearchTool when parsing Raw HTML.
+Do not use webSearchTool when parsing Raw HTML. 
+
+If webSearchTool fails, call fetchCleanText exactly once to fetch the URL and return plain text (HTML stripped).
 
 Extract the following fields, and respond only with JSON matching this schema exactly:
 - companyName: string. The company name presenting the listing (not the portal host).
@@ -56,10 +59,14 @@ export type PositionExtract = z.infer<typeof PositionExtractSchema>;
 
 const agent = new Agent({
   name: "Position Extractor",
-  model: "gpt-4.1",
+  model: "gpt-5",
+    modelSettings: {
+    reasoning: { effort: 'minimal' },
+    text: { verbosity: 'low' },
+  },
   outputType: PositionExtractSchema,
   instructions: prompt,
-  tools: [webSearchTool()],
+  tools: [webSearchTool(), fetchCleanText],
 });
 
 export async function extractPositionFromUrl(params: JobPositionCreateByUrl): Promise<PositionExtract | undefined> {

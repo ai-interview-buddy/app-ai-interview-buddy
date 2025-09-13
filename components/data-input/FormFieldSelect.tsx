@@ -63,7 +63,6 @@ export const FormFieldSelect = ({ form, name, label, options, placeholder, helpe
                 onValueChange={field.handleChange}
                 primaryColor="green"
                 dropdownStyle={{
-                  backgroundColor: "red",
                   borderColor: "white",
                   borderWidth: 0,
                   paddingVertical: 5,

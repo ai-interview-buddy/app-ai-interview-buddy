@@ -132,6 +132,8 @@ const OnboardingWizard: React.FC = () => {
             style={{
               width: width * 0.7,
               height: width * 0.5,
+              maxHeight: 500,
+              aspectRatio: 1260 / 900,
               borderRadius: 16,
             }}
             contentFit="contain"

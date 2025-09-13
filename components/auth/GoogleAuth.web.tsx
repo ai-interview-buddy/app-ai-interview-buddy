@@ -16,9 +16,11 @@ export default function SupabaseAuth() {
 
   if (!webClientId) return null;
 
-  const redirectUrl = `${window?.location?.protocol}//${window?.location?.host}/auth`;
-
   const handleGoogleLogin = async () => {
+    const redirectUrl = window?.location?.protocol
+      ? `${window?.location?.protocol}//${window?.location?.host}/auth`
+      : `https://app.aiinterviewbuddy.com/auth`;
+
     const req = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: redirectUrl },

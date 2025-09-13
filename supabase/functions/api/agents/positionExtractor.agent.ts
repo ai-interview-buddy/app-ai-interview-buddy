@@ -59,10 +59,10 @@ export type PositionExtract = z.infer<typeof PositionExtractSchema>;
 
 const agent = new Agent({
   name: "Position Extractor",
-  model: "gpt-5",
-    modelSettings: {
-    reasoning: { effort: 'minimal' },
-    text: { verbosity: 'low' },
+  model: "gpt-5-mini",
+  modelSettings: {
+    reasoning: { effort: "minimal" },
+    text: { verbosity: "low" },
   },
   outputType: PositionExtractSchema,
   instructions: prompt,

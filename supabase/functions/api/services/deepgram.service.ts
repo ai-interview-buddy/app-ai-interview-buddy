@@ -9,6 +9,7 @@ const deepgramApiKey = Deno.env.get("DEEPGRAM_API_KEY");
 
 const deepgramSTT = {
   model: "nova-3",
+  detect_language: true,
   smart_format: true,
   diarize: true,
   sentiment: true,

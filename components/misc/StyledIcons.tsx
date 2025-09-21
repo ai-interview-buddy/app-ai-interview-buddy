@@ -1,9 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "react-native";
 
-export function IconArrowForward() {
+export function IconArrowForward({ color = undefined }: { color?: string }) {
   const colorScheme = useColorScheme();
-  return <Ionicons name="arrow-forward" size={20} color={colorScheme === "dark" ? "#FFF" : "#1D252C"} />;
+  const actualColor = color ? color : colorScheme === "dark" ? "#FFF" : "#1D252C";
+  return <Ionicons name="arrow-forward" size={20} color={actualColor} />;
 }
 
 export function IconGoogle() {

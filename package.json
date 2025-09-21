@@ -47,6 +47,7 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "dom-to-image": "^2.6.0",
     "expo": "~53.0.12",
+    "expo-apple-authentication": "~7.2.4",
     "expo-application": "~6.1.5",
     "expo-audio": "~0.4.8",
     "expo-blur": "~14.1.5",

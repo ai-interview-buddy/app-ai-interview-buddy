@@ -86,7 +86,7 @@ chrome://inspect/
 -> 127.0.0.1:8083
 ```
 
-# Setup Auth
+# Setup Auth Google
 
 1. Create a google cloud project and then setup `3` Google OAuth 2.0 Client IDs
 2. `Ai Interview Buddy - Web`: 
@@ -105,6 +105,43 @@ References:
 - https://supabase.com/docs/guides/auth/social-login/auth-google
 - https://developers.google.com/android/guides/client-auth
 - https://github.com/flemingvincent/expo-supabase-starter/blob/main/context/supabase-provider.tsx
+
+# Setup Auth IoS
+
+Part 1 - creating a service:
+1. Follow https://docs.expo.dev/versions/latest/sdk/apple-authentication/
+2. Run `npx expo prebuild` and then `eas build --platform ios` (this will create the oAuth client in apple developer)
+3. Navigate https://developer.apple.com/account > Identifiers > App IDs > [new Service ID]
+4. Description as `Ai Interview Buddy - Web` and identifier as `com.aiinterviewbuddy.appinterviewbuddy.web`
+5. Open the created record and make sure it has `Sign In with Apple` enabled and add:
+   - Domains: app.aiinterviewbuddy.com,ihledqmotlhyxnqoipzd.supabase.co
+   - Return URLs: https://app.aiinterviewbuddy.com/auth,https://ihledqmotlhyxnqoipzd.supabase.co/auth/v1/callback
+
+Part 2 - creating a new key:
+1. Navigate https://developer.apple.com/account > Identifiers > Keys > [new Key]
+   - Name as `Ai Interview Buddy Web Key`
+   - check the option `Sign in with Apple`
+   - Configure/select `Primary App ID` as ``com.aiinterviewbuddy.appinterviewbuddy`
+2. Copy the `Key ID` and download the `AuthKey_XXXXXXXXXX.p8`
+
+Part 3 - convert all info into a jwt
+1. Use the tool https://applekeygen.expo.app/ OR similar on https://supabase.com/docs/guides/auth/social-login/auth-apple
+2. Inform: 
+   - `Key ID` from step 2;
+   - `Team ID` from apple developer account (corner top right)
+   - `Client ID` equals com.aiinterviewbuddy.appinterviewbuddy.web
+   - `Private Key` from step 2 `.p8` file
+   Then generate your jwt client secret token
+3. Navigate to `supabase > auth> providers > Apple`, and update:
+   - Client IDs: com.aiinterviewbuddy.appinterviewbuddy.web,com.aiinterviewbuddy.appinterviewbuddy
+   - Secret Key: from previous step
+
+Steps 2 and 3 should be repeated every 6 months.
+
+References:
+- https://supabase.com/docs/guides/auth/social-login/auth-apple?queryGroups=platform&platform=react-native
+- https://www.youtube.com/watch?v=-tpcZzTdvN0&t=270s
+- https://www.youtube.com/watch?v=tqxTijhYhp8&t=1s
 
 # Project colour scheme
 

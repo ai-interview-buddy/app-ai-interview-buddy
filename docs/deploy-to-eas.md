@@ -36,5 +36,5 @@ https://docs.expo.dev/tutorial/eas/ios-development-build-for-devices/
 ```
 
 npx eas device:create
-eas build --platform ios --profile development
+npx eas build --platform ios --profile preview
 ```

@@ -1,3 +1,4 @@
+import AppleAuth from "@/components/auth/AppleAuth";
 import GoogleAuth from "@/components/auth/GoogleAuth";
 import { ItemListBox } from "@/components/boxes/ItemListBox";
 import { RoundedShadowBox } from "@/components/boxes/RoundedShadowBox";
@@ -33,6 +34,10 @@ export default function PremiumLogin() {
 
             <VStack className="pb-4" space="md">
               <GoogleAuth />
+            </VStack>
+
+            <VStack className="pb-4" space="md">
+              <AppleAuth />
             </VStack>
 
             <ItemListBox

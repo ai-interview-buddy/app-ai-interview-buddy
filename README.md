@@ -21,6 +21,12 @@ adb reverse tcp:54321 tcp:54321
 npx expo run:android
 
 npx expo run:ios
+
+# npx expo run:ios --device
+# Change .env to EXPO_PUBLIC_SUPABASE_URL=http://YOUR_LOCAL_IP_HERE:54321
+# npx expo run:android --device
+# cd ios/ && pod install --repo-update && cd ..
+# npx expo prebuild --clean 
 ```
 
 In the output, you'll find options to open the app in a
@@ -111,17 +117,18 @@ Brand core:
    - Golden Honey: #E3AA1F → rgb(227, 170, 31)
 
  # Backlog
- - [ ] Seed two fake users in supabase with demo data and create a login option
- - [ ] Create the onboarding experience and use the variable hasCompletedOnboarding
- - [ ] Add authentication with LinkedIn
- - [ ] Delete account, removing db-data, storage files, auth user
- - [ ] Use uppy to upload big files https://github.com/transloadit/uppy/tree/main/examples/react-native-expo
 -  [ ] Change the "delete" career track option to allow replacing positions that uses it
--  [ ] Add a feature to re-import and re-process a cv
--  [ ] Create an inbox where users can forward the recruiter's email 
--  [ ] About Job Position Timeline:
-   -  [ ] Add the CV_ANALYSE: an utilitary to compare the position vs the cv and analyse in scores similar to the cvScore
-   -  [ ] Add the INTERVIEW_STEP: an utilitary to add schedulled interviews
-   -  [ ] Start saving the "custom instructions" and allow users to "re-play" with twicking the instructions
 -  [ ] tech: extract all forms in a proper file; 
 -  [ ] tech: review all exceptions to the controllers and proper logging; 
+-  [ ] remove agent and use openai js
+-  [ ] lunch ios
+-  [ ] lunch android
+-  [ ] add an option to "re-try" in the case upload fails
+-  [ ] add an option to "choose" what mic to use
+-  [ ] allow to rename or delete an interview
+-  [ ] Improve the experience for the main save button
+-  [ ] Create a dark mode
+-  [ ] Recording interview: when start recording, also, create the record and store the fine in a "expected" location; Then allow to recover
+-  [ ] Adding missing timeline items types (including interview schedulled and cv analyse)
+-  [ ] Add option to delete an account
+

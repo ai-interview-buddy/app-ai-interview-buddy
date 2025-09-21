@@ -72,3 +72,7 @@ export interface TimelineInterviewAnalyse {
 export interface TimelineCustomInstructionsUpdate {
   customInstructions: string;
 }
+
+export type SignedUrl = {
+  signedUrl: string;
+};

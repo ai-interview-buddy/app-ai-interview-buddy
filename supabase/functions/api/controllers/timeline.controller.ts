@@ -75,6 +75,13 @@ export const updateCustomInstructions = async (req: Request, res: Response) => {
   res.status(201).json(data);
 };
 
+export const getInterviewUrl = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { data, error } = await service.getInterviewSignedUrlById(req.supabase, id);
+  if (error) return res.status(400).json({ error: error.message });
+  res.status(200).json(data);
+};
+
 export const remove = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { error } = await service.remove(req.supabase, id);

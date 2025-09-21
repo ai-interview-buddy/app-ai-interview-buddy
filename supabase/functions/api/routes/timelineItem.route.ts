@@ -12,6 +12,7 @@ router.post("/linkedin-intro", userContext, controller.createLinkedinIntro);
 router.post("/reply-email", userContext, controller.createReplyEmail);
 router.post("/analyse-interview", userContext, controller.createInterviewAnalyse);
 router.patch("/:id/custom-instructions", controller.updateCustomInstructions);
+router.get("/:id/interview-url", controller.getInterviewUrl);
 router.delete("/:id", controller.remove);
 
 export default router;

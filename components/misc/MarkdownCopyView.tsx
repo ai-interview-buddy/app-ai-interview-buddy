@@ -8,9 +8,10 @@ import { EmptyState } from "../views/EmptyState";
 interface Props {
   markdownText?: string;
   children?: ReactNode;
+  before?: ReactNode;
 }
 
-export const MarkdownCopyView = ({ markdownText, children }: Props) => {
+export const MarkdownCopyView = ({ markdownText, children, before }: Props) => {
   const originalLabel = "Copy to clipboard";
   const [label, setLabel] = useState(originalLabel);
 
@@ -68,6 +69,8 @@ export const MarkdownCopyView = ({ markdownText, children }: Props) => {
           elevation: 2,
         }}
       >
+        {before && <View style={{ marginBottom: 20 }}>{before}</View>}
+
         <Markdown rules={rules} style={markdownStyles}>
           {markdownText}
         </Markdown>

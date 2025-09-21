@@ -1,4 +1,5 @@
 import {
+  SignedUrl,
   TimelineCoverLetter,
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
@@ -17,6 +18,7 @@ import {
   createTimelineReplyEmail,
   deleteTimelineItem,
   fetchTimelineItem,
+  fetchTimelineItemInterviewUrl,
   fetchTimelineItems,
   updateCustomInstructions,
 } from "./timelineItem.fetch";
@@ -36,6 +38,15 @@ export const useTimelineItem = (token?: string, id?: string): UseQueryResult<Tim
     enabled: !!token && !!id,
     staleTime: 1000 * 60 * 5,
     queryFn: () => fetchTimelineItem(token!, id!),
+  });
+};
+
+export const useTimelineItemInterviewUrl = (token?: string, id?: string): UseQueryResult<SignedUrl, Error> => {
+  return useQuery<SignedUrl, Error>({
+    queryKey: ["timeline-item-url", id],
+    enabled: !!token && !!id,
+    staleTime: 1000 * 60 * 5,
+    queryFn: () => fetchTimelineItemInterviewUrl(token!, id!),
   });
 };
 

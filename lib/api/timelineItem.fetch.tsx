@@ -1,4 +1,5 @@
 import {
+  SignedUrl,
   TimelineCoverLetter,
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
@@ -41,6 +42,14 @@ export const fetchTimelineItem = async (token: string, id: string): Promise<Time
     headers: defaultHeaders(token),
   });
   if (!res.ok) throw new Error(`Failed to fetch timeline item ${id}`);
+  return await res.json();
+};
+
+export const fetchTimelineItemInterviewUrl = async (token: string, id: string): Promise<SignedUrl> => {
+  const res = await fetch(`${API_BASE_URL}/timeline-items/${id}/interview-url`, {
+    headers: defaultHeaders(token),
+  });
+  if (!res.ok) console.error(`Failed to fetch timeline item ${id}`);
   return await res.json();
 };
 

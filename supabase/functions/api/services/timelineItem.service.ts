@@ -5,6 +5,7 @@ import { generateLinkedinIntro } from "../agents/linkedinIntro.agent.ts";
 import { generateReplyEmail } from "../agents/replyEmail.agent.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import {
+  SignedUrl,
   TimelineCoverLetter,
   TimelineCreateText,
   TimelineCustomInstructionsUpdate,
@@ -201,6 +202,35 @@ export const createInterviewAnalyse = async (
     console.error(`Error creating REPLY_EMAIL timeline item: ${safeErrorLog(err)}`);
     return genericError("Failed to create a timeline item", String(err));
   }
+};
+
+export const getInterviewSignedUrlById = async (supabase: SupabaseClient, id: string): Promise<ServiceResponse<SignedUrl>> => {
+  const { data, error } = await getById(supabase, id);
+  if (error) return genericError("Failed to load", String(error));
+  if (!data.interviewOriginalAudioPath) return genericError("Invalid interviewOriginalAudioPath");
+
+  const { data: signedUrl, error: urlError } = await supabase.storage
+    .from("interviews")
+    .createSignedUrl(data.interviewOriginalAudioPath!, 3600);
+
+  if (urlError || !signedUrl?.signedUrl) return genericError("Failed to signin an url", String(urlError));
+
+  // TODO: review this in prod, maybe, to require some other workaround
+  const url = signedUrl?.signedUrl;
+  if (url?.includes("http://kong:8000/storage/v1")) {
+    const newUrl = url.replace("http://kong:8000/storage/v1", `http://localhost:54321/storage/v1`);
+    return {
+      data: { signedUrl: newUrl },
+      count: null,
+      error: null,
+    };
+  }
+
+  return {
+    data: { signedUrl: url },
+    count: null,
+    error: null,
+  };
 };
 
 export const update = async (supabase: SupabaseClient, id: string, updates: TimelineItem): Promise<ServiceResponse<TimelineItem>> => {

@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Application from "expo-application";
 import { Image } from "expo-image";
 import * as Linking from "expo-linking";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import type React from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 
@@ -22,7 +22,6 @@ const AccountScreen: React.FC = () => {
   const { user, logOut } = useAuthStore();
 
   const handleLogout = () => {
-    console.log("hfsddfs");
     AlertPolyfill("Logout", "Are you sure you want to logout?", [
       {
         text: "Cancel",
@@ -184,6 +183,51 @@ const AccountScreen: React.FC = () => {
                 <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
               </TouchableOpacity>
             ))}
+          </View>
+
+          <View
+            style={{
+              backgroundColor: "white",
+              marginHorizontal: 20,
+              borderRadius: 20,
+              marginBottom: 32,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 2,
+              overflow: "hidden",
+            }}
+          >
+            <Link href={`/account/delete`} push asChild>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                  paddingVertical: 18,
+                  borderBottomColor: "#F3F4F6",
+                }}
+              >
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 12,
+                    backgroundColor: "#FFC629" + "15",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 16,
+                  }}
+                >
+                  <Ionicons name="warning-outline" size={20} color="#ff2929ff" />
+                </View>
+
+                <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Delete my accout</Text>
+
+                <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+              </TouchableOpacity>
+            </Link>
           </View>
 
           <View

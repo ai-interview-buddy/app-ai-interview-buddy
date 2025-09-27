@@ -2,6 +2,7 @@ import express from "express";
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { corsContext } from "./middlewares/cors.middleware.ts";
 import { supabaseContext } from "./middlewares/supabaseContext.middleware.ts";
+import account from "./routes/account.route.ts";
 import careerProfile from "./routes/careerProfile.route.ts";
 import interviewQuestion from "./routes/interviewQuestion.route.ts";
 import jobPosition from "./routes/jobPosition.route.ts";
@@ -22,6 +23,7 @@ app.use("/api/career-profiles", careerProfile);
 app.use("/api/job-positions", jobPosition);
 app.use("/api/timeline-items", timelineItem);
 app.use("/api/interview-questions", interviewQuestion);
+app.use("/api/account", account);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);

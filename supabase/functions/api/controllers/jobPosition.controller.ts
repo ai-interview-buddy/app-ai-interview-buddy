@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as service from "../services/jobPosition.service.ts";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
+import { fetchJobPositionUrl } from "../agents/tools/fetchCleanText.ts";
 
 export const getAll = async (req: Request, res: Response) => {
   const { data, error } = await service.getAll(req.supabase);
@@ -59,4 +60,19 @@ export const markOfferReceived = async (req: Request, res: Response) => {
   const { error } = await service.markOfferReceived(req.supabase, ids);
   if (error) return res.status(400).json({ error: error.message });
   res.status(204).end();
+};
+
+export const fetch = async (req: Request, res: Response) => {
+  const url  = req.query.url as string;
+  try {
+    console.log('here', url)
+    const html = await fetchJobPositionUrl(url);
+    res.json({ html });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(400).json({ error: "An unknown error occurred" });
+    }
+  }
 };

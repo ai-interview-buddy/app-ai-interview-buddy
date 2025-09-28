@@ -5,6 +5,7 @@ import { userContext } from "../middlewares/userContext.middleware.ts";
 const router = Router();
 
 router.get("/", controller.getAll);
+router.get("/fetch-url", controller.fetch);
 router.get("/:id", controller.getById);
 router.post("/by-url", userContext, controller.createByUrl);
 router.post("/by-description", userContext, controller.createByDescription);

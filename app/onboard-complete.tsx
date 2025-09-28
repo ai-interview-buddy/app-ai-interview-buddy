@@ -2,14 +2,24 @@ import CareerProfileForm from "@/components/career-profile/create/CareerProfileF
 import { MainContainer } from "@/components/container/MainContainer";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
+import { useCareerProfiles } from "@/lib/api/careerProfile.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { CareerProfile } from "@/supabase/functions/api/types/CareerProfile";
-import { Stack, router } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, View } from "react-native";
 
 const CreateCareerProfile = () => {
   const { completeOnboarding } = useAuthStore();
+  const router = useRouter();
+
+  const { user } = useAuthStore();
+  const { data } = useCareerProfiles(user?.accessToken);
+
+  if (data && data.length > 0) {
+    completeOnboarding();
+    router.push("/interview");
+  }
 
   const handleSave = async (saved: CareerProfile) => {
     try {

@@ -41,9 +41,7 @@ ${html}
 const userMessageByJobUrl = (url: string): string => `
 Now extract the position details from this job listing using the jobUrl:
 
-<jobUrl>
-${url}
-</jobUrl>
+<jobUrl>${url}</jobUrl>
 `;
 
 const PositionExtractSchema = z.object({
@@ -61,7 +59,7 @@ const agent = new Agent({
   name: "Position Extractor",
   model: "gpt-5-mini",
   modelSettings: {
-    reasoning: { effort: "minimal" },
+    // reasoning: { effort: "minimal" },
     text: { verbosity: "low" },
   },
   outputType: PositionExtractSchema,

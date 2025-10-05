@@ -3,7 +3,7 @@ import { useAuthStore } from "@/lib/supabase/authStore";
 import { CareerProfile } from "@/supabase/functions/api/types/CareerProfile";
 import React from "react";
 import { FormFieldHidden } from "./FormFieldHidden";
-import { FormFieldSelect, FormFieldSelectOption } from "./FormFieldSelect";
+import { FormFieldRadioGroup, FormFieldRadioGroupOption } from "./FormFieldRadioGroup";
 import { SelectSkeleton } from "./SelectSkeleton";
 
 export type Props = {
@@ -27,13 +27,13 @@ export const SelectCareerProfile = ({ form, name, label, placeholder = "Select a
     return <FormFieldHidden name={name} form={form} value={data[0]?.id} />;
   }
 
-  const options: FormFieldSelectOption[] = (data || []).map((profile: CareerProfile) => ({
+  const options: FormFieldRadioGroupOption[] = (data || []).map((profile: CareerProfile) => ({
     label: profile.title,
     value: profile.id,
   }));
 
   return (
-    <FormFieldSelect
+    <FormFieldRadioGroup
       name={name}
       label={label}
       options={options}

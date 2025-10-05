@@ -8,7 +8,7 @@ const unwrap = (t: z.ZodTypeAny): z.ZodTypeAny => {
   if (t instanceof z.ZodEffects || t instanceof z.ZodPipeline || t instanceof z.ZodBranded || t instanceof z.ZodReadonly) {
     return unwrap(def.schema);
   }
-  if (t instanceof z.ZodNullable) return unwrap(def.innerType);
+
   return t;
 };
 
@@ -16,6 +16,7 @@ const isOptionalLike = (t: z.ZodTypeAny): boolean => {
   const s = unwrap(t);
   if (s instanceof z.ZodOptional) return true;
   if (s instanceof z.ZodDefault) return true;
+  if (s instanceof z.ZodNullable) return true;
   if (s instanceof z.ZodUnion) {
     return (s as any)._def.options.some((opt: z.ZodTypeAny) => isOptionalLike(opt) || unwrap(opt) instanceof z.ZodUndefined);
   }

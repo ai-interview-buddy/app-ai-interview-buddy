@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
+import { fetchJobPositionUrl } from "../agents/tools/fetchCleanText.ts";
 import * as service from "../services/jobPosition.service.ts";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
-import { fetchJobPositionUrl } from "../agents/tools/fetchCleanText.ts";
 
 export const getAll = async (req: Request, res: Response) => {
   const { data, error } = await service.getAll(req.supabase);

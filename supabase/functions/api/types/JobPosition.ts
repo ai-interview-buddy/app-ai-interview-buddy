@@ -27,7 +27,7 @@ export type JobPositionCreateByDescription = {
 };
 
 export interface JobPositionUpdate {
-  careerProfileId: string;
+  careerProfileId?: string;
   companyName: string;
   companyWebsite?: string;
   jobUrl?: string;

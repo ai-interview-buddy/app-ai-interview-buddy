@@ -14,7 +14,7 @@ import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from "react-n
 import { z } from "zod";
 
 const formSchema = z.object({
-  careerProfileId: z.string().min(1, "Career Profile is required"),
+  careerProfileId: z.string().nullable(),
   companyName: z.string().min(1, "Company name is required"),
   jobTitle: z.string().min(1, "Job Title is required"),
   companyWebsite: z.string().nullable().optional(),
@@ -36,7 +36,7 @@ const UpdateJobPosition: React.FC = () => {
   const [saving, setSaving] = useState(false);
 
   const defaultValues: FormValues = {
-    careerProfileId: record?.careerProfileId || "",
+    careerProfileId: record?.careerProfileId ? (record?.careerProfileId as string) : null,
     companyName: record?.companyName || "",
     companyWebsite: record?.companyWebsite || "",
     jobTitle: record?.jobTitle || "",
@@ -53,7 +53,7 @@ const UpdateJobPosition: React.FC = () => {
         await updateJob.mutateAsync({
           id: String(id),
           data: {
-            careerProfileId: value.careerProfileId.trim(),
+            careerProfileId: value.careerProfileId ? (value.careerProfileId as string).trim() : "",
             companyName: value.companyName.trim(),
             companyWebsite: value.companyWebsite?.trim(),
             jobTitle: value?.jobTitle?.trim() || "",

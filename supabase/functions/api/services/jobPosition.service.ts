@@ -111,8 +111,9 @@ export const createByDescription = async (
 
 export const update = async (supabase: SupabaseClient, id: string, updates: JobPositionUpdate): Promise<ServiceResponse<JobPosition>> => {
   try {
+    const actualUpdates = { ...updates, careerProfileId: updates.careerProfileId ? updates.careerProfileId : null };
     const payload = oneToDbCase({
-      ...updates,
+      ...actualUpdates,
       updatedAt: new Date().toISOString(),
     });
     const query = await supabase.from("job_position").update(payload).eq("id", id).select().single();

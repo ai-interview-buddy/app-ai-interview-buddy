@@ -7,10 +7,11 @@ npm install -g eas-cli
 eas login
 
 eas build:configure
-eas build --platform android
 
+npx expo prebuild
+eas build --platform android
 eas build --platform ios
-eas submit --platform ios
+npx eas submit --platform ios
 ```
 
 Follow this guide:

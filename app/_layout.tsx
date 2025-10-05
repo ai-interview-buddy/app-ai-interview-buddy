@@ -29,7 +29,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GluestackUIProvider mode={"system"}>
+      <GluestackUIProvider mode={"light"}>
         <ActionSheetProvider>
           <Stack>
             <Stack.Protected guard={!hasCompletedOnboarding && !isLogged}>

@@ -1,7 +1,7 @@
 export interface JobPosition {
   id: string;
   accountId: string;
-  careerProfileId: string;
+  careerProfileId?: string;
   companyName: string;
   companyLogo?: string;
   companyWebsite?: string;
@@ -17,12 +17,12 @@ export interface JobPosition {
 }
 
 export type JobPositionCreateByUrl = {
-  profileId: string;
+  profileId?: string;
   jobUrl: string;
 };
 
 export type JobPositionCreateByDescription = {
-  profileId: string;
+  profileId?: string;
   jobDescription: string;
 };
 

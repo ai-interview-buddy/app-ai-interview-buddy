@@ -16,7 +16,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { z } from "zod";
 
 const formSchema = z.object({
-  profileId: z.string().min(1, "Career Profile is required"),
+  profileId: z.string().nullable(),
   jobUrl: z.string().url("Enter a valid URL").min(1, "Job URL is required"),
 });
 
@@ -27,7 +27,7 @@ export default function CreateStep2Url() {
   const [isLoading, setIsLoading] = useState(false);
   const createJob = useCreateJobPositionByUrl(queryClient, user?.accessToken);
 
-  const defaultValues = { profileId: "", jobUrl: "" };
+  const defaultValues = { profileId: "" as string | null, jobUrl: "" };
 
   const form = useForm({
     defaultValues,
@@ -36,7 +36,7 @@ export default function CreateStep2Url() {
       setIsLoading(true);
       try {
         const saved = await createJob.mutateAsync({
-          profileId: value.profileId.trim(),
+          profileId: value.profileId ? (value.profileId as string).trim() : undefined,
           jobUrl: value.jobUrl.trim(),
         });
         router.push(`/(tabs)/job-position/${saved.id}`);

@@ -1,4 +1,4 @@
-import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
+import { SupabaseClient, User } from "@supabase/supabase-js";
 import { cvScoringAgent, cvScoringWeight } from "../agents/cvScoring.agent.ts";
 import { CareerProfile, CareerProfileCreate, CareerProfileUpdate } from "../types/CareerProfile.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";

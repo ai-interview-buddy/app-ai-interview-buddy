@@ -34,7 +34,7 @@ const CareerProfileForm = ({ onConfirm }: CareerProfileFormProps) => {
 
   return (
     <UploadFileForm
-      title="Please inform your CV"
+      title="Please select your CV"
       subtitle="Upload your resume to get a detailed analysis and personalized recommendations"
       allowedTypes={["application/pdf"]}
       maxFileSize={5 * 1024 * 1024}

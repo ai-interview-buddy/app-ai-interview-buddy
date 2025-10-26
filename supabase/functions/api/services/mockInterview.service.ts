@@ -1,5 +1,7 @@
 import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
 import { buildMockInterviewInstructions } from "../agents/mockInterview.agent.ts";
+import { getById as getCareerProfileById } from "./careerProfile.service.ts";
+import { getById as getJobPositionById } from "./jobPosition.service.ts";
 import {
   MockInterviewInstructionInput,
   MockInterviewInstructionPayload,
@@ -57,65 +59,6 @@ const sanitizeCustomInstructions = (customInstructions?: string | null): string 
   return trimmed;
 };
 
-const fetchCandidateProfile = async (
-  supabase: SupabaseClient,
-  user: User,
-  id?: string
-): Promise<MockInterviewInstructionInput["candidateProfile"]> => {
-  if (!id) return undefined;
-
-  const { data, error } = await supabase
-    .from("career_profile")
-    .select("id,title,curriculum_text,account_id")
-    .eq("id", id)
-    .eq("account_id", user.id)
-    .maybeSingle();
-
-  if (error) {
-    const message = (error as { message?: string }).message ?? safeErrorLog(error);
-    throw new Error(`Failed to load career profile: ${message}`);
-  }
-
-  if (!data) {
-    throw new Error("Career profile not found");
-  }
-
-  return {
-    title: (data as { title?: string | null }).title ?? null,
-    curriculumText: (data as { curriculum_text?: string | null }).curriculum_text ?? null,
-  };
-};
-
-const fetchJobPosition = async (
-  supabase: SupabaseClient,
-  user: User,
-  id?: string
-): Promise<MockInterviewInstructionInput["jobPosition"]> => {
-  if (!id) return undefined;
-
-  const { data, error } = await supabase
-    .from("job_position")
-    .select("id,job_title,company_name,job_description,account_id")
-    .eq("id", id)
-    .eq("account_id", user.id)
-    .maybeSingle();
-
-  if (error) {
-    const message = (error as { message?: string }).message ?? safeErrorLog(error);
-    throw new Error(`Failed to load job position: ${message}`);
-  }
-
-  if (!data) {
-    throw new Error("Job position not found");
-  }
-
-  return {
-    jobTitle: (data as { job_title?: string | null }).job_title ?? null,
-    companyName: (data as { company_name?: string | null }).company_name ?? null,
-    jobDescription: (data as { job_description?: string | null }).job_description ?? null,
-  };
-};
-
 const createInstructionPayload = (
   candidateProfile: MockInterviewInstructionInput["candidateProfile"],
   jobPosition: MockInterviewInstructionInput["jobPosition"],
@@ -168,15 +111,42 @@ export const createMockInterviewSession = async (
       return genericError("OpenAI API key is not configured");
     }
 
-    let candidateProfile: MockInterviewInstructionInput["candidateProfile"];
-    let jobPosition: MockInterviewInstructionInput["jobPosition"];
+    let candidateProfile: MockInterviewInstructionInput["candidateProfile"] = undefined;
+    let jobPosition: MockInterviewInstructionInput["jobPosition"] = undefined;
 
     if (payload.careerProfileId) {
-      candidateProfile = await fetchCandidateProfile(supabase, user, payload.careerProfileId);
+      const { data, error } = await getCareerProfileById(supabase, payload.careerProfileId);
+      if (error) {
+        const message = error.message ?? safeErrorLog(error);
+        throw new Error(`Failed to load career profile: ${message}`);
+      }
+
+      if (!data || data.accountId !== user.id) {
+        throw new Error("Career profile not found");
+      }
+
+      candidateProfile = {
+        title: data.title ?? null,
+        curriculumText: data.curriculumText ?? null,
+      };
     }
 
     if (payload.positionId) {
-      jobPosition = await fetchJobPosition(supabase, user, payload.positionId);
+      const { data, error } = await getJobPositionById(supabase, payload.positionId);
+      if (error) {
+        const message = error.message ?? safeErrorLog(error);
+        throw new Error(`Failed to load job position: ${message}`);
+      }
+
+      if (!data || data.accountId !== user.id) {
+        throw new Error("Job position not found");
+      }
+
+      jobPosition = {
+        jobTitle: data.jobTitle ?? null,
+        companyName: data.companyName ?? null,
+        jobDescription: data.jobDescription ?? null,
+      };
     }
 
     const customInstructions = sanitizeCustomInstructions(payload.customInstructions);

@@ -6,6 +6,7 @@ import account from "./routes/account.route.ts";
 import careerProfile from "./routes/careerProfile.route.ts";
 import interviewQuestion from "./routes/interviewQuestion.route.ts";
 import jobPosition from "./routes/jobPosition.route.ts";
+import mockInterview from "./routes/mockInterview.route.ts";
 import timelineItem from "./routes/timelineItem.route.ts";
 
 addEventListener("beforeunload", (ev: unknown) => {
@@ -24,6 +25,7 @@ app.use("/api/job-positions", jobPosition);
 app.use("/api/timeline-items", timelineItem);
 app.use("/api/interview-questions", interviewQuestion);
 app.use("/api/account", account);
+app.use("/api/mock-interview", mockInterview);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);

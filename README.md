@@ -169,3 +169,6 @@ Brand core:
 -  [ ] Adding missing timeline items types (including interview schedulled and cv analyse)
 -  [ ] Add option to delete an account
 
+
+
+git log -6 -p > last4commits.diff

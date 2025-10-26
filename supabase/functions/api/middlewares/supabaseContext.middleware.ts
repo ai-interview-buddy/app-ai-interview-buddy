@@ -1,5 +1,5 @@
+import { createClient } from "@supabase/supabase-js";
 import { NextFunction, Request, Response } from "express";
-import { createClient } from "npm:@supabase/supabase-js@2";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";

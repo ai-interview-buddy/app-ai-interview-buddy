@@ -1,6 +1,6 @@
-import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
-import { ServiceResponse } from "../types/ServiceResponse.ts";
+import { SupabaseClient, User } from "@supabase/supabase-js";
 import { supabaseAdminClient } from "../lib/supabase.ts";
+import { ServiceResponse } from "../types/ServiceResponse.ts";
 
 export const remove = async (supabase: SupabaseClient, user: User): Promise<ServiceResponse<null>> => {
   if (!user?.id) throw new Error("Invalid user");

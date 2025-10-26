@@ -1,4 +1,4 @@
-import { SupabaseClient } from "npm:@supabase/supabase-js@2";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { parseQuestions } from "../agents/questionParser.agent.ts";
 import { QuestionScoringOutput, scoreQuestion } from "../agents/questionScoring.agent.ts";
 import {
@@ -150,7 +150,7 @@ export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRe
   const text = paragraphs
     ?.map((s) => {
       const speaker = s.speaker === candidateSpeakerId ? "You" : "Interviewer";
-      const sentence = s.sentences.map(s => s.text).join(" ");
+      const sentence = s.sentences.map((s) => s.text).join(" ");
       const time = formatTime(s.start);
       return `**${speaker} [${time}]** \n\n ${sentence}`;
     })

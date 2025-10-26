@@ -1,77 +1,17 @@
-import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
+import { SupabaseClient, User } from "@supabase/supabase-js";
 import { buildMockInterviewInstructions } from "../agents/mockInterview.agent.ts";
-import { getById as getCareerProfileById } from "./careerProfile.service.ts";
-import { getById as getJobPositionById } from "./jobPosition.service.ts";
 import {
-  MockInterviewInstructionInput,
-  MockInterviewInstructionPayload,
   MockInterviewRequest,
   MockInterviewResponse,
 } from "../types/MockInterview.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { genericError } from "../utils/error.utils.ts";
 import { safeErrorLog } from "../utils/typeConvertion.utils.ts";
+import { getById as getCareerProfileById } from "./careerProfile.service.ts";
+import { getById as getJobPositionById } from "./jobPosition.service.ts";
 
 const OPENAI_REALTIME_URL = "https://api.openai.com/v1/realtime/sessions";
 const OPENAI_REALTIME_MODEL = "gpt-realtime-mini";
-const MAX_CUSTOM_INSTRUCTION_LENGTH = 2000;
-
-const sanitizeCustomInstructions = (customInstructions?: string | null): string | undefined => {
-  if (!customInstructions) return undefined;
-  const trimmed = customInstructions.trim();
-  if (!trimmed) return undefined;
-  if (trimmed.length > MAX_CUSTOM_INSTRUCTION_LENGTH) {
-    return trimmed.slice(0, MAX_CUSTOM_INSTRUCTION_LENGTH) + "…";
-  }
-
-  const lower = trimmed.toLowerCase();
-  const bannedPatterns = [
-    /(ignore|disregard|forget)\s+(all\s+)?(earlier|previous|above)\s+instructions/,
-    /(override|bypass)\s+(these|the)\s+instructions/,
-    /(act|pretend)\s+as\s+.*?(hacker|malicious|unethical)/,
-  ];
-
-  if (bannedPatterns.some((pattern) => pattern.test(lower))) {
-    return undefined;
-  }
-
-  const relevantKeywords = [
-    "interview",
-    "candidate",
-    "question",
-    "role",
-    "company",
-    "job",
-    "behaviour",
-    "behavior",
-    "culture",
-    "strength",
-    "weakness",
-    "communication",
-    "team",
-  ];
-
-  const isRelevant = relevantKeywords.some((keyword) => lower.includes(keyword));
-  if (!isRelevant) {
-    return undefined;
-  }
-
-  return trimmed;
-};
-
-const createInstructionPayload = (
-  candidateProfile: MockInterviewInstructionInput["candidateProfile"],
-  jobPosition: MockInterviewInstructionInput["jobPosition"],
-  customInstructions?: string
-): MockInterviewInstructionPayload => {
-  const input: MockInterviewInstructionInput = {
-    candidateProfile,
-    jobPosition,
-    customInstructions,
-  };
-
-  return buildMockInterviewInstructions(input);
-};
 
 const requestRealtimeSession = async (openAiKey: string) => {
   const response = await fetch(OPENAI_REALTIME_URL, {
@@ -111,48 +51,23 @@ export const createMockInterviewSession = async (
       return genericError("OpenAI API key is not configured");
     }
 
-    let candidateProfile: MockInterviewInstructionInput["candidateProfile"] = undefined;
-    let jobPosition: MockInterviewInstructionInput["jobPosition"] = undefined;
+    const {careerProfileId,positionId,customInstructions } = payload;
 
-    if (payload.careerProfileId) {
-      const { data, error } = await getCareerProfileById(supabase, payload.careerProfileId);
-      if (error) {
-        const message = error.message ?? safeErrorLog(error);
+      const { data : candidateProfile, error: candidateProfileError } = careerProfileId ? await getCareerProfileById(supabase, careerProfileId): {};
+      if (candidateProfileError) {
+        const message = candidateProfileError.message ?? safeErrorLog(candidateProfileError);
         throw new Error(`Failed to load career profile: ${message}`);
       }
 
-      if (!data || data.accountId !== user.id) {
-        throw new Error("Career profile not found");
-      }
 
-      candidateProfile = {
-        title: data.title ?? null,
-        curriculumText: data.curriculumText ?? null,
-      };
-    }
-
-    if (payload.positionId) {
-      const { data, error } = await getJobPositionById(supabase, payload.positionId);
-      if (error) {
-        const message = error.message ?? safeErrorLog(error);
+      const { data: jobPosition, error: jobPositionError } =positionId ? await getJobPositionById(supabase, positionId) : {};
+      if (jobPositionError) {
+        const message = jobPositionError.message ?? safeErrorLog(jobPositionError);
         throw new Error(`Failed to load job position: ${message}`);
       }
 
-      if (!data || data.accountId !== user.id) {
-        throw new Error("Job position not found");
-      }
 
-      jobPosition = {
-        jobTitle: data.jobTitle ?? null,
-        companyName: data.companyName ?? null,
-        jobDescription: data.jobDescription ?? null,
-      };
-    }
-
-    const customInstructions = sanitizeCustomInstructions(payload.customInstructions);
-
-    const instructionsPayload = createInstructionPayload(candidateProfile, jobPosition, customInstructions);
-    const instructions = JSON.stringify(instructionsPayload);
+    const instructions = await buildMockInterviewInstructions(user, candidateProfile, jobPosition, customInstructions);
 
     const token = await requestRealtimeSession(openAiKey);
 

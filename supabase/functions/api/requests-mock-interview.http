@@ -7,7 +7,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "careerProfileId": "{{career_profile_id}}",
-  "positionId": "{{job_position_id}}",
+  "careerProfileId": "004f23ef-ab80-4a12-af8e-3334102f9bb4",
+  "positionId": "64714296-577a-418c-9eda-0dde5dceca79",
   "customInstructions": "Please focus on leadership and product strategy scenarios."
 }

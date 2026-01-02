@@ -150,7 +150,7 @@ export const buildMockInterviewInstructions = async (
   }
 
   const response = await client.responses.create({
-    model: "gpt-5-mini",
+    model: "gpt-5-nano",
     instructions: BASE_INSTRUCTION,
     input: input,
     reasoning: {

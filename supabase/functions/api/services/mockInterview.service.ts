@@ -1,16 +1,13 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import { buildMockInterviewInstructions } from "../agents/mockInterview.agent.ts";
-import {
-  MockInterviewRequest,
-  MockInterviewResponse,
-} from "../types/MockInterview.ts";
+import { MockInterviewRequest, MockInterviewResponse } from "../types/MockInterview.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { genericError } from "../utils/error.utils.ts";
 import { safeErrorLog } from "../utils/typeConvertion.utils.ts";
 import { getById as getCareerProfileById } from "./careerProfile.service.ts";
 import { getById as getJobPositionById } from "./jobPosition.service.ts";
 
-const OPENAI_REALTIME_URL = "https://api.openai.com/v1/realtime/sessions";
+const OPENAI_REALTIME_URL = "https://api.openai.com/v1/realtime/client_secrets";
 const OPENAI_REALTIME_MODEL = "gpt-realtime-mini";
 
 const requestRealtimeSession = async (openAiKey: string) => {
@@ -21,7 +18,13 @@ const requestRealtimeSession = async (openAiKey: string) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: OPENAI_REALTIME_MODEL,
+      session: {
+        type: "realtime",
+        model: OPENAI_REALTIME_MODEL,
+        audio: {
+          output: { voice: "marin" },
+        },
+      },
     }),
   });
 
@@ -30,8 +33,8 @@ const requestRealtimeSession = async (openAiKey: string) => {
     throw new Error(`OpenAI realtime session error (${response.status}): ${errorBody}`);
   }
 
-  const session = await response.json();
-  const token = session?.client_secret?.value ?? session?.client_secret ?? null;
+  const data = await response.json();
+  const token = data?.value ?? data?.client_secret ?? null;
 
   if (!token || typeof token !== "string") {
     throw new Error("OpenAI realtime session did not return a client token");
@@ -51,21 +54,21 @@ export const createMockInterviewSession = async (
       return genericError("OpenAI API key is not configured");
     }
 
-    const {careerProfileId,positionId,customInstructions } = payload;
+    const { careerProfileId, positionId, customInstructions } = payload;
 
-      const { data : candidateProfile, error: candidateProfileError } = careerProfileId ? await getCareerProfileById(supabase, careerProfileId): {};
-      if (candidateProfileError) {
-        const message = candidateProfileError.message ?? safeErrorLog(candidateProfileError);
-        throw new Error(`Failed to load career profile: ${message}`);
-      }
+    const { data: candidateProfile, error: candidateProfileError } = careerProfileId
+      ? await getCareerProfileById(supabase, careerProfileId)
+      : {};
+    if (candidateProfileError) {
+      const message = candidateProfileError.message ?? safeErrorLog(candidateProfileError);
+      throw new Error(`Failed to load career profile: ${message}`);
+    }
 
-
-      const { data: jobPosition, error: jobPositionError } =positionId ? await getJobPositionById(supabase, positionId) : {};
-      if (jobPositionError) {
-        const message = jobPositionError.message ?? safeErrorLog(jobPositionError);
-        throw new Error(`Failed to load job position: ${message}`);
-      }
-
+    const { data: jobPosition, error: jobPositionError } = positionId ? await getJobPositionById(supabase, positionId) : {};
+    if (jobPositionError) {
+      const message = jobPositionError.message ?? safeErrorLog(jobPositionError);
+      throw new Error(`Failed to load job position: ${message}`);
+    }
 
     const instructions = await buildMockInterviewInstructions(user, candidateProfile, jobPosition, customInstructions);
 

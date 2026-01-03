@@ -22,6 +22,7 @@ const MockInterviewStep1: React.FC = () => {
   // Refs for WebRTC
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const dcRef = useRef<any | null>(null);
+  const msRef = useRef<any | null>(null);
 
   const body = {
     careerProfileId: "1b2188f1-b0fd-4dbb-9543-18712a8bd281",
@@ -69,6 +70,7 @@ const MockInterviewStep1: React.FC = () => {
         audio: true,
         video: false,
       });
+      msRef.current = ms;
 
       ms.getTracks().forEach((track) => {
         pc.addTrack(track, ms);
@@ -116,6 +118,10 @@ const MockInterviewStep1: React.FC = () => {
     if (pcRef.current) {
       pcRef.current.close();
       pcRef.current = null;
+    }
+    if (msRef.current) {
+      msRef.current.getTracks().forEach((track: any) => track.stop());
+      msRef.current = null;
     }
     setIsSessionActive(false);
   };

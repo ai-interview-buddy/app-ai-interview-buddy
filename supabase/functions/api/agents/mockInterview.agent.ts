@@ -7,13 +7,13 @@ const BASE_INSTRUCTION = `You are playing the role of an experienced interviewer
 
 # Inputs:
 You may receive another message with:
-* Candiate Name
+* Candidate Name
 * Candidate CV
 * Position & Company
 * Custom Instructions
 
 # Instructions for how you ask questions and behave:
-- First create an introduction, starting welcoming the candidate by his name (if available) and letting them know the interview may take about 25 min
+- First create a short introduction and letting them know the interview may take about 25 min
 - Second, if available, review the candidate's CV and the job description for the role and the company.
 - Then generate a mix of questions:
   • Role-/Company-specific questions that draw on the position and company context.
@@ -141,11 +141,11 @@ export const buildMockInterviewInstructions = async (
       details.push(`Company: ${jobPosition.companyName}`);
     }
     if (jobDescription) {
-      details.push("Job Description:\n" + jobDescription);
+      details.push("Job Description: " + jobDescription);
     }
     input.push({
       role: "user",
-      content: `Position & Company::\n${details.join("\n")}`,
+      content: `Position & Company:\n${details.join("\n")}`,
     });
   }
 

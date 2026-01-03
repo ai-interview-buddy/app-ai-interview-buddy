@@ -2,21 +2,44 @@ export default class RealTimeClient {
   public static async createConnection(sdp: any, token: string): Promise<any> {
     const baseUrl = "https://api.openai.com/v1/realtime/calls";
     const model = "gpt-4o-realtime-preview-2024-12-17";
-    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
-      method: "POST",
-      body: sdp,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/sdp",
-      },
-    });
-    console.warn(sdpResponse);
-    const answer = {
-      type: "answer",
-      sdp: await sdpResponse.text(),
-    };
 
-    return answer;
+    try {
+      const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+        method: "POST",
+        body: sdp,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/sdp",
+        },
+      });
+
+      if (!sdpResponse.ok) {
+        const raw = await sdpResponse.text().catch(() => "");
+        let parsed: any = raw;
+        try {
+          parsed = raw ? JSON.parse(raw) : raw;
+        } catch {
+          // leave parsed as raw text
+        }
+
+        console.error("RTC: SDP exchange failed", {
+          status: sdpResponse.status,
+          error: parsed,
+        });
+
+        throw new Error(`OpenAI realtime SDP request failed (${sdpResponse.status})`);
+      }
+
+      const answer = {
+        type: "answer",
+        sdp: await sdpResponse.text(),
+      };
+
+      return answer;
+    } catch (err) {
+      console.error("RTC: Failed to create connection", err);
+      throw err;
+    }
   }
 
   public static openEvent(): string {

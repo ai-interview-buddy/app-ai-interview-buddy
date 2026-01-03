@@ -64,6 +64,8 @@ const MockInterviewStep1: React.FC = () => {
       pc.addTrack(ms.getTracks()[0]);
 
       const dc = pc.createDataChannel("oai-events");
+      dcRef.current = dc;
+
       dc.onopen = () => {
         dc.send(RealTimeClient.openEvent());
         dc.send(RealTimeClient.forceStartEvent());

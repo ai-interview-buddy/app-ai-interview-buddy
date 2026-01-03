@@ -34,7 +34,7 @@ const requestRealtimeSession = async (openAiKey: string) => {
   }
 
   const data = await response.json();
-  const token = data?.value ?? data?.client_secret ?? null;
+  const token = data?.value ?? null;
 
   if (!token || typeof token !== "string") {
     throw new Error("OpenAI realtime session did not return a client token");

@@ -1,4 +1,4 @@
-import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
+import { SupabaseClient, User } from "@supabase/supabase-js";
 import { extractPositionFromDescription, extractPositionFromUrl } from "../agents/positionExtractor.agent.ts";
 import { JobPosition, JobPositionCreateByDescription, JobPositionCreateByUrl, JobPositionUpdate } from "../types/JobPosition.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";

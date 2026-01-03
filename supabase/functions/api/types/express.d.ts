@@ -1,4 +1,4 @@
-import { SupabaseClient, User } from "npm:@supabase/supabase-js";
+import { SupabaseClient, User } from "@supabase/supabase-js";
 
 declare global {
   namespace Express {

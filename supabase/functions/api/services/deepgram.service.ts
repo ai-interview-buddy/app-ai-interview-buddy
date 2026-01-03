@@ -1,6 +1,6 @@
 import { createClient, DeepgramResponse, SyncPrerecordedResponse } from "@deepgram/sdk";
-import { Buffer } from 'node:buffer';
-import { SupabaseClient } from "npm:@supabase/supabase-js@2";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { Buffer } from "node:buffer";
 import { isLocal } from "../middlewares/supabaseContext.middleware.ts";
 import { DeepgramParagraph } from "../types/InterviewQuestion.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";

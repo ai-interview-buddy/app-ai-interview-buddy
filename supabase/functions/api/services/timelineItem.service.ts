@@ -1,5 +1,5 @@
 import { AgentInputItem } from "@openai/agents";
-import { SupabaseClient, User } from "npm:@supabase/supabase-js@2";
+import { SupabaseClient, User } from "@supabase/supabase-js";
 import { generateCoverLetter } from "../agents/coverLetter.agent.ts";
 import { generateLinkedinIntro } from "../agents/linkedinIntro.agent.ts";
 import { generateReplyEmail } from "../agents/replyEmail.agent.ts";
@@ -87,7 +87,7 @@ export const createCoverLetter = async (
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
     if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
-    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId!);
 
     const letter = await generateCoverLetter(careerPosition!.curriculumText, jobPosition!.jobDescription, body.customInstructions);
 
@@ -116,7 +116,7 @@ export const createLinkedinIntro = async (
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
     if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
-    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId!);
 
     const output = await generateLinkedinIntro(
       careerPosition!.curriculumText,
@@ -264,7 +264,7 @@ export const updateCustomInstructions = async (
     ];
 
     const { data: jobPosition } = await getJobPositionById(supabase, record.positionId);
-    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId!);
 
     let output: string | undefined;
 

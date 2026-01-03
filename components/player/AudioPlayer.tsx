@@ -28,7 +28,7 @@ export default function AudioPlayer({ timelineItem }: Props) {
   const status = useAudioPlayerStatus(player);
   const progressWidthRef = useRef(1);
 
-  const { data: url, isLoading } = useTimelineItemInterviewUrl(user?.accessToken!, timelineItem.id as string);
+  const { data, isLoading } = useTimelineItemInterviewUrl(user?.accessToken!, timelineItem.id as string);
 
   useEffect(() => {
     let mounted = true;
@@ -41,9 +41,9 @@ export default function AudioPlayer({ timelineItem }: Props) {
           interruptionModeAndroid: "duckOthers",
         });
 
-        if (!url?.signedUrl) return;
+        if (!data?.signedUrl) return;
         if (!mounted) return;
-        player.replace(url.signedUrl);
+        player.replace(data.signedUrl);
         setIsReady(true);
       } catch (e: any) {
         console.log(e);
@@ -53,7 +53,7 @@ export default function AudioPlayer({ timelineItem }: Props) {
     return () => {
       mounted = false;
     };
-  }, [timelineItem.id, url?.signedUrl]);
+  }, [timelineItem.id, data?.signedUrl]);
 
   const togglePlay = useCallback(() => {
     if (status.playing) player.pause();

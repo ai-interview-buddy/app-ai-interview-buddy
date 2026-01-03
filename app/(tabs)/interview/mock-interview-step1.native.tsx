@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
+import InCallManager from "react-native-incall-manager";
 import { mediaDevices, RTCPeerConnection } from "react-native-webrtc";
 
 const MockInterviewStep1: React.FC = () => {
@@ -46,6 +47,9 @@ const MockInterviewStep1: React.FC = () => {
     if (!mockInterview?.token) return;
 
     try {
+      InCallManager.start({ media: "audio" });
+      InCallManager.setForceSpeakerphoneOn(true);
+
       const pc = new RTCPeerConnection({
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
       });
@@ -111,6 +115,8 @@ const MockInterviewStep1: React.FC = () => {
   };
 
   const stopSession = () => {
+    InCallManager.stop();
+
     if (dcRef.current) {
       dcRef.current.close();
       dcRef.current = null;
@@ -135,7 +141,7 @@ const MockInterviewStep1: React.FC = () => {
       <MainContainer>
         <View style={{ gap: 20, padding: 20 }}>
           <Button onPress={startSession} disabled={!mockInterview || isSessionActive}>
-            <Text>Start Interview (iOS)</Text>
+            <Text>Start Interview (iOSx2)</Text>
           </Button>
           <Button onPress={stopSession} disabled={!isSessionActive}>
             <Text>Stop Interview</Text>

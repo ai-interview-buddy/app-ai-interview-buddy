@@ -1,5 +1,5 @@
-import { PostgrestResponseFailure } from "@supabase/postgrest-js";
-import { StorageError } from "@supabase/storage-js";
+import { PostgrestResponseFailure } from "npm:@supabase/postgrest-js@1.19.4";
+import { StorageError } from "npm:@supabase/storage-js@2.7.1";
 import { ServiceError, ServiceResponseFailure } from "../types/ServiceResponse.ts";
 
 export const genericError = (message: string, details?: string): ServiceResponseFailure => {

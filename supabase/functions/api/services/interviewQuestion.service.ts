@@ -142,7 +142,7 @@ const processTranscriptionAndSave = async (supabase: SupabaseClient, timelineRec
   const text = paragraphs
     ?.map((s: DeepgramParagraph) => {
       const speaker = s.speaker === candidateSpeakerId ? "You" : "Interviewer";
-      const sentence = s.sentences.map((sent: { text: string }) => sent.text).join(" ");
+      const sentence = s.sentences.map((s) => s.text).join(" ");
       const time = formatTime(s.start);
       return `**${speaker} [${time}]** \n\n ${sentence}`;
     })

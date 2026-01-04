@@ -50,7 +50,7 @@ export const useTimelineItemInterviewUrl = (token?: string, id?: string): UseQue
   });
 };
 
-const invalidateTimelineQueries = (queryClient: QueryClient, id?: string) => {
+export const invalidateTimelineQueries = (queryClient: QueryClient, id?: string) => {
   queryClient.invalidateQueries({ queryKey: ["timeline-items"] });
   if (id) queryClient.invalidateQueries({ queryKey: ["timeline-item", id] });
 };

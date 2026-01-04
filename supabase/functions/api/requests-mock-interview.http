@@ -1,0 +1,13 @@
+@base_url = http://localhost:54321/functions/v1
+@access_token = {{access_token}}
+
+### Create a mock interview session token
+POST {{base_url}}/api/mock-interview
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "careerProfileId": "004f23ef-ab80-4a12-af8e-3334102f9bb4",
+  "positionId": "64714296-577a-418c-9eda-0dde5dceca79",
+  "customInstructions": "Please focus on leadership and product strategy scenarios."
+}

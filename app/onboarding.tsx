@@ -25,6 +25,13 @@ const onboardingSteps: OnboardingStep[] = [
     image: require("@/assets/images/onboarding/welcome.png"),
   },
   {
+    title: "Practice Mock Interviews",
+    body: "Sharpen your skills with AI-driven sessions. Simulate real-world scenarios and get instant feedback on your performance.",
+    microcopy: "Build confidence with tailored questions and expert insights before the real deal.",
+    primaryCTA: "Next",
+    image: require("@/assets/images/onboarding/mock-interview.png"),
+  },
+  {
     title: "Record or Upload Your Interviews",
     body: "Capture your interviews either by recording directly in the app or uploading an existing file. Our AI will analyse every question, scoring areas like structure, clarity, and impact.",
     microcopy: "Review detailed feedback, drill into each answer, and save your strongest responses to build get that deserved job.",
@@ -61,10 +68,11 @@ const OnboardingWizard: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: "step0", title: "Welcome" },
-    { key: "step1", title: "Interviews" },
-    { key: "step2", title: "Job Positions" },
-    { key: "step3", title: "Career Track" },
-    { key: "step4", title: "Activate" },
+    { key: "step1", title: "Mock Interviews" },
+    { key: "step2", title: "Real Interviews" },
+    { key: "step3", title: "Job Positions" },
+    { key: "step4", title: "Career Track" },
+    { key: "step5", title: "Activate" },
   ]);
 
   const handleSkip = () => router.replace("/auth");
@@ -244,6 +252,7 @@ const OnboardingWizard: React.FC = () => {
     step2: () => <OnboardingScreen stepIndex={2} />,
     step3: () => <OnboardingScreen stepIndex={3} />,
     step4: () => <OnboardingScreen stepIndex={4} />,
+    step5: () => <OnboardingScreen stepIndex={5} />,
   });
 
   return (

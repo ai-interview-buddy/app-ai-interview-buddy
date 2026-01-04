@@ -32,7 +32,7 @@ export interface InterviewQuestion {
   actionsContribution?: number;
   resultsImpact?: number;
   competencyDemonstration?: number;
-  score?: number; 
+  score?: number;
 
   feedback?: string;
 
@@ -48,7 +48,6 @@ export interface InterviewQuestionFilter {
   questionType?: QuestionType;
 }
 
-
 // ################################################
 // ### other types
 // ################################################
@@ -58,7 +57,7 @@ export enum InterviewRole {
   INTERVIEWER = "INTERVIEWER",
 }
 
-interface DeepgramSentence {
+export interface DeepgramSentence {
   text: string;
   start: number;
   end: number;

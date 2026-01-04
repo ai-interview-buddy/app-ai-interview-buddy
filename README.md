@@ -168,4 +168,3 @@ Brand core:
 -  [ ] Recording interview: when start recording, also, create the record and store the fine in a "expected" location; Then allow to recover
 -  [ ] Adding missing timeline items types (including interview schedulled and cv analyse)
 -  [ ] Add option to delete an account
-

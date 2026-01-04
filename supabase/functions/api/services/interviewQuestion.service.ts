@@ -2,6 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { parseQuestions } from "../agents/questionParser.agent.ts";
 import { QuestionScoringOutput, scoreQuestion } from "../agents/questionScoring.agent.ts";
 import {
+  DeepgramParagraph,
   InterviewQuestion,
   InterviewQuestionFilter,
   InterviewRole,
@@ -51,17 +52,8 @@ export const getById = async (supabase: SupabaseClient, id: string): Promise<Ser
   return convertOne(result);
 };
 
-export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRecord: TimelineItem) => {
-  console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} received background-tasks`);
-
-  const { data: paragraphs, error: deepgramError } = await convertAudioFileToText(supabase, timelineRecord.interviewOriginalAudioPath!);
-  console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} response from deepgram ${paragraphs?.length} paragraphs`);
-
-  if (!paragraphs || deepgramError) {
-    return genericError("Failed deepgram has return an empty paragraphs object" + deepgramError);
-  }
-
-  const simplified: SimplifiedParagraph[] = paragraphs?.map((p, idx) => {
+const processTranscriptionAndSave = async (supabase: SupabaseClient, timelineRecord: TimelineItem, paragraphs: DeepgramParagraph[]) => {
+  const simplified: SimplifiedParagraph[] = paragraphs.map((p, idx) => {
     return { id: idx, speaker: p.speaker, sentence: p.sentences.map((s) => s.text).join(" ") };
   });
 
@@ -148,7 +140,7 @@ export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRe
   console.log(`interviewAnalyse: finished interview ${timelineRecord.id} create ${records.length} questions`);
 
   const text = paragraphs
-    ?.map((s) => {
+    ?.map((s: DeepgramParagraph) => {
       const speaker = s.speaker === candidateSpeakerId ? "You" : "Interviewer";
       const sentence = s.sentences.map((s) => s.text).join(" ");
       const time = formatTime(s.start);
@@ -156,13 +148,41 @@ export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRe
     })
     .join("\n\n");
 
-  const finalScore = Math.ceil(records.map((el) => el.score).reduce((prev, curr) => prev + curr, 0) / records.length);
+  const finalScore =
+    records.length > 0 ? Math.ceil(records.map((el) => el.score).reduce((prev, curr) => prev + curr, 0) / records.length) : 0;
   const timelineToUpdate = { ...timelineRecord, text: text, interviewScore: finalScore };
 
   await updateTimeline(supabase, timelineRecord.id, timelineToUpdate);
 
   console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} timeline item updated`);
   return records;
+};
+
+export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRecord: TimelineItem) => {
+  console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} received background-tasks`);
+
+  const { data: paragraphs, error: deepgramError } = await convertAudioFileToText(supabase, timelineRecord.interviewOriginalAudioPath!);
+  console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} response from deepgram ${paragraphs?.length} paragraphs`);
+
+  if (!paragraphs || deepgramError) {
+    return genericError("Failed deepgram has return an empty paragraphs object" + deepgramError);
+  }
+
+  return await processTranscriptionAndSave(supabase, timelineRecord, paragraphs);
+};
+
+export const parseQuestionsByTranscript = async (
+  supabase: SupabaseClient,
+  timelineRecord: TimelineItem,
+  transcript: DeepgramParagraph[]
+) => {
+  console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} received transcript-based analysis`);
+
+  if (!transcript || transcript.length === 0) {
+    return genericError("Failed: transcript is empty");
+  }
+
+  return await processTranscriptionAndSave(supabase, timelineRecord, transcript);
 };
 
 export const remove = async (supabase: SupabaseClient, id: string): Promise<ServiceResponse<null>> => {

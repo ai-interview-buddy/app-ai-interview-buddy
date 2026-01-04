@@ -1,6 +1,7 @@
 import { InterviewQuestion, QuestionType } from "@/supabase/functions/api/types/InterviewQuestion";
 import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { deleteInterviewQuestion, fetchInterviewQuestion, fetchInterviewQuestions } from "./interviewQuestion.fetch";
+import { analyseMockInterview } from "./mockInterview.fetch";
 
 export const useInterviewQuestions = (
   token?: string,
@@ -44,5 +45,17 @@ export const useDeleteInterviewQuestion = (queryClient: QueryClient, token?: str
       return deleteInterviewQuestion(token, id);
     },
     onSuccess: (_, id) => invalidateInterviewQuestionQueries(queryClient, id),
+  });
+};
+
+export const useAnalyseMockInterview = (queryClient: QueryClient, token?: string) => {
+  return useMutation<{ id: string }, Error, { positionId?: string; transcript: any[] }>({
+    mutationFn: (body) => {
+      if (!token) throw new Error("Missing token");
+      return analyseMockInterview(token, body);
+    },
+    onSuccess: (data) => {
+      invalidateInterviewQuestionQueries(queryClient, data.id);
+    },
   });
 };

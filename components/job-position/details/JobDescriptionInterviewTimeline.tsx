@@ -4,6 +4,7 @@ import { useTimelineItems } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { default as React } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -13,7 +14,14 @@ interface Props {
 
 export const JobDescriptionInterviewTimeline = ({ record }: Props) => {
   const { user } = useAuthStore();
+  const router = useRouter();
   const { data, isLoading } = useTimelineItems(user?.accessToken, { unpaged: true, jobPositionId: record?.id });
+
+  const handleCreateNewStage = () => {
+    if (record?.id) {
+      router.push(`/interview/mock-interview-step1?positionId=${record.id}`);
+    }
+  };
 
   const loading = isLoading || !data;
 
@@ -44,7 +52,7 @@ export const JobDescriptionInterviewTimeline = ({ record }: Props) => {
         {/* Add New Stage Button */}
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity
-            // onPress={handleCreateNewStage}
+            onPress={handleCreateNewStage}
             style={{
               width: 48,
               height: 48,
@@ -64,7 +72,7 @@ export const JobDescriptionInterviewTimeline = ({ record }: Props) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            // onPress={handleCreateNewStage}
+            onPress={handleCreateNewStage}
             style={{
               flex: 1,
               backgroundColor: "white",
@@ -83,7 +91,7 @@ export const JobDescriptionInterviewTimeline = ({ record }: Props) => {
                 textAlign: "center",
               }}
             >
-              Add New Interview Stage
+              Add a Mock Interview
             </Text>
           </TouchableOpacity>
         </View>

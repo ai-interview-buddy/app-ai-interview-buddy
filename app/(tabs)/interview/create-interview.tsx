@@ -9,8 +9,8 @@ const CreateStep1: React.FC = () => {
   const router = useRouter();
   const { positionId } = useLocalSearchParams();
 
-  const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview/create-interview"));
-  const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview/create-interview"));
+  const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
+  const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
 
   return (
     <>
@@ -18,7 +18,7 @@ const CreateStep1: React.FC = () => {
 
       <MainContainer>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-          <TitleBackHeader pageTitle="Interview feedback" handleBack={handleBack} handleCancel={handleCancel} />
+          <TitleBackHeader pageTitle="New interview" handleBack={handleBack} handleCancel={handleCancel} />
 
           <ScrollView
             style={{ flex: 1 }}
@@ -29,14 +29,14 @@ const CreateStep1: React.FC = () => {
             showsVerticalScrollIndicator={false}
           >
             <CenteredTextHeading
-              title="How would you like to capture the interview?"
-              subtitle="Choose to record in-app or import an existing audio file"
+              title="What type of interview do you want?"
+              subtitle="Choose between a mock interview or a real interview"
             />
 
             <View style={{ gap: 16 }}>
               <Link
                 href={{
-                  pathname: "/interview/create-interview-analyse-step2-record",
+                  pathname: "/interview/mock-interview-step1",
                   params: { positionId },
                 }}
                 push
@@ -68,12 +68,12 @@ const CreateStep1: React.FC = () => {
                         marginRight: 16,
                       }}
                     >
-                      <Ionicons name="mic-outline" size={24} color="#E3AA1F" />
+                      <Ionicons name="school-outline" size={24} color="#E3AA1F" />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>Record Interview</Text>
+                      <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>Mock Interview</Text>
                       <Text style={{ fontSize: 14, color: "#6B7280", lineHeight: 20 }}>
-                        Use your device's microphone to capture live audio
+                        Practice with simulated questions and get structured AI feedback
                       </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
@@ -82,7 +82,7 @@ const CreateStep1: React.FC = () => {
               </Link>
               <Link
                 href={{
-                  pathname: "/interview/create-interview-analyse-step2-upload",
+                  pathname: "/interview/create-interview-analyse-step1",
                   params: { positionId },
                 }}
                 push
@@ -114,11 +114,13 @@ const CreateStep1: React.FC = () => {
                         marginRight: 16,
                       }}
                     >
-                      <Ionicons name="cloud-upload-outline" size={24} color="#E3AA1F" />
+                      <Ionicons name="briefcase-outline" size={24} color="#E3AA1F" />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>Upload Recording</Text>
-                      <Text style={{ fontSize: 14, color: "#6B7280", lineHeight: 20 }}>Select an existing audio file from your device</Text>
+                      <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>Real Interview</Text>
+                      <Text style={{ fontSize: 14, color: "#6B7280", lineHeight: 20 }}>
+                        Analyse a real interview capturing it live or by uploading a recording
+                      </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
                   </View>

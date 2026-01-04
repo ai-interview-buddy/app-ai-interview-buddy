@@ -47,7 +47,7 @@ const InterviewList: React.FC = () => {
           )}
         </ScrollView>
 
-        <FloatingActionLink href="/interview/create-interview-analyse-step1" />
+        <FloatingActionLink href="/interview/create-interview" />
       </MainContainer>
     </>
   );

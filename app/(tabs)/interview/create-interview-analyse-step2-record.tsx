@@ -1,6 +1,7 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { UploadProgressDialog } from "@/components/dialogs/UploadProgressDialog";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
+import { TipsSection } from "@/components/misc/TipsSection";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
 import { useCreateTimelineInterviewAnalyse } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
@@ -45,7 +46,7 @@ export const STT_RECORDING_OPTIONS: RecordingOptions = {
 
 const RecordInterview: React.FC = () => {
   const router = useRouter();
-  const { jobPositionId } = useLocalSearchParams();
+  const { positionId } = useLocalSearchParams();
 
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
@@ -265,9 +266,9 @@ const RecordInterview: React.FC = () => {
       };
 
       await uploadFile(user, "interviews", filename, audioRecorder, onProgress);
-      const timelineItem = await mutateAsync({ positionId: jobPositionId as string, interviewPath: filename });
+      const timelineItem = await mutateAsync({ positionId: positionId as string, interviewPath: filename });
 
-      router.replace(jobPositionId ? `/job-position/${jobPositionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
+      router.replace(positionId ? `/job-position/${positionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
     } catch (err) {
       console.error("Failed to stop recording", err);
       Alert.alert("Error", "Failed to stop recording. Please try again.");
@@ -306,8 +307,8 @@ const RecordInterview: React.FC = () => {
     outputRange: [0.1, 0],
   });
 
-  const handleBack = () => router.push({ pathname: `/interview/create-interview-analyse-step1`, params: { jobPositionId } });
-  const handleCancel = () => (jobPositionId ? router.push(`/job-position`) : router.push("/interview"));
+  const handleBack = () => router.push({ pathname: `/interview/create-interview-analyse-step1`, params: { positionId } });
+  const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
 
   return (
     <>
@@ -479,59 +480,7 @@ const RecordInterview: React.FC = () => {
             )}
 
             {/* Tips Section */}
-            {!isRecording && (
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: 20,
-                  left: 40,
-                  right: 40,
-                }}
-              >
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    borderRadius: 16,
-                    padding: 20,
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.04,
-                    shadowRadius: 8,
-                    elevation: 2,
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "flex-start",
-                      marginBottom: 12,
-                    }}
-                  >
-                    <Ionicons name="bulb" size={20} color="#FFC629" style={{ marginRight: 12, marginTop: 2 }} />
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "700",
-                        color: "#1D252C",
-                      }}
-                    >
-                      Recording Tips
-                    </Text>
-                  </View>
-
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: "#6B7280",
-                      lineHeight: 20,
-                    }}
-                  >
-                    • Find a quiet environment{"\n"}• Speak clearly and at normal pace{"\n"}• Keep your device close but not too close{"\n"}
-                    • Take your time to think before answering
-                  </Text>
-                </View>
-              </View>
-            )}
+            {!isRecording && <TipsSection />}
           </View>
         </KeyboardAvoidingView>
       </MainContainer>

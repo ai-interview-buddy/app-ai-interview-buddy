@@ -131,7 +131,7 @@ export const InterviewPreparationView: React.FC<InterviewPreparationViewProps> =
                 <Ionicons name="time-outline" size={18} color="#FFC629" />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 14, fontWeight: "600", color: "#1D252C", marginBottom: 2 }}>Aprox 25 minutes</Text>
+                <Text style={{ fontSize: 14, fontWeight: "600", color: "#1D252C", marginBottom: 2 }}>Approximately 25 minutes</Text>
                 <Text style={{ fontSize: 13, color: "#6B7280" }}>Average interview duration</Text>
               </View>
             </View>

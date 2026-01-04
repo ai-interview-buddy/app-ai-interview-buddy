@@ -1,16 +1,19 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import { buildMockInterviewInstructions } from "../agents/mockInterview.agent.ts";
-import { MockInterviewRequest, MockInterviewResponse } from "../types/MockInterview.ts";
+import { MockInterviewAnalyseRequest, MockInterviewRequest, MockInterviewResponse } from "../types/MockInterview.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
+import { TimelineItem, TimelineType } from "../types/TimelineItem.ts";
 import { genericError } from "../utils/error.utils.ts";
 import { safeErrorLog } from "../utils/typeConvertion.utils.ts";
 import { getById as getCareerProfileById } from "./careerProfile.service.ts";
+import { parseQuestionsByTranscript } from "./interviewQuestion.service.ts";
 import { getById as getJobPositionById } from "./jobPosition.service.ts";
+import { create as createTimeline } from "./timelineItem.service.ts";
 
 const OPENAI_REALTIME_URL = "https://api.openai.com/v1/realtime/client_secrets";
 const OPENAI_REALTIME_MODEL = "gpt-realtime-mini";
 
-const requestRealtimeSession = async (openAiKey: string) => {
+const requestRealtimeSession = async (openAiKey: string, instructions: string) => {
   const response = await fetch(OPENAI_REALTIME_URL, {
     method: "POST",
     headers: {
@@ -20,8 +23,15 @@ const requestRealtimeSession = async (openAiKey: string) => {
     body: JSON.stringify({
       session: {
         type: "realtime",
+        instructions,
         model: OPENAI_REALTIME_MODEL,
         audio: {
+          input: {
+            transcription: {
+              language: "en",
+              model: "gpt-4o-mini-transcribe", // Enable transcription of user's audio
+            },
+          },
           output: { voice: "marin" },
         },
       },
@@ -54,11 +64,9 @@ export const createMockInterviewSession = async (
       return genericError("OpenAI API key is not configured");
     }
 
-    const { careerProfileId, positionId, customInstructions } = payload;
+    const { profileId, positionId, customInstructions } = payload;
 
-    const { data: candidateProfile, error: candidateProfileError } = careerProfileId
-      ? await getCareerProfileById(supabase, careerProfileId)
-      : {};
+    const { data: candidateProfile, error: candidateProfileError } = profileId ? await getCareerProfileById(supabase, profileId) : {};
     if (candidateProfileError) {
       const message = candidateProfileError.message ?? safeErrorLog(candidateProfileError);
       throw new Error(`Failed to load career profile: ${message}`);
@@ -72,18 +80,57 @@ export const createMockInterviewSession = async (
 
     const instructions = await buildMockInterviewInstructions(user, candidateProfile, jobPosition, customInstructions);
 
-    const token = await requestRealtimeSession(openAiKey);
+    const token = await requestRealtimeSession(openAiKey, instructions);
 
     return {
       error: null,
       data: {
         token,
-        instructions,
       },
       count: null,
     };
   } catch (error) {
     console.error(`Failed to create mock interview session: ${safeErrorLog(error)}`);
     return genericError("Unable to create mock interview session", error instanceof Error ? error.message : undefined);
+  }
+};
+
+export const analyseMockInterview = async (
+  supabase: SupabaseClient,
+  user: User,
+  payload: MockInterviewAnalyseRequest
+): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    const { positionId, transcript } = payload;
+
+    // 1. Create a TimelineItem of type INTERVIEW_ANALYSE
+    const newInterview: Partial<TimelineItem> = {
+      accountId: user.id,
+      type: TimelineType.INTERVIEW_ANALYSE,
+      title: "Mock Interview Review",
+      positionId: positionId,
+      interviewScore: 0,
+      text: "",
+    };
+
+    const { data: timelineItem, error: timelineError } = await createTimeline(supabase, newInterview);
+    if (timelineError || !timelineItem) {
+      throw new Error(`Failed to create timeline item: ${timelineError?.message}`);
+    }
+
+    // 2. Trigger analysis background task (which now also supports direct transcript)
+    // We don't await this if we want it to be background, but here we probably want to return the result or at least start it.
+    // The user request implies they want to wait for it or redirect to the item.
+    // In parseQuestionsByAudio it was a background task in some contexts, but here it's a direct service call.
+    await parseQuestionsByTranscript(supabase, timelineItem, transcript);
+
+    return {
+      error: null,
+      data: timelineItem,
+      count: null,
+    };
+  } catch (error) {
+    console.error(`Failed to analyse mock interview: ${safeErrorLog(error)}`);
+    return genericError("Unable to analyse mock interview", error instanceof Error ? error.message : undefined);
   }
 };

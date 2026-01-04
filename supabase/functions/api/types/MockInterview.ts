@@ -1,10 +1,16 @@
+import { DeepgramParagraph } from "./InterviewQuestion.ts";
+
 export type MockInterviewRequest = {
-  careerProfileId?: string;
+  profileId?: string;
   positionId?: string;
   customInstructions?: string;
 };
 
 export type MockInterviewResponse = {
   token: string;
-  instructions: string;
+};
+
+export type MockInterviewAnalyseRequest = {
+  positionId?: string;
+  transcript: DeepgramParagraph[];
 };

@@ -22,6 +22,16 @@ import { getById as getCareerProfileById } from "./careerProfile.service.ts";
 import { parseQuestionsByAudio } from "./interviewQuestion.service.ts";
 import { getById as getJobPositionById } from "./jobPosition.service.ts";
 
+export const create = async (supabase: SupabaseClient, record: Partial<TimelineItem>): Promise<ServiceResponse<TimelineItem>> => {
+  try {
+    const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
+    return convertOne(result);
+  } catch (err) {
+    console.error(`Error creating timeline item: ${safeErrorLog(err)}`);
+    return genericError("Failed to create a timeline item", String(err));
+  }
+};
+
 export const getAll = async (supabase: SupabaseClient, params: TimelineFilter): Promise<ServiceResponse<TimelineItem[]>> => {
   let query = supabase
     .from("timeline_item")

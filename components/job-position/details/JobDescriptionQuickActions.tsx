@@ -45,7 +45,7 @@ const actions: Action[] = [
     icon: "mic-outline",
     title: "Interview feedback",
     subtitle: "Capture your interview and get AI powered feedback",
-    getLink: (record: JobPosition) => `/interview/create-interview-analyse-step1?jobPositionId=${record.id}`,
+    getLink: (record: JobPosition) => `/interview/create-interview-analyse-step1?positionId=${record.id}`,
   },
 ];
 

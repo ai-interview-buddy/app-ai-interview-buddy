@@ -11,3 +11,14 @@ export const createMockInterviewSession = async (token: string, request: MockInt
 
   return await res.json();
 };
+
+export const analyseMockInterview = async (token: string, body: { positionId?: string; transcript: any[] }): Promise<{ id: string }> => {
+  const res = await fetch(`${API_BASE_URL}/mock-interview/analyse`, {
+    method: "POST",
+    headers: defaultHeaders(token),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error("Failed to analyse mock interview");
+
+  return await res.json();
+};

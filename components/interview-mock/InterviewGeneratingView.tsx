@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect } from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 import { TipsSection } from "../misc/TipsSection";
 
@@ -50,7 +50,9 @@ export const InterviewGeneratingView: React.FC = () => {
   }));
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 40 }}>
+    <ScrollView
+      contentContainerStyle={{ flex: 1, justifyContent: "flex-start", alignItems: "center", paddingHorizontal: 20, marginBottom: 40 }}
+    >
       <Animated.View
         style={[
           {
@@ -150,6 +152,6 @@ export const InterviewGeneratingView: React.FC = () => {
 
       {/* Tips Section */}
       <TipsSection />
-    </View>
+    </ScrollView>
   );
 };

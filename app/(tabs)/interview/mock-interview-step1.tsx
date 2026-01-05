@@ -106,8 +106,15 @@ const MockInterviewPage: React.FC = () => {
     }
   };
 
-  const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview/create-interview"));
-  const handleCancel = () => (positionId ? router.replace(`/job-position`) : router.replace("/interview/create-interview"));
+  const handleBack = () => {
+    router.dismissAll(); // this is important, it destroy all objects - including the call to oai
+    positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview/create-interview");
+  };
+
+  const handleCancel = () => {
+    router.dismissAll();
+    positionId ? router.push(`/job-position`) : router.push("/interview/create-interview");
+  };
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useRef, useState } from "react";
-import { Animated, Easing, LayoutChangeEvent, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { LayoutChangeEvent, Text, TouchableOpacity, View } from "react-native";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 interface CollapsibleCardProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -11,28 +12,31 @@ interface CollapsibleCardProps {
 
 export const CollapsibleCard: React.FC<CollapsibleCardProps> = ({ icon, title, children, initialExpanded = false }) => {
   const [isExpanded, setIsExpanded] = useState(initialExpanded);
-  const [contentHeight, setContentHeight] = useState(0);
-  const animatedValue = useRef(new Animated.Value(initialExpanded ? 1 : 0)).current;
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+  const animationProgress = useSharedValue(initialExpanded ? 1 : 0);
 
   useEffect(() => {
-    Animated.timing(animatedValue, {
-      toValue: isExpanded ? 1 : 0,
+    animationProgress.value = withTiming(isExpanded ? 1 : 0, {
       duration: 300,
       easing: Easing.inOut(Easing.ease),
-      useNativeDriver: false,
-    }).start();
+    });
   }, [isExpanded]);
 
   const onLayout = (event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout;
-    if (height > 0 && height !== contentHeight) {
-      setContentHeight(height);
+    if (height > 0 && Math.abs(height - measuredHeight) > 1) {
+      setMeasuredHeight(height);
     }
   };
 
-  const heightValue = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, contentHeight],
+  const animatedStyle = useAnimatedStyle(() => {
+    // Add 16 to account for the top spacing of the content
+    const targetHeight = measuredHeight > 0 ? measuredHeight + 16 : 0;
+    return {
+      height: targetHeight * animationProgress.value,
+      opacity: measuredHeight === 0 ? 0 : 1,
+      overflow: "hidden",
+    };
   });
 
   return (
@@ -51,6 +55,7 @@ export const CollapsibleCard: React.FC<CollapsibleCardProps> = ({ icon, title, c
     >
       <TouchableOpacity
         onPress={() => setIsExpanded(!isExpanded)}
+        activeOpacity={0.7}
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -84,15 +89,17 @@ export const CollapsibleCard: React.FC<CollapsibleCardProps> = ({ icon, title, c
         <Ionicons name={isExpanded ? "chevron-up" : "chevron-down"} size={24} color="#6B7280" />
       </TouchableOpacity>
 
-      <Animated.View
-        style={{
-          height: heightValue,
-          overflow: "hidden",
-        }}
-      >
+      <Animated.View style={animatedStyle}>
         <View
           onLayout={onLayout}
-          style={{ marginTop: 16, position: contentHeight === 0 ? "absolute" : "relative", opacity: contentHeight === 0 ? 0 : 1 }}
+          collapsable={false}
+          style={{
+            // Absolute positioning ensures the content is never 'squashed' by the parent's animating height
+            position: "absolute",
+            top: 16,
+            left: 0,
+            right: 0,
+          }}
         >
           {children}
         </View>

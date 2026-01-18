@@ -5,9 +5,21 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Stack, useRouter } from "expo-router";
 import type React from "react";
-import { useState } from "react";
-import { Animated, Dimensions, Text, TouchableOpacity, View } from "react-native";
-import { SceneMap, TabView } from "react-native-tab-view";
+import { useEffect, useState } from "react";
+import { Dimensions, Pressable, Text, View } from "react-native";
+import Animated, {
+  Easing,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
+import { TabView } from "react-native-tab-view";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type OnboardingStep = {
   title: string;
@@ -20,7 +32,7 @@ type OnboardingStep = {
 const onboardingSteps: OnboardingStep[] = [
   {
     title: "Nail your next interview",
-    body: "Record interviews, review your performance, track roles, and tailor your CVs everything in one place.",
+    body: "Mock interviews, record real interviews, review your performance, track roles, and tailor your CVs everything in one place.",
     primaryCTA: "Get started",
     image: require("@/assets/images/onboarding/welcome.png"),
   },
@@ -34,7 +46,7 @@ const onboardingSteps: OnboardingStep[] = [
   {
     title: "Record or Upload Your Interviews",
     body: "Capture your interviews either by recording directly in the app or uploading an existing file. Our AI will analyse every question, scoring areas like structure, clarity, and impact.",
-    microcopy: "Review detailed feedback, drill into each answer, and save your strongest responses to build get that deserved job.",
+    microcopy: "Review detailed feedback, drill into each answer, and save your strongest responses to build toward that deserved job.",
     primaryCTA: "Next",
     image: require("@/assets/images/onboarding/record-interview.png"),
   },
@@ -53,7 +65,7 @@ const onboardingSteps: OnboardingStep[] = [
     image: require("@/assets/images/onboarding/career-track.png"),
   },
   {
-    title: "Start by sign in and then upload your CV",
+    title: "Start by signing in and then upload your CV",
     body: "You can login using your social account and then we'll scan your CV to suggest improvements.",
     primaryCTA: "Start now",
     image: require("@/assets/images/onboarding/upload-cv.png"),
@@ -61,6 +73,347 @@ const onboardingSteps: OnboardingStep[] = [
 ];
 
 const { width } = Dimensions.get("window");
+
+const StepIndicator = ({ isActive, isCompleted }: { isActive: boolean; isCompleted: boolean }) => {
+  const widthValue = useSharedValue(isActive ? 28 : 8);
+
+  useEffect(() => {
+    widthValue.value = withSpring(isActive ? 28 : 8, {
+      damping: 15,
+      stiffness: 120,
+    });
+  }, [isActive]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    width: widthValue.value,
+    height: 4,
+    backgroundColor: isActive || isCompleted ? "#FFC629" : "#E5E7EB",
+    borderRadius: 4,
+  }));
+
+  return <Animated.View style={animatedStyle} />;
+};
+
+const OnboardingScreen = ({
+  stepIndex,
+  isActive,
+  shouldAnimate,
+  handleNext,
+  handleSkip,
+}: {
+  stepIndex: number;
+  isActive: boolean;
+  shouldAnimate: boolean;
+  handleNext: () => void;
+  handleSkip: () => void;
+}) => {
+  const step = onboardingSteps[stepIndex];
+  const hasAnimated = useSharedValue(false);
+
+  // Animation values for entrance
+  // If we should animate, start at 0 opacity and offset
+  // If we shouldn't animate (e.g. going back), start at 1 and 0
+  const imageOpacity = useSharedValue(shouldAnimate ? 0 : 1);
+  const imageTranslateY = useSharedValue(shouldAnimate ? 30 : 0);
+  const titleOpacity = useSharedValue(shouldAnimate ? 0 : 1);
+  const titleTranslateY = useSharedValue(shouldAnimate ? 20 : 0);
+  const bodyOpacity = useSharedValue(shouldAnimate ? 0 : 1);
+  const bodyTranslateY = useSharedValue(shouldAnimate ? 20 : 0);
+  const microcopyOpacity = useSharedValue(shouldAnimate ? 0 : 1);
+  const microcopyTranslateY = useSharedValue(shouldAnimate ? 20 : 0);
+  const ctaOpacity = useSharedValue(shouldAnimate ? 0 : 1);
+  const ctaTranslateY = useSharedValue(shouldAnimate ? 20 : 0);
+  const skipOpacity = useSharedValue(shouldAnimate ? 0 : 1);
+
+  // Button press animation
+  const buttonScale = useSharedValue(1);
+
+  // Floating animation
+  const floatValue = useSharedValue(0);
+
+  // Run entrance animations when this screen becomes active
+  useEffect(() => {
+    if (isActive && shouldAnimate && !hasAnimated.value) {
+      hasAnimated.value = true;
+
+      // Image animation
+      imageOpacity.value = withTiming(1, { duration: 500, easing: Easing.out(Easing.ease) });
+      imageTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
+
+      // Title animation (delayed)
+      setTimeout(() => {
+        titleOpacity.value = withTiming(1, { duration: 400 });
+        titleTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
+      }, 150);
+
+      // Body animation
+      setTimeout(() => {
+        bodyOpacity.value = withTiming(1, { duration: 400 });
+        bodyTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
+      }, 250);
+
+      // Microcopy animation
+      setTimeout(() => {
+        microcopyOpacity.value = withTiming(1, { duration: 400 });
+        microcopyTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
+      }, 350);
+
+      // CTA animation
+      setTimeout(() => {
+        ctaOpacity.value = withTiming(1, { duration: 400 });
+        ctaTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
+      }, 450);
+
+      // Skip animation
+      setTimeout(() => {
+        skipOpacity.value = withTiming(1, { duration: 300 });
+      }, 550);
+    }
+  }, [isActive, shouldAnimate]);
+
+  // Continuous floating animation for the image
+  useEffect(() => {
+    floatValue.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0, { duration: 2000, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      true
+    );
+  }, []);
+
+  // Animated styles
+  const imageContainerStyle = useAnimatedStyle(() => ({
+    opacity: imageOpacity.value,
+    transform: [{ translateY: imageTranslateY.value + interpolate(floatValue.value, [0, 1], [0, -8]) }],
+  }));
+
+  const titleStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+    transform: [{ translateY: titleTranslateY.value }],
+  }));
+
+  const bodyStyle = useAnimatedStyle(() => ({
+    opacity: bodyOpacity.value,
+    transform: [{ translateY: bodyTranslateY.value }],
+  }));
+
+  const microcopyStyle = useAnimatedStyle(() => ({
+    opacity: microcopyOpacity.value,
+    transform: [{ translateY: microcopyTranslateY.value }],
+  }));
+
+  const ctaStyle = useAnimatedStyle(() => ({
+    opacity: ctaOpacity.value,
+    transform: [{ translateY: ctaTranslateY.value }],
+  }));
+
+  const skipStyle = useAnimatedStyle(() => ({
+    opacity: skipOpacity.value,
+  }));
+
+  const buttonAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: buttonScale.value }],
+  }));
+
+  const handleButtonPressIn = () => {
+    buttonScale.value = withSpring(0.96, { damping: 15, stiffness: 400 });
+  };
+
+  const handleButtonPressOut = () => {
+    buttonScale.value = withSpring(1, { damping: 15, stiffness: 400 });
+  };
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#FEFBED",
+        paddingHorizontal: 24,
+      }}
+    >
+      {/* Image Section with floating animation */}
+      <View
+        style={{
+          flex: 4,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Animated.View style={imageContainerStyle}>
+          <View
+            style={{
+              borderRadius: 24,
+              padding: 20,
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.12,
+              shadowRadius: 24,
+              elevation: 3,
+            }}
+          >
+            <Image
+              source={step.image}
+              style={{
+                width: width * 0.65,
+                height: width * 0.48,
+                maxHeight: 500,
+                aspectRatio: 1260 / 900,
+                borderRadius: 12,
+              }}
+              contentFit="contain"
+            />
+          </View>
+        </Animated.View>
+      </View>
+
+      {/* Text Content Section */}
+      <View style={{ flex: 3, justifyContent: "center", paddingHorizontal: 8 }}>
+        {/* Title with accent line */}
+        <Animated.View style={[{ alignItems: "center", marginBottom: 20 }, titleStyle]}>
+          <View
+            style={{
+              width: 40,
+              height: 4,
+              backgroundColor: "#FFC629",
+              borderRadius: 2,
+              marginBottom: 16,
+            }}
+          />
+          <Text
+            style={{
+              fontSize: 26,
+              fontWeight: "800",
+              color: "#1D252C",
+              textAlign: "center",
+              lineHeight: 34,
+              letterSpacing: -0.5,
+            }}
+          >
+            {step.title}
+          </Text>
+        </Animated.View>
+
+        {/* Body text */}
+        <Animated.Text
+          style={[
+            {
+              fontSize: 15,
+              color: "#4B5563",
+              textAlign: "center",
+              lineHeight: 24,
+              marginBottom: step.microcopy ? 20 : 24,
+              letterSpacing: 0.1,
+            },
+            bodyStyle,
+          ]}
+        >
+          {step.body}
+        </Animated.Text>
+
+        {/* Microcopy in a subtle card */}
+        {step.microcopy && (
+          <Animated.View
+            style={[
+              {
+                backgroundColor: "#FFF7DE",
+                borderRadius: 12,
+                paddingVertical: 14,
+                paddingHorizontal: 18,
+                borderLeftWidth: 3,
+                borderLeftColor: "#FFC629",
+              },
+              microcopyStyle,
+            ]}
+          >
+            <Text
+              style={{
+                fontSize: 13,
+                color: "#6B7280",
+                lineHeight: 20,
+                fontStyle: "italic",
+              }}
+            >
+              {step.microcopy}
+            </Text>
+          </Animated.View>
+        )}
+      </View>
+
+      {/* CTA Section */}
+      <View style={{ flex: 2, justifyContent: "flex-end", paddingBottom: 40 }}>
+        <Animated.View style={ctaStyle}>
+          <AnimatedPressable
+            onPress={handleNext}
+            onPressIn={handleButtonPressIn}
+            onPressOut={handleButtonPressOut}
+            style={[
+              {
+                backgroundColor: "#FFC629",
+                borderRadius: 14,
+                paddingVertical: 16,
+                paddingHorizontal: 24,
+                shadowColor: "#E3AA1F",
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.35,
+                shadowRadius: 12,
+                elevation: 5,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              },
+              buttonAnimatedStyle,
+            ]}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "700",
+                color: "#1D252C",
+                textAlign: "center",
+                letterSpacing: 0.3,
+              }}
+            >
+              {step.primaryCTA}
+            </Text>
+            {stepIndex === onboardingSteps.length - 1 ? (
+              <Ionicons name="sparkles" size={18} color="#1D252C" style={{ marginLeft: 8 }} />
+            ) : (
+              <Ionicons name="arrow-forward" size={18} color="#1D252C" style={{ marginLeft: 8 }} />
+            )}
+          </AnimatedPressable>
+        </Animated.View>
+
+        {stepIndex < onboardingSteps.length - 1 && (
+          <Animated.View style={skipStyle}>
+            <Pressable
+              onPress={handleSkip}
+              style={{
+                paddingVertical: 14,
+                paddingHorizontal: 24,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: "500",
+                  color: "#9CA3AF",
+                  textAlign: "center",
+                  letterSpacing: 0.2,
+                }}
+              >
+                Skip for now
+              </Text>
+            </Pressable>
+          </Animated.View>
+        )}
+      </View>
+    </View>
+  );
+};
 
 const OnboardingWizard: React.FC = () => {
   const router = useRouter();
@@ -77,192 +430,70 @@ const OnboardingWizard: React.FC = () => {
 
   const handleSkip = () => router.replace("/auth");
 
+  const handleIndexChange = (newIndex: number) => {
+    setIndex(newIndex);
+  };
+
   const handleNext = async () => {
     if (index < routes.length - 1) {
-      setIndex(index + 1);
+      handleIndexChange(index + 1);
     } else {
       handleSkip();
     }
   };
 
   const renderTabBar = () => {
-    const progressWidth = (index / (routes.length - 1)) * 100;
-
     return (
       <View
         style={{
-          paddingHorizontal: 20,
-          paddingVertical: 16,
+          paddingHorizontal: 24,
+          paddingTop: 16,
+          paddingBottom: 8,
           backgroundColor: "#FEFBED",
         }}
       >
         <View
           style={{
-            height: 4,
-            backgroundColor: "#F3F4F6",
-            borderRadius: 2,
-            marginBottom: 12,
-          }}
-        >
-          <Animated.View
-            style={{
-              height: "100%",
-              width: `${progressWidth}%`,
-              backgroundColor: "#FFC629",
-              borderRadius: 2,
-            }}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  const OnboardingScreen = ({ stepIndex }: { stepIndex: number }) => {
-    const step = onboardingSteps[stepIndex];
-
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#FEFBED",
-          paddingHorizontal: 20,
-        }}
-      >
-        <View
-          style={{
-            flex: 4,
-            justifyContent: "center",
+            flexDirection: "row",
             alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
           }}
         >
-          <Image
-            source={step.image}
-            style={{
-              width: width * 0.7,
-              height: width * 0.5,
-              maxHeight: 500,
-              aspectRatio: 1260 / 900,
-              borderRadius: 16,
-            }}
-            contentFit="contain"
-          />
-        </View>
-
-        <View style={{ flex: 3, justifyContent: "center" }}>
-          <Text
-            style={{
-              fontSize: 28,
-              fontWeight: "800",
-              color: "#1D252C",
-              textAlign: "center",
-              marginBottom: 16,
-              lineHeight: 36,
-            }}
-          >
-            {step.title}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 16,
-              color: "#6B7280",
-              textAlign: "center",
-              lineHeight: 24,
-              marginBottom: step.microcopy ? 16 : 32,
-            }}
-          >
-            {step.body}
-          </Text>
-
-          {step.microcopy && (
-            <Text
-              style={{
-                fontSize: 14,
-                color: "#9CA3AF",
-                textAlign: "center",
-                lineHeight: 20,
-                fontStyle: "italic",
-              }}
-            >
-              {step.microcopy}
-            </Text>
-          )}
-        </View>
-
-        <View style={{ flex: 2, justifyContent: "flex-end", paddingBottom: 40 }}>
-          <TouchableOpacity
-            onPress={handleNext}
-            style={{
-              backgroundColor: "#FFC629",
-              borderRadius: 16,
-              paddingVertical: 18,
-              paddingHorizontal: 24,
-              shadowColor: "#FFC629",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
-              elevation: 4,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "700",
-                color: "#1D252C",
-                textAlign: "center",
-              }}
-            >
-              {step.primaryCTA}
-              {stepIndex === onboardingSteps.length - 1 && (
-                <>
-                  {" "}
-                  <Ionicons name="sparkles-outline" size={18} />
-                </>
-              )}
-            </Text>
-          </TouchableOpacity>
-          {stepIndex < onboardingSteps.length - 1 && (
-            <TouchableOpacity
-              onPress={handleSkip}
-              style={{
-                paddingVertical: 16,
-                paddingHorizontal: 24,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "600",
-                  color: "#9CA3AF",
-                  textAlign: "center",
-                }}
-              >
-                Skip
-              </Text>
-            </TouchableOpacity>
-          )}
+          {routes.map((_, i) => (
+            <StepIndicator key={i} isActive={i === index} isCompleted={i < index} />
+          ))}
         </View>
       </View>
     );
   };
 
-  const renderScene = SceneMap({
-    step0: () => <OnboardingScreen stepIndex={0} />,
-    step1: () => <OnboardingScreen stepIndex={1} />,
-    step2: () => <OnboardingScreen stepIndex={2} />,
-    step3: () => <OnboardingScreen stepIndex={3} />,
-    step4: () => <OnboardingScreen stepIndex={4} />,
-    step5: () => <OnboardingScreen stepIndex={5} />,
-  });
+  const renderScene = ({ route }: { route: { key: string } }) => {
+    const stepIndex = routes.findIndex((r) => r.key === route.key);
+    // Future steps or current step should animate if they haven't yet
+    // Past steps should just stay fully visible
+    const shouldAnimate = stepIndex >= index;
+
+    return (
+      <OnboardingScreen
+        stepIndex={stepIndex}
+        isActive={index === stepIndex}
+        shouldAnimate={shouldAnimate}
+        handleNext={handleNext}
+        handleSkip={handleSkip}
+      />
+    );
+  };
 
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
         <TabView
+          lazy
           navigationState={{ index, routes }}
           renderScene={renderScene}
-          onIndexChange={setIndex}
+          onIndexChange={handleIndexChange}
           initialLayout={{ width }}
           renderTabBar={renderTabBar}
         />

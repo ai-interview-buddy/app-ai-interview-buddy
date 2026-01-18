@@ -83,7 +83,7 @@ const WebVersionPage: React.FC = () => {
                 marginBottom: 12,
               }}
             >
-              Take it to the big screen x2
+              Take it to the big screen
             </Text>
 
             <Text

@@ -1,6 +1,7 @@
 {
   "expo": {
-    "version": "1.0.3",
+    "name": "AI Interview Buddy",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "scheme": "appaiinterviewbuddy",
@@ -10,7 +11,10 @@
       "usesAppleSignIn": true,
       "supportsTablet": true,
       "bundleIdentifier": "com.aiinterviewbuddy.appinterviewbuddy",
-      "infoPlist": { "UIBackgroundModes": ["audio"] },
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"],
+        "CFBundleDisplayName": "AI Interview Buddy"
+      },
       "icon": {
         "dark": "./assets/icons/ios-dark.png",
         "light": "./assets/icons/ios-light.png",

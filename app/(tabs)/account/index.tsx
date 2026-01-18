@@ -2,6 +2,7 @@ import { ButtonDanger } from "@/components/button/ButtonDanger";
 import { MainContainer } from "@/components/container/MainContainer";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
 import { Text } from "@/components/ui/text";
+import { useUiStore } from "@/lib/storage/uiStore";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { Ionicons } from "@expo/vector-icons";
 import * as Application from "expo-application";
@@ -9,6 +10,7 @@ import { Image } from "expo-image";
 import * as Linking from "expo-linking";
 import { Link, Stack } from "expo-router";
 import type React from "react";
+import { useEffect } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 
 type MenuItem = {
@@ -20,6 +22,11 @@ type MenuItem = {
 
 const AccountScreen: React.FC = () => {
   const { user, logOut } = useAuthStore();
+  const { markAsOpened, hasOpenedWebVersion, hasOpenedFeedback } = useUiStore();
+
+  useEffect(() => {
+    markAsOpened("hasOpenedAccount");
+  }, []);
 
   const handleLogout = () => {
     AlertPolyfill("Logout", "Are you sure you want to logout?", [
@@ -151,6 +158,105 @@ const AccountScreen: React.FC = () => {
               overflow: "hidden",
             }}
           >
+            <Link href={`/account/web-version`} push asChild>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                  paddingVertical: 18,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#F3F4F6",
+                }}
+              >
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 12,
+                    backgroundColor: "#FFC629" + "15",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 16,
+                  }}
+                >
+                  <Ionicons name="globe-outline" size={20} color="#FFC629" />
+                </View>
+
+                <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Use the web version</Text>
+
+                {!hasOpenedWebVersion && (
+                  <View
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: 8,
+                      backgroundColor: "#EF4444", // Red color
+                      marginRight: 8,
+                    }}
+                  />
+                )}
+
+                <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+              </TouchableOpacity>
+            </Link>
+
+            <Link href={`/account/feedback`} push asChild>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                  paddingVertical: 18,
+                }}
+              >
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 12,
+                    backgroundColor: "#FFC629" + "15",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 16,
+                  }}
+                >
+                  <Ionicons name="chatbubble-ellipses-outline" size={20} color="#FFC629" />
+                </View>
+
+                <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Feedback or report a bug</Text>
+
+                {!hasOpenedFeedback && (
+                  <View
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: 8,
+                      backgroundColor: "#EF4444", // Red color
+                      marginRight: 8,
+                    }}
+                  />
+                )}
+
+                <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+              </TouchableOpacity>
+            </Link>
+          </View>
+
+          <View
+            style={{
+              backgroundColor: "white",
+              marginHorizontal: 20,
+              borderRadius: 20,
+              marginBottom: 32,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 8,
+              elevation: 2,
+              overflow: "hidden",
+            }}
+          >
             {menuItems.map((item, index) => (
               <TouchableOpacity
                 onPress={() => Linking.openURL(item.href)}
@@ -223,7 +329,7 @@ const AccountScreen: React.FC = () => {
                   <Ionicons name="warning-outline" size={20} color="#ff2929ff" />
                 </View>
 
-                <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Delete my accout</Text>
+                <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Delete my account</Text>
 
                 <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
               </TouchableOpacity>

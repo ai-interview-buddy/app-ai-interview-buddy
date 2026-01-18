@@ -7,7 +7,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function TabLayout() {
   const { width } = useWindowDimensions();
-  const { hasOpenedJobPositions, hasOpenedInterviews, hasOpenedCareerProfiles, hasOpenedAccount } = useUiStore();
+  const { hasOpenedJobPositions, hasOpenedInterviews, hasOpenedCareerProfiles, hasOpenedAccount, hasOpenedFeedback, hasOpenedWebVersion } =
+    useUiStore();
 
   const isWebSidebar = Platform.OS === "web" && width >= 768;
   return (
@@ -109,7 +110,7 @@ export default function TabLayout() {
             name="account"
             options={{
               title: "Account",
-              tabBarBadge: hasOpenedAccount ? undefined : "",
+              tabBarBadge: hasOpenedAccount && hasOpenedFeedback && hasOpenedWebVersion ? undefined : "",
               headerShown: false,
               tabBarIcon: ({ color }) => <Ionicons name={"settings-outline"} color={color} size={28} />,
             }}

@@ -7,6 +7,7 @@ type UiState = {
   hasOpenedInterviews: boolean;
   hasOpenedCareerProfiles: boolean;
   hasOpenedWebVersion: boolean;
+  hasOpenedFeedback: boolean;
   hasOpenedAccount: boolean;
   markAsOpened: (key: keyof Omit<UiState, "markAsOpened">) => void;
 };
@@ -18,6 +19,7 @@ export const useUiStore = create(
       hasOpenedInterviews: false,
       hasOpenedCareerProfiles: false,
       hasOpenedWebVersion: false,
+      hasOpenedFeedback: false,
       hasOpenedAccount: false,
       markAsOpened: (key) =>
         set((state) => ({

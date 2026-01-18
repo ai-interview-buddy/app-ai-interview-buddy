@@ -22,7 +22,7 @@ type MenuItem = {
 
 const AccountScreen: React.FC = () => {
   const { user, logOut } = useAuthStore();
-  const { markAsOpened, hasOpenedWebVersion } = useUiStore();
+  const { markAsOpened, hasOpenedWebVersion, hasOpenedFeedback } = useUiStore();
 
   useEffect(() => {
     markAsOpened("hasOpenedAccount");
@@ -165,6 +165,7 @@ const AccountScreen: React.FC = () => {
                   alignItems: "center",
                   paddingHorizontal: 20,
                   paddingVertical: 18,
+                  borderBottomWidth: 1,
                   borderBottomColor: "#F3F4F6",
                 }}
               >
@@ -185,6 +186,47 @@ const AccountScreen: React.FC = () => {
                 <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Use the web version</Text>
 
                 {!hasOpenedWebVersion && (
+                  <View
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: 8,
+                      backgroundColor: "#EF4444", // Red color
+                      marginRight: 8,
+                    }}
+                  />
+                )}
+
+                <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+              </TouchableOpacity>
+            </Link>
+
+            <Link href={`/account/feedback`} push asChild>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                  paddingVertical: 18,
+                }}
+              >
+                <View
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 12,
+                    backgroundColor: "#FFC629" + "15",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 16,
+                  }}
+                >
+                  <Ionicons name="chatbubble-ellipses-outline" size={20} color="#FFC629" />
+                </View>
+
+                <Text style={{ flex: 1, fontSize: 16, fontWeight: "600", color: "#1D252C" }}>Feedback or report a bug</Text>
+
+                {!hasOpenedFeedback && (
                   <View
                     style={{
                       width: 16,

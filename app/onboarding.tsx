@@ -46,7 +46,7 @@ const onboardingSteps: OnboardingStep[] = [
   {
     title: "Record or Upload Your Interviews",
     body: "Capture your interviews either by recording directly in the app or uploading an existing file. Our AI will analyse every question, scoring areas like structure, clarity, and impact.",
-    microcopy: "Review detailed feedback, drill into each answer, and save your strongest responses to build get that deserved job.",
+    microcopy: "Review detailed feedback, drill into each answer, and save your strongest responses to build toward that deserved job.",
     primaryCTA: "Next",
     image: require("@/assets/images/onboarding/record-interview.png"),
   },
@@ -65,7 +65,7 @@ const onboardingSteps: OnboardingStep[] = [
     image: require("@/assets/images/onboarding/career-track.png"),
   },
   {
-    title: "Start by sign in and then upload your CV",
+    title: "Start by signing in and then upload your CV",
     body: "You can login using your social account and then we'll scan your CV to suggest improvements.",
     primaryCTA: "Start now",
     image: require("@/assets/images/onboarding/upload-cv.png"),
@@ -490,7 +490,7 @@ const OnboardingWizard: React.FC = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <MainContainer>
         <TabView
-          lazy={({ route }) => true}
+          lazy
           navigationState={{ index, routes }}
           renderScene={renderScene}
           onIndexChange={handleIndexChange}

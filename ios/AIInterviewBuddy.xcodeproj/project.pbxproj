@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		5CD5A00711B65DEC71F21677 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822A9220334FB7C7BDB4FA3F /* ExpoModulesProvider.swift */; };
-		AE5E2935AEFFD630ECCCCCF3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8029576CBF8A1882717E4CB0 /* PrivacyInfo.xcprivacy */; };
+		4357DE0AFD203A4A3781F841 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2B83A4D726B91ADF8A389E /* PrivacyInfo.xcprivacy */; };
+		7002A02A6318D9A5F9801163 /* libPods-AIInterviewBuddy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCCAA9520DA286FA41C7F79D /* libPods-AIInterviewBuddy.a */; };
+		934D51F90C9920A9A07992FE /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D86377C298316B4B95DF7 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		D3D95AE58FEF612EF9C0A521 /* libPods-AIInterviewBuddy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DC2A462072964F9783274C /* libPods-AIInterviewBuddy.a */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -20,16 +20,16 @@
 		13B07F961A680F5B00A75B9A /* AIInterviewBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIInterviewBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AIInterviewBuddy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AIInterviewBuddy/Info.plist; sourceTree = "<group>"; };
-		25C53D088DC05DD40D1DD264 /* Pods-AIInterviewBuddy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.debug.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.debug.xcconfig"; sourceTree = "<group>"; };
-		5A7DE4A90D19AFDE73E6BCB6 /* Pods-AIInterviewBuddy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.release.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.release.xcconfig"; sourceTree = "<group>"; };
-		62DC2A462072964F9783274C /* libPods-AIInterviewBuddy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AIInterviewBuddy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8029576CBF8A1882717E4CB0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = AIInterviewBuddy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		822A9220334FB7C7BDB4FA3F /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-AIInterviewBuddy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		3AC50B1FA073655BC705346E /* Pods-AIInterviewBuddy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.release.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = AIInterviewBuddy/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AA2B83A4D726B91ADF8A389E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = AIInterviewBuddy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		DCCAA9520DA286FA41C7F79D /* libPods-AIInterviewBuddy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AIInterviewBuddy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AIInterviewBuddy/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* AIInterviewBuddy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AIInterviewBuddy-Bridging-Header.h"; path = "AIInterviewBuddy/AIInterviewBuddy-Bridging-Header.h"; sourceTree = "<group>"; };
+		F30D86377C298316B4B95DF7 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-AIInterviewBuddy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		FDB4EFFB51DF32589BE7D576 /* Pods-AIInterviewBuddy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.debug.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,23 +37,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3D95AE58FEF612EF9C0A521 /* libPods-AIInterviewBuddy.a in Frameworks */,
+				7002A02A6318D9A5F9801163 /* libPods-AIInterviewBuddy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0485C820E32B92C17E027DA0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				25C53D088DC05DD40D1DD264 /* Pods-AIInterviewBuddy.debug.xcconfig */,
-				5A7DE4A90D19AFDE73E6BCB6 /* Pods-AIInterviewBuddy.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* AIInterviewBuddy */ = {
 			isa = PBXGroup;
 			children = (
@@ -63,7 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				8029576CBF8A1882717E4CB0 /* PrivacyInfo.xcprivacy */,
+				AA2B83A4D726B91ADF8A389E /* PrivacyInfo.xcprivacy */,
 			);
 			name = AIInterviewBuddy;
 			sourceTree = "<group>";
@@ -72,23 +62,15 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				62DC2A462072964F9783274C /* libPods-AIInterviewBuddy.a */,
+				DCCAA9520DA286FA41C7F79D /* libPods-AIInterviewBuddy.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		660F040A639D9657DA2565DE /* AIInterviewBuddy */ = {
+		2FE082AC55627181216EA401 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				822A9220334FB7C7BDB4FA3F /* ExpoModulesProvider.swift */,
-			);
-			name = AIInterviewBuddy;
-			sourceTree = "<group>";
-		};
-		81788772B9CA063A5773D36B /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				660F040A639D9657DA2565DE /* AIInterviewBuddy */,
+				CD5E19900C147433AAFBCA0E /* AIInterviewBuddy */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -107,8 +89,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				0485C820E32B92C17E027DA0 /* Pods */,
-				81788772B9CA063A5773D36B /* ExpoModulesProviders */,
+				CD7BEF6ACFF1E940B71953A7 /* Pods */,
+				2FE082AC55627181216EA401 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -132,6 +114,24 @@
 			path = AIInterviewBuddy/Supporting;
 			sourceTree = "<group>";
 		};
+		CD5E19900C147433AAFBCA0E /* AIInterviewBuddy */ = {
+			isa = PBXGroup;
+			children = (
+				F30D86377C298316B4B95DF7 /* ExpoModulesProvider.swift */,
+			);
+			name = AIInterviewBuddy;
+			sourceTree = "<group>";
+		};
+		CD7BEF6ACFF1E940B71953A7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FDB4EFFB51DF32589BE7D576 /* Pods-AIInterviewBuddy.debug.xcconfig */,
+				3AC50B1FA073655BC705346E /* Pods-AIInterviewBuddy.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AIInterviewBuddy" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				FB356C852B8D0ED355E84D03 /* [Expo] Configure project */,
+				C2864DC87251D770202AD5CE /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				C9FCB2F97810ED610AFEB52A /* [CP] Embed Pods Frameworks */,
+				1D28EA0D6557893E71631572 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -198,7 +198,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				AE5E2935AEFFD630ECCCCCF3 /* PrivacyInfo.xcprivacy in Resources */,
+				4357DE0AFD203A4A3781F841 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +240,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1D28EA0D6557893E71631572 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiWebRTC/WebRTC.framework/WebRTC",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
@@ -302,27 +322,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C9FCB2F97810ED610AFEB52A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/JitsiWebRTC/WebRTC.framework/WebRTC",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FB356C852B8D0ED355E84D03 /* [Expo] Configure project */ = {
+		C2864DC87251D770202AD5CE /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -349,7 +349,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				5CD5A00711B65DEC71F21677 /* ExpoModulesProvider.swift in Sources */,
+				934D51F90C9920A9A07992FE /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,7 +358,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 25C53D088DC05DD40D1DD264 /* Pods-AIInterviewBuddy.debug.xcconfig */;
+			baseConfigurationReference = FDB4EFFB51DF32589BE7D576 /* Pods-AIInterviewBuddy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -383,7 +383,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aiinterviewbuddy.appinterviewbuddy;
-				PRODUCT_NAME = "AI Interview Buddy";
+				PRODUCT_NAME = AIInterviewBuddy;
 				SWIFT_OBJC_BRIDGING_HEADER = "AIInterviewBuddy/AIInterviewBuddy-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -397,7 +397,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5A7DE4A90D19AFDE73E6BCB6 /* Pods-AIInterviewBuddy.release.xcconfig */;
+			baseConfigurationReference = 3AC50B1FA073655BC705346E /* Pods-AIInterviewBuddy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -418,7 +418,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aiinterviewbuddy.appinterviewbuddy;
-				PRODUCT_NAME = "AI Interview Buddy";
+				PRODUCT_NAME = AIInterviewBuddy;
 				SWIFT_OBJC_BRIDGING_HEADER = "AIInterviewBuddy/AIInterviewBuddy-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

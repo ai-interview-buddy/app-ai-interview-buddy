@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
-import { Animated, Easing, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Easing, ScrollView, Text, TouchableOpacity, View } from "react-native";
 export interface InterviewActiveAnimationProps {
   currentQuestion: string;
   isAISpeaking: boolean;
@@ -104,108 +104,110 @@ export const InterviewActiveAnimation: React.FC<InterviewActiveAnimationProps> =
   });
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 20 }}>
-      {/* Visual Indicator Container */}
-      <View style={{ alignItems: "center", marginVertical: 40 }}>
-        {/* Animated Waves */}
-        <Animated.View
-          style={{
-            position: "absolute",
-            width: 300,
-            height: 300,
-            borderRadius: 150,
-            backgroundColor: "#FFC629",
-            opacity: wave3Opacity,
-            transform: [{ scale: wave3Scale }],
-          }}
-        />
-
-        <Animated.View
-          style={{
-            position: "absolute",
-            width: 250,
-            height: 250,
-            borderRadius: 125,
-            backgroundColor: "#FFC629",
-            opacity: wave2Opacity,
-            transform: [{ scale: wave2Scale }],
-          }}
-        />
-
-        <Animated.View
-          style={{
-            position: "absolute",
-            width: 200,
-            height: 200,
-            borderRadius: 100,
-            backgroundColor: "#FFC629",
-            opacity: wave1Opacity,
-            transform: [{ scale: wave1Scale }],
-          }}
-        />
-
-        {/* Main Indicator */}
-        <Animated.View
-          style={{
-            transform: [{ scale: pulseAnim }],
-          }}
-        >
-          <View
+    <>
+      <ScrollView contentContainerStyle={{ flex: 1, paddingHorizontal: 20 }}>
+        {/* Visual Indicator Container */}
+        <View style={{ alignItems: "center", marginVertical: 40 }}>
+          {/* Animated Waves */}
+          <Animated.View
             style={{
-              width: 160,
-              height: 160,
-              borderRadius: 80,
-              backgroundColor: isAISpeaking ? "#34D399" : "#60A5FA",
-              justifyContent: "center",
-              alignItems: "center",
-              shadowColor: isAISpeaking ? "#34D399" : "#60A5FA",
-              shadowOffset: { width: 0, height: 12 },
-              shadowOpacity: 0.4,
-              shadowRadius: 20,
-              elevation: 12,
+              position: "absolute",
+              width: 300,
+              height: 300,
+              borderRadius: 150,
+              backgroundColor: "#FFC629",
+              opacity: wave3Opacity,
+              transform: [{ scale: wave3Scale }],
+            }}
+          />
+
+          <Animated.View
+            style={{
+              position: "absolute",
+              width: 250,
+              height: 250,
+              borderRadius: 125,
+              backgroundColor: "#FFC629",
+              opacity: wave2Opacity,
+              transform: [{ scale: wave2Scale }],
+            }}
+          />
+
+          <Animated.View
+            style={{
+              position: "absolute",
+              width: 200,
+              height: 200,
+              borderRadius: 100,
+              backgroundColor: "#FFC629",
+              opacity: wave1Opacity,
+              transform: [{ scale: wave1Scale }],
+            }}
+          />
+
+          {/* Main Indicator */}
+          <Animated.View
+            style={{
+              transform: [{ scale: pulseAnim }],
             }}
           >
-            <Ionicons name={isAISpeaking ? "volume-high" : "mic"} size={60} color="white" />
-            <Text style={{ color: "white", paddingTop: 10, fontSize: 12 }}>{isAISpeaking ? "AI is speaking..." : "Listening..."}</Text>
-          </View>
-        </Animated.View>
-      </View>
+            <View
+              style={{
+                width: 160,
+                height: 160,
+                borderRadius: 80,
+                backgroundColor: isAISpeaking ? "#34D399" : "#60A5FA",
+                justifyContent: "center",
+                alignItems: "center",
+                shadowColor: isAISpeaking ? "#34D399" : "#60A5FA",
+                shadowOffset: { width: 0, height: 12 },
+                shadowOpacity: 0.4,
+                shadowRadius: 20,
+                elevation: 12,
+              }}
+            >
+              <Ionicons name={isAISpeaking ? "volume-high" : "mic"} size={60} color="white" />
+              <Text style={{ color: "white", paddingTop: 10, fontSize: 12 }}>{isAISpeaking ? "AI is speaking..." : "Listening..."}</Text>
+            </View>
+          </Animated.View>
+        </View>
 
-      {/* Current Question Card */}
-      <View
-        style={{
-          backgroundColor: "white",
-          borderRadius: 16,
-          padding: 20,
-          marginBottom: 20,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.04,
-          shadowRadius: 8,
-          elevation: 2,
-        }}
-      >
+        {/* Current Question Card */}
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 12,
+            backgroundColor: "white",
+            borderRadius: 16,
+            padding: 20,
+            marginBottom: 20,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.04,
+            shadowRadius: 8,
+            elevation: 2,
           }}
         >
           <View
             style={{
-              backgroundColor: "#FFF7DE",
-              paddingHorizontal: 10,
-              paddingVertical: 4,
-              borderRadius: 8,
-              marginRight: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
             }}
           >
-            <Text style={{ fontSize: 11, fontWeight: "600", color: "#E3AA1F" }}>Transcript</Text>
+            <View
+              style={{
+                backgroundColor: "#FFF7DE",
+                paddingHorizontal: 10,
+                paddingVertical: 4,
+                borderRadius: 8,
+                marginRight: 8,
+              }}
+            >
+              <Text style={{ fontSize: 11, fontWeight: "600", color: "#E3AA1F" }}>Transcript</Text>
+            </View>
           </View>
+          <Text style={{ fontSize: 16, color: "#1D252C", lineHeight: 24 }}>{currentQuestion || "Waiting for AI..."}</Text>
         </View>
-        <Text style={{ fontSize: 16, color: "#1D252C", lineHeight: 24 }}>{currentQuestion || "Waiting for AI..."}</Text>
-      </View>
+      </ScrollView>
 
       {/* End Interview Button */}
       <TouchableOpacity
@@ -214,6 +216,9 @@ export const InterviewActiveAnimation: React.FC<InterviewActiveAnimationProps> =
           backgroundColor: "white",
           borderRadius: 16,
           paddingVertical: 14,
+          marginHorizontal: 20,
+          marginTop: 5,
+          marginBottom: 10,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
@@ -224,6 +229,6 @@ export const InterviewActiveAnimation: React.FC<InterviewActiveAnimationProps> =
         <Ionicons name="stop-circle-outline" size={20} color="#EF4444" style={{ marginRight: 8 }} />
         <Text style={{ fontSize: 16, fontWeight: "600", color: "#EF4444" }}>End Interview</Text>
       </TouchableOpacity>
-    </View>
+    </>
   );
 };

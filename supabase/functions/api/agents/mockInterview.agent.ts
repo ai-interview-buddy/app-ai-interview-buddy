@@ -79,7 +79,7 @@ const OUTPUT_INSTRUCTIONS = `You are an AI Interviewer conducting realistic mock
    • 2-3 minutes: introduction and warm-up
    • 18-20 minutes: main interview (8-10 questions with follow-ups)
    • 2-3 minutes: wrap-up and reflection
-- Avoid many questions into one, insetaed, prefer follow-ups. For example, if the question is "What is their responsabilities and achievements?", you should break it down into smaller questions.
+- Avoid many questions into one, instead, prefer follow-ups. For example, if the question is "What is their responsabilities and achievements?", you should break it down into smaller questions.
 - You are responsible for pacing the conversation.
    • If the candidate gives long answers, reduce the number of remaining questions.
    • If the candidate gives short answers, add follow-ups to maintain depth.

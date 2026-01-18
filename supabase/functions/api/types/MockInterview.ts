@@ -1,5 +1,10 @@
 import { DeepgramParagraph } from "./InterviewQuestion.ts";
 
+export type MockInterviewVoice = {
+  name: string;
+  weight: number;
+};
+
 export type MockInterviewRequest = {
   profileId?: string;
   positionId?: string;
@@ -8,6 +13,8 @@ export type MockInterviewRequest = {
 
 export type MockInterviewResponse = {
   token: string;
+  instructions: string;
+  voice: string;
 };
 
 export type MockInterviewAnalyseRequest = {

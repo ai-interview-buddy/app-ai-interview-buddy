@@ -5,17 +5,23 @@ import { InterviewListItem } from "@/components/interview/InterviewListItem";
 import { EmptyState } from "@/components/views/EmptyState";
 import { PageLoading } from "@/components/views/PageLoading";
 import { useTimelineItems } from "@/lib/api/timelineItem.query";
+import { useUiStore } from "@/lib/storage/uiStore";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { TimelineFilter } from "@/supabase/functions/api/types/TimelineItem";
 import { Link, Stack } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
 const InterviewList: React.FC = () => {
   const { user } = useAuthStore();
+  const { markAsOpened } = useUiStore();
   const params: TimelineFilter = { type: "INTERVIEW_ANALYSE", unpaged: true };
   const { data, isSuccess, isRefetching, isLoading, refetch } = useTimelineItems(user?.accessToken, params);
   const isEmpty = isSuccess && data.length === 0;
+
+  useEffect(() => {
+    markAsOpened("hasOpenedInterviews");
+  }, []);
 
   if (isLoading) {
     return <PageLoading />;

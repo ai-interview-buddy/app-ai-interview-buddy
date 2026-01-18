@@ -7,14 +7,16 @@ import { SearchBar } from "@/components/misc/SearchBar";
 import { EmptyState } from "@/components/views/EmptyState";
 import { PageLoading } from "@/components/views/PageLoading";
 import { useJobPositions } from "@/lib/api/jobPosition.query";
+import { useUiStore } from "@/lib/storage/uiStore";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import { Link, Stack } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
 const JobPositionList: React.FC = () => {
   const { user } = useAuthStore();
+  const { markAsOpened } = useUiStore();
   const { data, isSuccess, isRefetching, isLoading, refetch } = useJobPositions(user?.accessToken);
   const isEmpty = isSuccess && data.length === 0;
 
@@ -25,6 +27,10 @@ const JobPositionList: React.FC = () => {
   const allCount = data?.filter((p) => !p.archived).length || 0;
   const offersCount = data?.filter((p) => p.offerReceived).length || 0;
   const archivedCount = data?.filter((p) => p.archived).length || 0;
+
+  useEffect(() => {
+    markAsOpened("hasOpenedJobPositions");
+  }, []);
 
   if (isLoading) {
     return <PageLoading />;

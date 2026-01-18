@@ -5,15 +5,21 @@ import { TitleListHeader } from "@/components/headers/TitleListHeader";
 import { EmptyState } from "@/components/views/EmptyState";
 import { PageLoading } from "@/components/views/PageLoading";
 import { useCareerProfiles } from "@/lib/api/careerProfile.query";
+import { useUiStore } from "@/lib/storage/uiStore";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { Link } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 
 const CareerProfileList: React.FC = () => {
   const { user } = useAuthStore();
+  const { markAsOpened } = useUiStore();
   const { data, isSuccess, isRefetching, isLoading, refetch } = useCareerProfiles(user?.accessToken);
   const isEmpty = isSuccess && data.length === 0;
+
+  useEffect(() => {
+    markAsOpened("hasOpenedCareerProfiles");
+  }, []);
 
   if (isLoading) {
     return <PageLoading />;

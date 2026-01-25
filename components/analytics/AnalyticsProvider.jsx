@@ -32,9 +32,4 @@ export const AnalyticsProvider = ({ children }) => {
       <Analytics />
     </PostHogProvider>
   );
-    >
-      {children}
-      <Analytics />
-    </PostHogProvider>
-  );
 };

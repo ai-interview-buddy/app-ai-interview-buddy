@@ -96,6 +96,6 @@ export function supabaseConvertSessionToUserInfo(session: Session): UserInfo {
     name: session.user.user_metadata.name,
     accessToken: session.access_token,
     avatar: session.user.user_metadata.avatar_url,
-    expiresAt: session.expires_at
+    expiresAt: session.expires_at,
   };
 }

@@ -44,6 +44,7 @@
       "expo-router",
       "./android-manifest.plugin.js",
       ["expo-apple-authentication"],
+      ["expo-localization"],
       ["expo-document-picker", { "iCloudContainerEnvironment": "Production" }],
       ["expo-audio", { "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone." }],
       ["expo-build-properties", { "android": { "extraMavenRepos": ["../../node_modules/@notifee/react-native/android/libs"] } }],

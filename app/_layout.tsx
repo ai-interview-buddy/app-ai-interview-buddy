@@ -1,3 +1,4 @@
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
 import { useAuthStore } from "@/lib/supabase/authStore";
@@ -28,28 +29,30 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GluestackUIProvider mode={"light"}>
-        <ActionSheetProvider>
-          <Stack>
-            <Stack.Protected guard={!hasCompletedOnboarding && !isLogged}>
-              <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-            </Stack.Protected>
+    <AnalyticsProvider>
+      <QueryClientProvider client={queryClient}>
+        <GluestackUIProvider mode={"light"}>
+          <ActionSheetProvider>
+            <Stack>
+              <Stack.Protected guard={!hasCompletedOnboarding && !isLogged}>
+                <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+              </Stack.Protected>
 
-            <Stack.Protected guard={!isLogged}>
-              <Stack.Screen name="auth" options={{ headerShown: false }} />
-            </Stack.Protected>
+              <Stack.Protected guard={!isLogged}>
+                <Stack.Screen name="auth" options={{ headerShown: false }} />
+              </Stack.Protected>
 
-            <Stack.Protected guard={!hasCompletedOnboarding && isLogged}>
-              <Stack.Screen name="onboard-complete" options={{ headerShown: false }} />
-            </Stack.Protected>
+              <Stack.Protected guard={!hasCompletedOnboarding && isLogged}>
+                <Stack.Screen name="onboard-complete" options={{ headerShown: false }} />
+              </Stack.Protected>
 
-            <Stack.Protected guard={hasCompletedOnboarding && isLogged}>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack.Protected>
-          </Stack>
-        </ActionSheetProvider>
-      </GluestackUIProvider>
-    </QueryClientProvider>
+              <Stack.Protected guard={hasCompletedOnboarding && isLogged}>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack.Protected>
+            </Stack>
+          </ActionSheetProvider>
+        </GluestackUIProvider>
+      </QueryClientProvider>
+    </AnalyticsProvider>
   );
 }

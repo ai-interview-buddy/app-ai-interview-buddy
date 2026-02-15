@@ -1,5 +1,5 @@
 import { formatDateLong } from "@/lib/utils/format.utils";
-import { TimelineItem } from "@/supabase/functions/api/types/TimelineItem";
+import { TimelineItem, TimelineType } from "@/supabase/functions/api/types/TimelineItem";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { default as React } from "react";
@@ -25,7 +25,11 @@ export const TimelineItemListAnalyse = ({ timelineItem, bgColor }: Props) => {
           zIndex: 1,
         }}
       >
-        <Ionicons name="speedometer-outline" size={24} color="white" />
+        <Ionicons
+          name={timelineItem.type === TimelineType.MOCK_ANALYSE ? "chatbubbles-outline" : "speedometer-outline"}
+          size={24}
+          color="white"
+        />
       </View>
 
       {/* Stage Content */}

@@ -3,7 +3,8 @@ import { useJobPositions } from "@/lib/api/jobPosition.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { formatDateLong } from "@/lib/utils/format.utils";
 import { getScoreColor, getScoreLabel } from "@/lib/utils/score.utils";
-import { TimelineItem } from "@/supabase/functions/api/types/TimelineItem";
+import { TimelineItem, TimelineType } from "@/supabase/functions/api/types/TimelineItem";
+import { Ionicons } from "@expo/vector-icons";
 import React, { forwardRef } from "react";
 import { Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 
@@ -42,17 +43,45 @@ export const InterviewListItem = forwardRef<React.ComponentRef<typeof TouchableO
       >
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
           <View style={{ flex: 1, marginRight: 16 }}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "700",
-                color: "#1D252C",
-                marginBottom: 8,
-              }}
-              numberOfLines={2}
-            >
-              {company?.companyName || item.title}
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8 }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "700",
+                  color: "#1D252C",
+                }}
+                numberOfLines={2}
+              >
+                {company?.companyName || item.title}
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  backgroundColor: item.type === TimelineType.MOCK_ANALYSE ? "#06B6D420" : "#10B98120",
+                  paddingHorizontal: 8,
+                  paddingVertical: 2,
+                  borderRadius: 6,
+                  marginLeft: 8,
+                }}
+              >
+                <Ionicons
+                  name={item.type === TimelineType.MOCK_ANALYSE ? "chatbubbles-outline" : "speedometer-outline"}
+                  size={12}
+                  color={item.type === TimelineType.MOCK_ANALYSE ? "#06B6D4" : "#10B981"}
+                />
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "600",
+                    color: item.type === TimelineType.MOCK_ANALYSE ? "#06B6D4" : "#10B981",
+                    marginLeft: 4,
+                  }}
+                >
+                  {item.type === TimelineType.MOCK_ANALYSE ? "Mock" : "Real"}
+                </Text>
+              </View>
+            </View>
 
             {company?.jobTitle && (
               <View style={{ flexDirection: "row", alignItems: "center" }}>

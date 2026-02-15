@@ -19,8 +19,9 @@ const getStatusColor = (type: TimelineType) => {
     case "INTERVIEW_STEP":
       return "#EF4444";
     case "INTERVIEW_ANALYSE":
-    case "MOCK_ANALYSE":
       return "#10B981";
+    case "MOCK_ANALYSE":
+      return "#06B6D4";
     default:
       return "#9CA3AF";
   }

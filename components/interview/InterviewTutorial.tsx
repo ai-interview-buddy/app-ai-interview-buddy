@@ -354,6 +354,8 @@ const TutorialScreen = ({
             onPress={handleNext}
             onPressIn={handleButtonPressIn}
             onPressOut={handleButtonPressOut}
+            accessibilityRole="button"
+            accessibilityLabel={step.primaryCTA}
             style={[
               {
                 backgroundColor: "#FFC629",

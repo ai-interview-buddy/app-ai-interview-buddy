@@ -1,6 +1,9 @@
 name: EAS Build
 
 on:
+  push:
+    branches:
+      - feat/expo-pipeline
   workflow_dispatch:
     inputs:
       platform:
@@ -56,14 +59,17 @@ jobs:
 
       - name: Build
         run: |
+          PLATFORM="${{ github.event.inputs.platform || 'ios' }}"
+          PROFILE="${{ github.event.inputs.profile || 'production' }}"
+
           SUBMIT_FLAG=""
           if [ "${{ github.event.inputs.auto_submit }}" = "true" ]; then
             SUBMIT_FLAG="--auto-submit"
           fi
 
           eas build \
-            --platform ${{ github.event.inputs.platform }} \
-            --profile ${{ github.event.inputs.profile }} \
+            --platform "$PLATFORM" \
+            --profile "$PROFILE" \
             --non-interactive \
             --no-wait \
             $SUBMIT_FLAG

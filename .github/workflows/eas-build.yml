@@ -1,9 +1,6 @@
 name: EAS Build
 
 on:
-  push:
-    branches:
-      - feat/expo-pipeline
   workflow_dispatch:
     inputs:
       platform:

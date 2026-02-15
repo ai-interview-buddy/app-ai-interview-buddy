@@ -1,11 +1,12 @@
 "use client";
 
 import { MainContainer } from "@/components/container/MainContainer";
+import { AnalyticsEvents, useAnalytics } from "@/lib/analytics/useAnalytics";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Stack, useRouter } from "expo-router";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Dimensions, Pressable, Text, View } from "react-native";
 import Animated, {
   Easing,
@@ -414,6 +415,8 @@ const OnboardingScreen = ({
 
 const OnboardingWizard: React.FC = () => {
   const router = useRouter();
+  const { capture } = useAnalytics();
+  const hasTrackedInitialStep = useRef(false);
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -425,17 +428,43 @@ const OnboardingWizard: React.FC = () => {
     { key: "step5", title: "Activate" },
   ]);
 
-  const handleSkip = () => router.replace("/auth");
+  const trackStepViewed = useCallback(
+    (stepIndex: number) => {
+      capture(AnalyticsEvents.ONBOARDING_STEP_VIEWED, {
+        step_index: stepIndex,
+        step_title: onboardingSteps[stepIndex].title,
+      });
+    },
+    [capture]
+  );
+
+  // Track initial step view
+  useEffect(() => {
+    if (!hasTrackedInitialStep.current) {
+      hasTrackedInitialStep.current = true;
+      trackStepViewed(0);
+    }
+  }, [trackStepViewed]);
+
+  const handleSkip = () => {
+    capture(AnalyticsEvents.ONBOARDING_SKIPPED, {
+      skipped_at_step: index,
+      step_title: onboardingSteps[index].title,
+    });
+    router.replace("/auth");
+  };
 
   const handleIndexChange = (newIndex: number) => {
     setIndex(newIndex);
+    trackStepViewed(newIndex);
   };
 
   const handleNext = async () => {
     if (index < routes.length - 1) {
       handleIndexChange(index + 1);
     } else {
-      handleSkip();
+      capture(AnalyticsEvents.ONBOARDING_COMPLETED);
+      router.replace("/auth");
     }
   };
 

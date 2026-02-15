@@ -5,6 +5,7 @@ import { InterviewActiveView } from "@/components/interview-mock/InterviewActive
 import { InterviewGeneratingView } from "@/components/interview-mock/InterviewGeneratingView";
 import { InterviewPreparationFormValues, InterviewPreparationView } from "@/components/interview-mock/InterviewPreparationView";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
+import { AnalyticsEvents, useAnalytics } from "@/lib/analytics/useAnalytics";
 import { useAnalyseMockInterview } from "@/lib/api/interviewQuestion.query";
 import { useCreateJobPositionByDescription } from "@/lib/api/jobPosition.query";
 import { useCreateMockInterview } from "@/lib/api/mockInterview.query";
@@ -21,6 +22,7 @@ type InterviewState = "preparation" | "generating" | "active";
 const MockInterviewPage: React.FC = () => {
   const router = useRouter();
   const { user } = useAuthStore();
+  const { capture } = useAnalytics();
   const [mockInterview, setMockInterview] = useState<MockInterviewResponse | null>(null);
   const { positionId, profileId } = useLocalSearchParams<{ positionId: string; profileId: string }>();
   const queryClient = useQueryClient();
@@ -57,6 +59,7 @@ const MockInterviewPage: React.FC = () => {
 
       const mockInterviewResponse = await mutateAsync(body);
       setMockInterview(mockInterviewResponse);
+      capture(AnalyticsEvents.MOCK_INTERVIEW_STARTED);
 
       setState("active");
     } catch (err) {
@@ -96,6 +99,7 @@ const MockInterviewPage: React.FC = () => {
         transcript,
       });
 
+      capture(AnalyticsEvents.MOCK_INTERVIEW_COMPLETED, { interview_id: result.id });
       router.replace(`/interview/${result.id}`);
     } catch (err) {
       console.error("Failed to analyse interview:", err);

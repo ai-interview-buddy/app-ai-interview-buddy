@@ -2,6 +2,7 @@ import CareerProfileForm from "@/components/career-profile/create/CareerProfileF
 import { MainContainer } from "@/components/container/MainContainer";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
+import { AnalyticsEvents, useAnalytics } from "@/lib/analytics/useAnalytics";
 import { useCareerProfiles } from "@/lib/api/careerProfile.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { CareerProfile } from "@/supabase/functions/api/types/CareerProfile";
@@ -12,6 +13,7 @@ import { ScrollView, View } from "react-native";
 const CreateCareerProfile = () => {
   const { completeOnboarding } = useAuthStore();
   const router = useRouter();
+  const { capture } = useAnalytics();
 
   const { user } = useAuthStore();
   const { data } = useCareerProfiles(user?.accessToken);
@@ -23,6 +25,7 @@ const CreateCareerProfile = () => {
 
   const handleSave = async (saved: CareerProfile) => {
     try {
+      capture(AnalyticsEvents.CV_UPLOADED, { career_profile_id: saved.id });
       completeOnboarding();
       router.push(`/(tabs)/career-profile/${saved.id}`);
     } catch (error) {

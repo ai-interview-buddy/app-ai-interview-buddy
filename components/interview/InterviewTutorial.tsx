@@ -1,8 +1,9 @@
+import { AnalyticsEvents, useAnalytics } from "@/lib/analytics/useAnalytics";
 import { Image } from "expo-image";
 import type { LucideIcon } from "lucide-react-native";
 import { ArrowRight, Briefcase, CheckCircle, GraduationCap } from "lucide-react-native";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
 import Animated, {
   Easing,
@@ -552,6 +553,8 @@ type InterviewTutorialProps = {
 
 export const InterviewTutorial: React.FC<InterviewTutorialProps> = ({ onComplete }) => {
   const { width } = useWindowDimensions();
+  const { capture } = useAnalytics();
+  const hasTrackedInitialStep = useRef(false);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: "step0", title: "Overview" },
@@ -559,14 +562,34 @@ export const InterviewTutorial: React.FC<InterviewTutorialProps> = ({ onComplete
     { key: "step2", title: "Real Interview" },
   ]);
 
+  const trackStepViewed = useCallback(
+    (stepIndex: number) => {
+      capture(AnalyticsEvents.INTERVIEW_TUTORIAL_STEP_VIEWED, {
+        step_index: stepIndex,
+        step_title: tutorialSteps[stepIndex].title,
+      });
+    },
+    [capture]
+  );
+
+  // Track initial step view
+  useEffect(() => {
+    if (!hasTrackedInitialStep.current) {
+      hasTrackedInitialStep.current = true;
+      trackStepViewed(0);
+    }
+  }, [trackStepViewed]);
+
   const handleIndexChange = (newIndex: number) => {
     setIndex(newIndex);
+    trackStepViewed(newIndex);
   };
 
   const handleNext = () => {
     if (index < routes.length - 1) {
       handleIndexChange(index + 1);
     } else {
+      capture(AnalyticsEvents.INTERVIEW_TUTORIAL_COMPLETED);
       onComplete();
     }
   };

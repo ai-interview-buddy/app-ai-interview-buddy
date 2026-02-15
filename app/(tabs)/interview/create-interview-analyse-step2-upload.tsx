@@ -3,6 +3,7 @@ import UploadFileForm from "@/components/data-input/UploadFileForm";
 import { UploadProgressDialog } from "@/components/dialogs/UploadProgressDialog";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
+import { AnalyticsEvents, useAnalytics } from "@/lib/analytics/useAnalytics";
 import { useCreateTimelineInterviewAnalyse } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { getFileExtension } from "@/lib/utils/files.utils";
@@ -23,6 +24,7 @@ const CreateStep2Upload: React.FC = () => {
   const { positionId } = useLocalSearchParams();
 
   const { user } = useAuthStore();
+  const { capture } = useAnalytics();
   const queryClient = useQueryClient();
   const { mutateAsync } = useCreateTimelineInterviewAnalyse(queryClient, user?.accessToken);
 
@@ -49,6 +51,7 @@ const CreateStep2Upload: React.FC = () => {
 
       await uploadFile(user, "interviews", filename, pickerAsset, onProgress);
       const timelineItem = await mutateAsync({ positionId: positionId as string, interviewPath: filename });
+      capture(AnalyticsEvents.INTERVIEW_UPLOAD_COMPLETED, { interview_id: timelineItem.id });
       router.replace(positionId ? `/job-position/${positionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
     } catch (error) {
       console.log(error);

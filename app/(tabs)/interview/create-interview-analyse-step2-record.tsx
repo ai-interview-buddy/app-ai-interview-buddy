@@ -3,6 +3,7 @@ import { UploadProgressDialog } from "@/components/dialogs/UploadProgressDialog"
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
 import { TipsSection } from "@/components/misc/TipsSection";
 import AlertPolyfill from "@/components/ui/alert-web/AlertPolyfill";
+import { AnalyticsEvents, useAnalytics } from "@/lib/analytics/useAnalytics";
 import { useCreateTimelineInterviewAnalyse } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { formatTime } from "@/lib/utils/format.utils";
@@ -49,6 +50,7 @@ const RecordInterview: React.FC = () => {
   const { positionId } = useLocalSearchParams();
 
   const { user } = useAuthStore();
+  const { capture } = useAnalytics();
   const queryClient = useQueryClient();
   const { mutateAsync } = useCreateTimelineInterviewAnalyse(queryClient, user?.accessToken);
 
@@ -197,6 +199,7 @@ const RecordInterview: React.FC = () => {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
       setIsRecording(true);
+      capture(AnalyticsEvents.INTERVIEW_RECORDING_STARTED);
 
       await audioRecorder.prepareToRecordAsync();
       audioRecorder.record();
@@ -268,6 +271,7 @@ const RecordInterview: React.FC = () => {
       await uploadFile(user, "interviews", filename, audioRecorder, onProgress);
       const timelineItem = await mutateAsync({ positionId: positionId as string, interviewPath: filename });
 
+      capture(AnalyticsEvents.INTERVIEW_RECORDING_COMPLETED, { interview_id: timelineItem.id });
       router.replace(positionId ? `/job-position/${positionId}/timeline/${timelineItem.id}` : `/interview/${timelineItem.id}`);
     } catch (err) {
       console.error("Failed to stop recording", err);

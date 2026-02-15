@@ -1,6 +1,8 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
+import { InterviewTutorial } from "@/components/interview/InterviewTutorial";
+import { useUiStore } from "@/lib/storage/uiStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -8,9 +10,25 @@ import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, Vie
 const CreateStep1: React.FC = () => {
   const router = useRouter();
   const { positionId } = useLocalSearchParams();
+  const { hasDoneInterviewTutorial, markAsOpened } = useUiStore();
 
   const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
   const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
+
+  const handleTutorialComplete = () => {
+    markAsOpened("hasDoneInterviewTutorial");
+  };
+
+  if (!hasDoneInterviewTutorial) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <MainContainer>
+          <InterviewTutorial onComplete={handleTutorialComplete} />
+        </MainContainer>
+      </>
+    );
+  }
 
   return (
     <>

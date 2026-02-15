@@ -5,12 +5,12 @@ import { InterviewTutorial } from "@/components/interview/InterviewTutorial";
 import { useUiStore } from "@/lib/storage/uiStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CreateStep1: React.FC = () => {
   const router = useRouter();
   const { positionId } = useLocalSearchParams();
-  const { hasDoneInterviewTutorial, markAsOpened } = useUiStore();
+  const { _hasHydrated, hasDoneInterviewTutorial, markAsOpened } = useUiStore();
 
   const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
   const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
@@ -18,6 +18,19 @@ const CreateStep1: React.FC = () => {
   const handleTutorialComplete = () => {
     markAsOpened("hasDoneInterviewTutorial");
   };
+
+  if (!_hasHydrated) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <MainContainer>
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <ActivityIndicator size="large" color="#FFC629" />
+          </View>
+        </MainContainer>
+      </>
+    );
+  }
 
   if (!hasDoneInterviewTutorial) {
     return (

@@ -114,7 +114,10 @@ jobs:
           PROFILE="${{ github.event.inputs.profile || 'production' }}"
 
           SUBMIT_FLAG=""
-          if [ "${{ github.event.inputs.auto_submit }}" = "true" ]; then
+          IS_TAG="${{ startsWith(github.ref, 'refs/tags/v') }}"
+          AUTO_SUBMIT="${{ github.event.inputs.auto_submit }}"
+
+          if [ "$IS_TAG" = "true" ] || [ "$AUTO_SUBMIT" = "true" ]; then
             if [ "$PROFILE" = "preview" ]; then
               echo "⚠️ Ignoring auto_submit: preview builds use internal distribution and cannot be submitted to stores."
             else

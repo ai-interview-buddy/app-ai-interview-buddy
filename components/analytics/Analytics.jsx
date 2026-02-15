@@ -1,3 +1,4 @@
+import { AnalyticsEvents } from "@/lib/analytics/useAnalytics";
 import { useAuthStore } from "@/lib/supabase/authStore";
 import { useGlobalSearchParams, usePathname } from "expo-router";
 import { usePostHog } from "posthog-react-native";
@@ -27,6 +28,7 @@ export const Analytics = () => {
       if (initialCheckDone && !prevIsLoggedRef.current) {
         // Only alias on transition from logged out to logged in (login/signup)
         posthog.alias(user.id);
+        posthog.capture(AnalyticsEvents.ACCOUNT_CREATED, { user_id: user.id });
       }
       posthog.identify(user.id);
     } else if (!isLogged && prevIsLoggedRef.current) {

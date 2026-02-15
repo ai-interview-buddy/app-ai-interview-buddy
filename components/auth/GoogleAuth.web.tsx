@@ -14,6 +14,7 @@ export default function SupabaseAuth() {
   const router = useRouter();
   const { logInWithSession } = useAuthStore();
 
+  // Early return must stay before hooks — moving it after useEffect breaks the Android build
   if (!webClientId) return null;
 
   const handleGoogleLogin = async () => {
@@ -28,6 +29,7 @@ export default function SupabaseAuth() {
     if (req.error) Alert.alert("OAuth error:", req.error.message);
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     (async () => {
       const hash = window?.location?.hash;

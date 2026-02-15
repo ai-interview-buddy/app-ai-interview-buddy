@@ -45,9 +45,8 @@ export const FormFieldUrl = ({ form, name, label, placeholder, helper, formSchem
   };
 
   return (
-    <form.Field
-      name={name}
-      children={(field: any) => {
+    <form.Field name={name}>
+      {(field: any) => {
         const isInvalid = isFormFieldInvalid(form, field);
         return (
           <FormControl isInvalid={isInvalid} isRequired={required} size="md" style={{ marginBottom: 16 }}>
@@ -79,6 +78,6 @@ export const FormFieldUrl = ({ form, name, label, placeholder, helper, formSchem
           </FormControl>
         );
       }}
-    ></form.Field>
+    </form.Field>
   );
 };

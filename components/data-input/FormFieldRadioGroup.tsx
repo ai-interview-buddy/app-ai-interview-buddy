@@ -34,9 +34,8 @@ export const FormFieldRadioGroup = ({ form, name, label, options, placeholder, h
   const required = isFieldRequired(formSchema, name);
 
   return (
-    <form.Field
-      name={name}
-      children={(field: any) => {
+    <form.Field name={name}>
+      {(field: any) => {
         const isInvalid = isFormFieldInvalid(form, field);
         return (
           <FormControl isInvalid={isInvalid} isRequired={required} style={{ marginBottom: 16 }}>
@@ -73,6 +72,6 @@ export const FormFieldRadioGroup = ({ form, name, label, options, placeholder, h
           </FormControl>
         );
       }}
-    ></form.Field>
+    </form.Field>
   );
 };

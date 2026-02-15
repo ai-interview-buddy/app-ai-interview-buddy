@@ -26,9 +26,8 @@ type Props = {
 export const FormFieldTextArea = ({ form, name, label, placeholder, helper, formSchema, className = "h-40" }: Props) => {
   const required = isFieldRequired(formSchema, name);
   return (
-    <form.Field
-      name={name}
-      children={(field: any) => {
+    <form.Field name={name}>
+      {(field: any) => {
         const isInvalid = isFormFieldInvalid(form, field);
         return (
           <FormControl isInvalid={isInvalid} isRequired={required} size="md" style={{ marginBottom: 16 }}>
@@ -55,6 +54,6 @@ export const FormFieldTextArea = ({ form, name, label, placeholder, helper, form
           </FormControl>
         );
       }}
-    ></form.Field>
+    </form.Field>
   );
 };

@@ -91,7 +91,7 @@ const FeedbackPage: React.FC = () => {
                 marginBottom: 24,
               }}
             >
-              Found a bug or have a suggestion? We'd love to hear from you! Your feedback helps us make AI Interview Buddy better for
+              Found a bug or have a suggestion? We&apos;d love to hear from you! Your feedback helps us make AI Interview Buddy better for
               everyone.
             </Text>
 

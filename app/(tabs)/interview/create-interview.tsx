@@ -1,11 +1,12 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
+import { PageLoading } from "@/components/views/PageLoading";
 import { useUiStore } from "@/lib/storage/uiStore";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CreateStep1: React.FC = () => {
   const router = useRouter();
@@ -29,27 +30,21 @@ const CreateStep1: React.FC = () => {
   const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
   const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
 
-  if (!hasHydrated) {
+  useEffect(() => {
+    if (hasHydrated && !hasDoneInterviewTutorial) {
+      router.push({
+        pathname: "/interview/interview-tutorial",
+        params: { positionId },
+      });
+    }
+  }, [hasHydrated, hasDoneInterviewTutorial]);
+
+  if (!hasHydrated || !hasDoneInterviewTutorial) {
     return (
       <>
         <Stack.Screen options={{ headerShown: false }} />
-        <MainContainer>
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <ActivityIndicator size="large" color="#FFC629" />
-          </View>
-        </MainContainer>
+        <PageLoading />
       </>
-    );
-  }
-
-  if (!hasDoneInterviewTutorial) {
-    return (
-      <Redirect
-        href={{
-          pathname: "/interview/interview-tutorial",
-          params: { positionId },
-        }}
-      />
     );
   }
 

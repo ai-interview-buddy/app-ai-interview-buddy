@@ -1,5 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import type { LucideIcon } from "lucide-react-native";
+import { ArrowRight, Briefcase, CheckCircle, GraduationCap } from "lucide-react-native";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, useWindowDimensions, View } from "react-native";
@@ -30,7 +31,7 @@ type TutorialStep = {
   microcopy?: string;
   primaryCTA: string;
   image?: any;
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: LucideIcon;
   comparisonTable?: ComparisonRow[];
 };
 
@@ -71,7 +72,7 @@ const tutorialSteps: TutorialStep[] = [
     microcopy: "Think of it as a practice session: no real interviewer is involved. It's your safe space to rehearse.",
     primaryCTA: "Got it, next",
     image: require("@/assets/images/onboarding/mock-interview.png"),
-    icon: "school-outline",
+    icon: GraduationCap,
   },
   {
     title: "Real Interview",
@@ -79,7 +80,7 @@ const tutorialSteps: TutorialStep[] = [
     microcopy: "The AI won't participate in the conversation. It captures your real interview so you can review detailed feedback later.",
     primaryCTA: "I understood",
     image: require("@/assets/images/onboarding/record-interview.png"),
-    icon: "briefcase-outline",
+    icon: Briefcase,
   },
 ];
 
@@ -231,11 +232,7 @@ const TutorialScreen = ({
       }}
     >
       {step.comparisonTable ? (
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 16 }}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
           {/* Image Section for comparison table */}
           {step.image && (
             <View style={{ alignItems: "center", paddingTop: 16 }}>
@@ -325,7 +322,7 @@ const TutorialScreen = ({
                   marginHorizontal: 3,
                 }}
               >
-                <Ionicons name="school-outline" size={18} color="#E3AA1F" style={{ marginBottom: 4 }} />
+                <GraduationCap size={18} color="#E3AA1F" style={{ marginBottom: 4 }} />
                 <Text style={{ fontSize: 13, fontWeight: "700", color: "#1D252C" }}>Mock</Text>
               </View>
               <View
@@ -339,7 +336,7 @@ const TutorialScreen = ({
                   marginHorizontal: 3,
                 }}
               >
-                <Ionicons name="briefcase-outline" size={18} color="#6B7280" style={{ marginBottom: 4 }} />
+                <Briefcase size={18} color="#6B7280" style={{ marginBottom: 4 }} />
                 <Text style={{ fontSize: 13, fontWeight: "700", color: "#1D252C" }}>Real</Text>
               </View>
             </View>
@@ -397,11 +394,7 @@ const TutorialScreen = ({
           </Animated.View>
         </ScrollView>
       ) : (
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 16 }}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 16 }} showsVerticalScrollIndicator={false}>
           {/* Image Section */}
           <View style={{ alignItems: "center", paddingTop: 16 }}>
             <Animated.View style={imageContainerStyle}>
@@ -442,7 +435,7 @@ const TutorialScreen = ({
                     marginBottom: 12,
                   }}
                 >
-                  <Ionicons name={step.icon} size={24} color="#E3AA1F" />
+                  <step.icon size={24} color="#E3AA1F" />
                 </View>
               )}
               <Text
@@ -543,9 +536,9 @@ const TutorialScreen = ({
             {step.primaryCTA}
           </Text>
           {isLastStep ? (
-            <Ionicons name="checkmark-circle" size={18} color="#1D252C" style={{ marginLeft: 8 }} />
+            <CheckCircle size={18} color="#1D252C" style={{ marginLeft: 8 }} />
           ) : (
-            <Ionicons name="arrow-forward" size={18} color="#1D252C" style={{ marginLeft: 8 }} />
+            <ArrowRight size={18} color="#1D252C" style={{ marginLeft: 8 }} />
           )}
         </AnimatedPressable>
       </Animated.View>

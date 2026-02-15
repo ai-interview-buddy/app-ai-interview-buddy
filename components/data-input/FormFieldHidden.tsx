@@ -22,5 +22,9 @@ const FormFieldHiddenInner = ({ name, value, field }: { name: string; value: str
 };
 
 export const FormFieldHidden = ({ form, name, value }: Props) => {
-  return <form.Field name={name} children={(field: any) => <FormFieldHiddenInner name={name} value={value} field={field} />} />;
+  return (
+    <form.Field name={name}>
+      {(field: any) => <FormFieldHiddenInner name={name} value={value} field={field} />}
+    </form.Field>
+  );
 };

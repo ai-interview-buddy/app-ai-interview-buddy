@@ -63,7 +63,7 @@ const CreateStep1: React.FC = () => {
                     <View style={{ flex: 1 }}>
                       <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>From Job URL</Text>
                       <Text style={{ fontSize: 14, color: "#6B7280", lineHeight: 20 }}>
-                        Paste a job posting URL and we'll extract all the details automatically
+                        Paste a job posting URL and we&apos;ll extract all the details automatically
                       </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
@@ -102,7 +102,7 @@ const CreateStep1: React.FC = () => {
                     <View style={{ flex: 1 }}>
                       <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>From Description</Text>
                       <Text style={{ fontSize: 14, color: "#6B7280", lineHeight: 20 }}>
-                        Paste the job description and we'll extract the key information
+                        Paste the job description and we&apos;ll extract the key information
                       </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />

@@ -37,9 +37,8 @@ export const FormFieldSelect = ({ form, name, label, options, placeholder, helpe
   const optionsArr = options.map((opt) => ({ label: opt.label, value: opt.value }));
 
   return (
-    <form.Field
-      name={name}
-      children={(field: any) => {
+    <form.Field name={name}>
+      {(field: any) => {
         const isInvalid = isFormFieldInvalid(form, field);
         return (
           <FormControl isInvalid={isInvalid} isRequired={required} style={{ marginBottom: 16 }}>
@@ -94,6 +93,6 @@ export const FormFieldSelect = ({ form, name, label, options, placeholder, helpe
           </FormControl>
         );
       }}
-    ></form.Field>
+    </form.Field>
   );
 };

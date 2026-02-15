@@ -73,7 +73,7 @@ const CreateStep1: React.FC = () => {
                     <View style={{ flex: 1 }}>
                       <Text style={{ fontSize: 18, fontWeight: "700", color: "#1D252C", marginBottom: 4 }}>Record Interview</Text>
                       <Text style={{ fontSize: 14, color: "#6B7280", lineHeight: 20 }}>
-                        Use your device's microphone to capture live audio
+                        Use your device&apos;s microphone to capture live audio
                       </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />

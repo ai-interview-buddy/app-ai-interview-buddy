@@ -40,7 +40,7 @@ export const SignIn = () => {
                   </Button>
                 </VStack>
                 <HStack className="self-center" space="sm">
-                  <Text size="md">Don't have an account?</Text>
+                  <Text size="md">Don&apos;t have an account?</Text>
                   <Link href="/" asChild>
                     Sign up
                   </Link>

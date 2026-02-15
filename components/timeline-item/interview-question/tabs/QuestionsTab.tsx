@@ -20,7 +20,7 @@ export const QuestionsTab = ({ timelineItem, questions, linkType }: Props) => {
       <View style={{ padding: 20 }}>
         {isEmpty && (
           <EmptyState title="No Questions" icon="help-circle-outline">
-            It's possible your recording has failed, or, the interview didn't have the structure of Quenstions & Answers.
+            It&apos;s possible your recording has failed, or, the interview didn&apos;t have the structure of Quenstions &amp; Answers.
           </EmptyState>
         )}
 

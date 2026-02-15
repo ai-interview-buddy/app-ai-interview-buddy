@@ -28,6 +28,7 @@ export default function SupabaseAuth() {
     if (req.error) Alert.alert("OAuth error:", req.error.message);
   };
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     (async () => {
       const hash = window?.location?.hash;

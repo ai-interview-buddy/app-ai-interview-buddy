@@ -95,7 +95,7 @@ const WebVersionPage: React.FC = () => {
             >
               Did you know all the features you love are also available in your desktop browser?
               {"\n\n"}
-              Practice and prepare for your interviews with the comfort of a full keyboard and a larger display. It's much easier to use the
+              Practice and prepare for your interviews with the comfort of a full keyboard and a larger display. It&apos;s much easier to use the
               web browser for deep focus sessions.
             </Text>
 

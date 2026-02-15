@@ -64,7 +64,11 @@ jobs:
 
           SUBMIT_FLAG=""
           if [ "${{ github.event.inputs.auto_submit }}" = "true" ]; then
-            SUBMIT_FLAG="--auto-submit"
+            if [ "$PROFILE" = "preview" ]; then
+              echo "⚠️ Ignoring auto_submit: preview builds use internal distribution and cannot be submitted to stores."
+            else
+              SUBMIT_FLAG="--auto-submit"
+            fi
           fi
 
           eas build \

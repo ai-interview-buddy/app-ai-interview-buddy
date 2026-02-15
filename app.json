@@ -14,9 +14,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.aiinterviewbuddy.appinterviewbuddy",
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ]
+        "UIBackgroundModes": ["audio"]
       },
       "icon": {
         "dark": "./assets/icons/ios-dark.png",
@@ -46,12 +44,8 @@
     "plugins": [
       "expo-router",
       "./android-manifest.plugin.js",
-      [
-        "expo-apple-authentication"
-      ],
-      [
-        "expo-localization"
-      ],
+      ["expo-apple-authentication"],
+      ["expo-localization"],
       [
         "expo-document-picker",
         {
@@ -68,9 +62,7 @@
         "expo-build-properties",
         {
           "android": {
-            "extraMavenRepos": [
-              "../../node_modules/@notifee/react-native/android/libs"
-            ]
+            "extraMavenRepos": ["../../node_modules/@notifee/react-native/android/libs"]
           }
         }
       ],
@@ -94,9 +86,7 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
       ],
-      [
-        "expo-config-plugin-incall-manager"
-      ]
+      ["expo-config-plugin-incall-manager"]
     ],
     "experiments": {
       "typedRoutes": true

@@ -6,6 +6,7 @@ export enum TimelineType {
   CV_ANALYSE = "CV_ANALYSE",
   INTERVIEW_STEP = "INTERVIEW_STEP",
   INTERVIEW_ANALYSE = "INTERVIEW_ANALYSE",
+  MOCK_ANALYSE = "MOCK_ANALYSE",
 }
 
 export interface TimelineItem {
@@ -72,6 +73,9 @@ export interface TimelineInterviewAnalyse {
 export interface TimelineCustomInstructionsUpdate {
   customInstructions: string;
 }
+
+export const isInterviewAnalyseType = (type: string): boolean =>
+  type === TimelineType.INTERVIEW_ANALYSE || type === TimelineType.MOCK_ANALYSE;
 
 export type SignedUrl = {
   signedUrl: string;

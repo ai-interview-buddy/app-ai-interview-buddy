@@ -6,6 +6,7 @@ import { InterviewQuestionMain } from "@/components/timeline-item/interview-ques
 import { PageLoading } from "@/components/views/PageLoading";
 import { useTimelineItem } from "@/lib/api/timelineItem.query";
 import { useAuthStore } from "@/lib/supabase/authStore";
+import { isInterviewAnalyseType } from "@/supabase/functions/api/types/TimelineItem";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 
@@ -28,7 +29,7 @@ export default function TimelineItemView() {
 
   const isCustomInstructionsUpdatable = record.type == "COVER_LETTER" || record.type == "LINKEDIN_INTRO" || record.type == "REPLY_EMAIL";
 
-  const isInterviewQuestion = record.type == "INTERVIEW_ANALYSE";
+  const isInterviewQuestion = isInterviewAnalyseType(record.type);
 
   return (
     <>

@@ -79,15 +79,32 @@ npm run lint                        # ESLint
 
 When requested to start the project, you should:
 
+> **Important:** If you're in a git worktree (`.claude/worktrees/`), Supabase may already
+> be running from the main worktree. Check with `npx supabase status` first — if it's
+> already running, skip `supabase start`. You still need to run `npm install` since each
+> worktree has its own `node_modules`.
+
 ```sh
 npm install
-npx supabase start
+npx supabase start            # Skip if already running (check with `npx supabase status`)
 npx supabase migration up
 npx supabase functions serve
 npx expo start
 ```
 
-Then you are able t access the project by navigating to `http://localhost:8081` in the browser.
+Then you are able to access the project by navigating to `http://localhost:8081` in the browser.
+
+## Before doing a commit
+
+Before doing a commit, you should run the following commands:
+
+```sh
+npm run lint
+
+npx expo prebuild --clean
+npx expo export --platform web
+
+```
 
 ## Code Conventions
 

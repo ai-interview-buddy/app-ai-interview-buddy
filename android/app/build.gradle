@@ -93,7 +93,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.5"
+        versionName "1.0.6"
     }
     signingConfigs {
         debug {
@@ -174,8 +174,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
     implementation(project(':react-native-incall-manager'))
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }

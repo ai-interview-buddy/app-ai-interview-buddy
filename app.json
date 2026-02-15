@@ -12,8 +12,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.aiinterviewbuddy.appinterviewbuddy",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
-        "CFBundleDisplayName": "AI Interview Buddy"
+        "UIBackgroundModes": ["audio"]
       },
       "icon": {
         "dark": "./assets/icons/ios-dark.png",

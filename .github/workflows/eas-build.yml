@@ -110,7 +110,7 @@ jobs:
 
       - name: Build
         run: |
-          PLATFORM="${{ github.event.inputs.platform || 'all' }}"
+          PLATFORM="${{ github.event.inputs.platform || 'ios' }}"
           PROFILE="${{ github.event.inputs.profile || 'production' }}"
 
           SUBMIT_FLAG=""

@@ -1,10 +1,9 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
-import { InterviewTutorial } from "@/components/interview/InterviewTutorial";
 import { useUiStore } from "@/lib/storage/uiStore";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Redirect, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
@@ -12,7 +11,6 @@ const CreateStep1: React.FC = () => {
   const router = useRouter();
   const { positionId } = useLocalSearchParams();
   const hasDoneInterviewTutorial = useUiStore((s) => s.hasDoneInterviewTutorial);
-  const markAsOpened = useUiStore((s) => s.markAsOpened);
   const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
@@ -31,10 +29,6 @@ const CreateStep1: React.FC = () => {
   const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
   const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
 
-  const handleTutorialComplete = () => {
-    markAsOpened("hasDoneInterviewTutorial");
-  };
-
   if (!hasHydrated) {
     return (
       <>
@@ -50,12 +44,12 @@ const CreateStep1: React.FC = () => {
 
   if (!hasDoneInterviewTutorial) {
     return (
-      <>
-        <Stack.Screen options={{ headerShown: false }} />
-        <MainContainer>
-          <InterviewTutorial onComplete={handleTutorialComplete} />
-        </MainContainer>
-      </>
+      <Redirect
+        href={{
+          pathname: "/interview/interview-tutorial",
+          params: { positionId },
+        }}
+      />
     );
   }
 

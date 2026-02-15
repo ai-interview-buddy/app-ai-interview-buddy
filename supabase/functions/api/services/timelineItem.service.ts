@@ -43,7 +43,12 @@ export const getAll = async (supabase: SupabaseClient, params: TimelineFilter): 
   }
 
   if (params.type) {
+    const validTypes = Object.values(TimelineType) as string[];
     const types = params.type.split(",");
+    const invalid = types.filter((t) => !validTypes.includes(t));
+    if (invalid.length > 0) {
+      throw new Error(`Invalid timeline type(s): ${invalid.join(", ")}`);
+    }
     query = types.length === 1 ? query.eq("type", types[0]) : query.in("type", types);
   }
 

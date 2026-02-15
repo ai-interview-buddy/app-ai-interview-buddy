@@ -1,6 +1,8 @@
 {
   "expo": {
     "name": "AI Interview Buddy",
+    "slug": "app-ai-interview-buddy",
+    "owner": "ai-interview-buddy",
     "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
@@ -44,9 +46,26 @@
       "./android-manifest.plugin.js",
       ["expo-apple-authentication"],
       ["expo-localization"],
-      ["expo-document-picker", { "iCloudContainerEnvironment": "Production" }],
-      ["expo-audio", { "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone." }],
-      ["expo-build-properties", { "android": { "extraMavenRepos": ["../../node_modules/@notifee/react-native/android/libs"] } }],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": ["../../node_modules/@notifee/react-native/android/libs"]
+          }
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -75,7 +94,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "07a93b6d-771b-41b7-83e5-6205619f826a"
+        "projectId": "6b824829-3f3c-407e-972c-0ed62b15bb31"
       }
     }
   }

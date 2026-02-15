@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		4357DE0AFD203A4A3781F841 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA2B83A4D726B91ADF8A389E /* PrivacyInfo.xcprivacy */; };
-		7002A02A6318D9A5F9801163 /* libPods-AIInterviewBuddy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DCCAA9520DA286FA41C7F79D /* libPods-AIInterviewBuddy.a */; };
-		934D51F90C9920A9A07992FE /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D86377C298316B4B95DF7 /* ExpoModulesProvider.swift */; };
+		9EAD45835969806F17A4E497 /* libPods-AIInterviewBuddy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4119F9A951C0CBDBB0997038 /* libPods-AIInterviewBuddy.a */; };
+		AF238B2BAF7CB888F169A1A4 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1643E71861F1DE01B2EAD710 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		C6B2098AC2FE5BEF12A0941F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BDD154592602D30591BDD5E7 /* PrivacyInfo.xcprivacy */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -20,16 +20,16 @@
 		13B07F961A680F5B00A75B9A /* AIInterviewBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIInterviewBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AIInterviewBuddy/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = AIInterviewBuddy/Info.plist; sourceTree = "<group>"; };
-		3AC50B1FA073655BC705346E /* Pods-AIInterviewBuddy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.release.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.release.xcconfig"; sourceTree = "<group>"; };
+		1643E71861F1DE01B2EAD710 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-AIInterviewBuddy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		4119F9A951C0CBDBB0997038 /* libPods-AIInterviewBuddy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AIInterviewBuddy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D557EBC0CFC3105E231B6A2 /* Pods-AIInterviewBuddy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.release.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.release.xcconfig"; sourceTree = "<group>"; };
+		8D97D679C923194F719BC1FB /* Pods-AIInterviewBuddy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.debug.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.debug.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = AIInterviewBuddy/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AA2B83A4D726B91ADF8A389E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = AIInterviewBuddy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		DCCAA9520DA286FA41C7F79D /* libPods-AIInterviewBuddy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AIInterviewBuddy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDD154592602D30591BDD5E7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = AIInterviewBuddy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AIInterviewBuddy/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* AIInterviewBuddy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AIInterviewBuddy-Bridging-Header.h"; path = "AIInterviewBuddy/AIInterviewBuddy-Bridging-Header.h"; sourceTree = "<group>"; };
-		F30D86377C298316B4B95DF7 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-AIInterviewBuddy/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		FDB4EFFB51DF32589BE7D576 /* Pods-AIInterviewBuddy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AIInterviewBuddy.debug.xcconfig"; path = "Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,13 +37,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7002A02A6318D9A5F9801163 /* libPods-AIInterviewBuddy.a in Frameworks */,
+				9EAD45835969806F17A4E497 /* libPods-AIInterviewBuddy.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01F264EE1CF6A1ED6563391A /* AIInterviewBuddy */ = {
+			isa = PBXGroup;
+			children = (
+				1643E71861F1DE01B2EAD710 /* ExpoModulesProvider.swift */,
+			);
+			name = AIInterviewBuddy;
+			sourceTree = "<group>";
+		};
+		0F44CBD6090A5ECEDFCAC1AB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8D97D679C923194F719BC1FB /* Pods-AIInterviewBuddy.debug.xcconfig */,
+				4D557EBC0CFC3105E231B6A2 /* Pods-AIInterviewBuddy.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* AIInterviewBuddy */ = {
 			isa = PBXGroup;
 			children = (
@@ -53,7 +71,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				AA2B83A4D726B91ADF8A389E /* PrivacyInfo.xcprivacy */,
+				BDD154592602D30591BDD5E7 /* PrivacyInfo.xcprivacy */,
 			);
 			name = AIInterviewBuddy;
 			sourceTree = "<group>";
@@ -62,15 +80,15 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				DCCAA9520DA286FA41C7F79D /* libPods-AIInterviewBuddy.a */,
+				4119F9A951C0CBDBB0997038 /* libPods-AIInterviewBuddy.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2FE082AC55627181216EA401 /* ExpoModulesProviders */ = {
+		47267EB0F5C34263854FE4C3 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				CD5E19900C147433AAFBCA0E /* AIInterviewBuddy */,
+				01F264EE1CF6A1ED6563391A /* AIInterviewBuddy */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -89,8 +107,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				CD7BEF6ACFF1E940B71953A7 /* Pods */,
-				2FE082AC55627181216EA401 /* ExpoModulesProviders */,
+				0F44CBD6090A5ECEDFCAC1AB /* Pods */,
+				47267EB0F5C34263854FE4C3 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -114,24 +132,6 @@
 			path = AIInterviewBuddy/Supporting;
 			sourceTree = "<group>";
 		};
-		CD5E19900C147433AAFBCA0E /* AIInterviewBuddy */ = {
-			isa = PBXGroup;
-			children = (
-				F30D86377C298316B4B95DF7 /* ExpoModulesProvider.swift */,
-			);
-			name = AIInterviewBuddy;
-			sourceTree = "<group>";
-		};
-		CD7BEF6ACFF1E940B71953A7 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				FDB4EFFB51DF32589BE7D576 /* Pods-AIInterviewBuddy.debug.xcconfig */,
-				3AC50B1FA073655BC705346E /* Pods-AIInterviewBuddy.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "AIInterviewBuddy" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				C2864DC87251D770202AD5CE /* [Expo] Configure project */,
+				D77BB0A9550BEF5D34CC9CD2 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				1D28EA0D6557893E71631572 /* [CP] Embed Pods Frameworks */,
+				2093AE70BCE301E138C571D3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -166,9 +166,7 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = ZZF89H29D2;
 						LastSwiftMigration = 1250;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -198,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				4357DE0AFD203A4A3781F841 /* PrivacyInfo.xcprivacy in Resources */,
+				C6B2098AC2FE5BEF12A0941F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,7 +240,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1D28EA0D6557893E71631572 /* [CP] Embed Pods Frameworks */ = {
+		2093AE70BCE301E138C571D3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -328,7 +326,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AIInterviewBuddy/Pods-AIInterviewBuddy-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C2864DC87251D770202AD5CE /* [Expo] Configure project */ = {
+		D77BB0A9550BEF5D34CC9CD2 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -355,7 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				934D51F90C9920A9A07992FE /* ExpoModulesProvider.swift in Sources */,
+				AF238B2BAF7CB888F169A1A4 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,15 +362,12 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FDB4EFFB51DF32589BE7D576 /* Pods-AIInterviewBuddy.debug.xcconfig */;
+			baseConfigurationReference = 8D97D679C923194F719BC1FB /* Pods-AIInterviewBuddy.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AIInterviewBuddy/AIInterviewBuddy.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZZF89H29D2;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -392,7 +387,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aiinterviewbuddy.appinterviewbuddy;
-				PRODUCT_NAME = "AIInterviewBuddy";
+				PRODUCT_NAME = AIInterviewBuddy;
 				SWIFT_OBJC_BRIDGING_HEADER = "AIInterviewBuddy/AIInterviewBuddy-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -403,15 +398,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3AC50B1FA073655BC705346E /* Pods-AIInterviewBuddy.release.xcconfig */;
+			baseConfigurationReference = 4D557EBC0CFC3105E231B6A2 /* Pods-AIInterviewBuddy.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AIInterviewBuddy/AIInterviewBuddy.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZZF89H29D2;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AIInterviewBuddy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -427,7 +419,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aiinterviewbuddy.appinterviewbuddy;
-				PRODUCT_NAME = "AIInterviewBuddy";
+				PRODUCT_NAME = AIInterviewBuddy;
 				SWIFT_OBJC_BRIDGING_HEADER = "AIInterviewBuddy/AIInterviewBuddy-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

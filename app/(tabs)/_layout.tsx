@@ -70,7 +70,7 @@ export default function TabLayout() {
             tabBarActiveTintColor: "#ffc629",
             headerShadowVisible: false,
             headerTintColor: "#fff",
-            tabBarBadgeStyle: { right: -10 },
+            tabBarBadgeStyle: { right: -10, transform: [{ scale: 0.7 }] },
           }}
         >
           <Tabs.Screen name="index" options={{ href: null, headerShown: false }} />

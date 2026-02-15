@@ -85,6 +85,11 @@ When requested to start the project, you should:
 > worktree has its own `node_modules`.
 
 ```sh
+# copy the env files to your git tree
+.env.local
+supabase/.env
+supabase/functions/.env
+
 npm install
 npx supabase start            # Skip if already running (check with `npx supabase status`)
 npx supabase migration up

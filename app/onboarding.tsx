@@ -246,9 +246,6 @@ const OnboardingScreen = ({
             style={{
               borderRadius: 24,
               padding: 20,
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.12,
-              shadowRadius: 24,
               elevation: 3,
             }}
           >

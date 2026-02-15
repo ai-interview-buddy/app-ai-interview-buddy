@@ -1,16 +1,52 @@
 import { MainContainer } from "@/components/container/MainContainer";
 import { CenteredTextHeading } from "@/components/headers/CenteredTextHeading";
 import { TitleBackHeader } from "@/components/headers/TitleBackHeader";
+import { PageLoading } from "@/components/views/PageLoading";
+import { useUiStore } from "@/lib/storage/uiStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CreateStep1: React.FC = () => {
   const router = useRouter();
   const { positionId } = useLocalSearchParams();
+  const hasDoneInterviewTutorial = useUiStore((s) => s.hasDoneInterviewTutorial);
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    const unsub = useUiStore.persist.onFinishHydration(() => {
+      setHasHydrated(true);
+    });
+
+    // In case hydration already finished before mount
+    if (useUiStore.persist.hasHydrated()) {
+      setHasHydrated(true);
+    }
+
+    return unsub;
+  }, []);
 
   const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
   const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
+
+  useEffect(() => {
+    if (hasHydrated && !hasDoneInterviewTutorial) {
+      router.push({
+        pathname: "/interview/interview-tutorial",
+        params: { positionId },
+      });
+    }
+  }, [hasHydrated, hasDoneInterviewTutorial]);
+
+  if (!hasHydrated || !hasDoneInterviewTutorial) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <PageLoading />
+      </>
+    );
+  }
 
   return (
     <>

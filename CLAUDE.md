@@ -100,10 +100,30 @@ Before doing a commit, you should run the following commands:
 
 ```sh
 npm run lint
+# expect no errors - warnings is fine;
+
+(cd supabase/functions/api && deno install && deno lint && deno test --allow-read)
+# expect no errors
+
+npx expo start
+# then navigate http://localhost:8081 in the browser, wait the page to load (without error)
+# expect the following (or similar):
+#   λ Bundled 1731ms node_modules/expo-router/node/render.js (3850 modules)
+#   Web node_modules/expo-router/entry.js ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (3868/3868)
+#   Web Bundled 3663ms node_modules/expo-router/entry.js (3868 modules)
+#   Web Bundled 575ms node_modules/expo-router/entry.js (3810 modules)
 
 npx expo prebuild --clean
-npx expo export --platform web
+# expect changes in only the ios/AIInterviewBuddy.xcodeproj/project.pbxproj file
 
+npx expo export --platform web
+# the export works without issue
+
+npx expo run:ios
+# the build works with success
+
+npx expo run:android
+# the build works with success
 ```
 
 ## Code Conventions

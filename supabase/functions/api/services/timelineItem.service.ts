@@ -43,7 +43,8 @@ export const getAll = async (supabase: SupabaseClient, params: TimelineFilter): 
   }
 
   if (params.type) {
-    query = query.eq("type", params.type);
+    const types = params.type.split(",");
+    query = types.length === 1 ? query.eq("type", types[0]) : query.in("type", types);
   }
 
   if (params.unpaged) {

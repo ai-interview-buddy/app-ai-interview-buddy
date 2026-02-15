@@ -122,10 +122,10 @@ export const analyseMockInterview = async (
   try {
     const { positionId, transcript } = payload;
 
-    // 1. Create a TimelineItem of type INTERVIEW_ANALYSE
+    // 1. Create a TimelineItem of type MOCK_ANALYSE
     const newInterview: Partial<TimelineItem> = {
       accountId: user.id,
-      type: TimelineType.INTERVIEW_ANALYSE,
+      type: TimelineType.MOCK_ANALYSE,
       title: "Mock Interview Review",
       positionId: positionId,
       interviewScore: 0,

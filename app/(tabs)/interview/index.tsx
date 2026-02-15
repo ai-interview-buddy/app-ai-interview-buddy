@@ -15,7 +15,7 @@ import { RefreshControl, ScrollView, View } from "react-native";
 const InterviewList: React.FC = () => {
   const { user } = useAuthStore();
   const { markAsOpened } = useUiStore();
-  const params: TimelineFilter = { type: "INTERVIEW_ANALYSE", unpaged: true };
+  const params: TimelineFilter = { type: "INTERVIEW_ANALYSE,MOCK_ANALYSE", unpaged: true };
   const { data, isSuccess, isRefetching, isLoading, refetch } = useTimelineItems(user?.accessToken, params);
   const isEmpty = isSuccess && data.length === 0;
 

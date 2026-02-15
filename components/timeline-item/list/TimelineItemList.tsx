@@ -1,4 +1,4 @@
-import { TimelineItem, TimelineType } from "@/supabase/functions/api/types/TimelineItem";
+import { TimelineItem, TimelineType, isInterviewAnalyseType } from "@/supabase/functions/api/types/TimelineItem";
 import { default as React } from "react";
 import { View } from "react-native";
 import { TimelineItemListAnalyse } from "./types/TimelineItemListAnalyse";
@@ -19,6 +19,7 @@ const getStatusColor = (type: TimelineType) => {
     case "INTERVIEW_STEP":
       return "#EF4444";
     case "INTERVIEW_ANALYSE":
+    case "MOCK_ANALYSE":
       return "#10B981";
     default:
       return "#9CA3AF";
@@ -40,7 +41,7 @@ export const TimelineItemList = ({ timelineItem }: Props) => {
   return (
     <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
       {isSimple && <TimelineItemListSimple timelineItem={timelineItem} bgColor={bgColor} />}
-      {timelineItem.type === TimelineType.INTERVIEW_ANALYSE && <TimelineItemListAnalyse timelineItem={timelineItem} bgColor={bgColor} />}
+      {isInterviewAnalyseType(timelineItem.type) && <TimelineItemListAnalyse timelineItem={timelineItem} bgColor={bgColor} />}
     </View>
   );
 };

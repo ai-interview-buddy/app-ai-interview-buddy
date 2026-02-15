@@ -14,6 +14,7 @@ export default function SupabaseAuth() {
   const router = useRouter();
   const { logInWithSession } = useAuthStore();
 
+  // Early return must stay before hooks — moving it after useEffect breaks the Android build
   if (!webClientId) return null;
 
   const handleGoogleLogin = async () => {

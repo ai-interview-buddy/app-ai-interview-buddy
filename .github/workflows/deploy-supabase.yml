@@ -13,7 +13,7 @@ jobs:
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-      SUPABASE_PROJECT_REF: ihledqmotlhyxnqoipzd
+      SUPABASE_PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
       # Required for config.toml parsing (auth.external providers use env() refs)
       SUPABASE_AUTH_EXTERNAL_GOOGLE_ENABLED: "false"
       SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT: ""

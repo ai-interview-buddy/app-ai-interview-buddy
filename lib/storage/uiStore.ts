@@ -34,7 +34,14 @@ export const useUiStore = create(
     {
       name: "ui-store",
       storage: createJSONStorage(() => AsyncStorage),
-      onRehydrateStorage: () => () => {
+      partialize: (state) => {
+        const { _hasHydrated, markAsOpened, ...rest } = state;
+        return rest as UiState;
+      },
+      onRehydrateStorage: () => (_state, error) => {
+        if (error) {
+          console.warn("UI store rehydration failed:", error);
+        }
         useUiStore.setState({ _hasHydrated: true });
       },
     }

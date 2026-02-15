@@ -2,12 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Dimensions, Pressable, Text, View } from "react-native";
+import { Pressable, Text, useWindowDimensions, View } from "react-native";
 import Animated, {
   Easing,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withRepeat,
   withSequence,
   withSpring,
@@ -55,8 +56,6 @@ const tutorialSteps: TutorialStep[] = [
   },
 ];
 
-const { width } = Dimensions.get("window");
-
 const TutorialStepIndicator = ({
   isActive,
   isCompleted,
@@ -88,11 +87,13 @@ const TutorialScreen = ({
   isActive,
   shouldAnimate,
   handleNext,
+  width,
 }: {
   stepIndex: number;
   isActive: boolean;
   shouldAnimate: boolean;
   handleNext: () => void;
+  width: number;
 }) => {
   const step = tutorialSteps[stepIndex];
   const hasAnimated = useSharedValue(false);
@@ -115,34 +116,43 @@ const TutorialScreen = ({
     if (isActive && shouldAnimate && !hasAnimated.value) {
       hasAnimated.value = true;
 
+      // Image animation (immediate)
       imageOpacity.value = withTiming(1, {
         duration: 500,
         easing: Easing.out(Easing.ease),
       });
       imageTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
 
-      setTimeout(() => {
-        titleOpacity.value = withTiming(1, { duration: 400 });
-        titleTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
-      }, 150);
+      // Title animation (150ms delay)
+      titleOpacity.value = withDelay(150, withTiming(1, { duration: 400 }));
+      titleTranslateY.value = withDelay(
+        150,
+        withSpring(0, { damping: 15, stiffness: 100 })
+      );
 
-      setTimeout(() => {
-        bodyOpacity.value = withTiming(1, { duration: 400 });
-        bodyTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
-      }, 250);
+      // Body animation (250ms delay)
+      bodyOpacity.value = withDelay(250, withTiming(1, { duration: 400 }));
+      bodyTranslateY.value = withDelay(
+        250,
+        withSpring(0, { damping: 15, stiffness: 100 })
+      );
 
-      setTimeout(() => {
-        microcopyOpacity.value = withTiming(1, { duration: 400 });
-        microcopyTranslateY.value = withSpring(0, {
-          damping: 15,
-          stiffness: 100,
-        });
-      }, 350);
+      // Microcopy animation (350ms delay)
+      microcopyOpacity.value = withDelay(
+        350,
+        withTiming(1, { duration: 400 })
+      );
+      microcopyTranslateY.value = withDelay(
+        350,
+        withSpring(0, { damping: 15, stiffness: 100 })
+      );
 
-      setTimeout(() => {
-        ctaOpacity.value = withTiming(1, { duration: 400 });
-        ctaTranslateY.value = withSpring(0, { damping: 15, stiffness: 100 });
-      }, 450);
+      // CTA animation (450ms delay)
+      ctaOpacity.value = withDelay(450, withTiming(1, { duration: 400 }));
+      ctaTranslateY.value = withDelay(
+        450,
+        withSpring(0, { damping: 15, stiffness: 100 })
+      );
     }
   }, [isActive, shouldAnimate]);
 
@@ -402,6 +412,7 @@ type InterviewTutorialProps = {
 export const InterviewTutorial: React.FC<InterviewTutorialProps> = ({
   onComplete,
 }) => {
+  const { width } = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: "step0", title: "Overview" },
@@ -461,6 +472,7 @@ export const InterviewTutorial: React.FC<InterviewTutorialProps> = ({
         isActive={index === stepIndex}
         shouldAnimate={shouldAnimate}
         handleNext={handleNext}
+        width={width}
       />
     );
   };

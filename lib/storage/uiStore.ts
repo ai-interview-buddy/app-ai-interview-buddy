@@ -3,7 +3,6 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type UiState = {
-  _hasHydrated: boolean;
   hasOpenedJobPositions: boolean;
   hasOpenedInterviews: boolean;
   hasOpenedCareerProfiles: boolean;
@@ -11,13 +10,12 @@ type UiState = {
   hasOpenedFeedback: boolean;
   hasOpenedAccount: boolean;
   hasDoneInterviewTutorial: boolean;
-  markAsOpened: (key: keyof Omit<UiState, "markAsOpened" | "_hasHydrated">) => void;
+  markAsOpened: (key: keyof Omit<UiState, "markAsOpened">) => void;
 };
 
 export const useUiStore = create(
   persist<UiState>(
     (set) => ({
-      _hasHydrated: false,
       hasOpenedJobPositions: false,
       hasOpenedInterviews: false,
       hasOpenedCareerProfiles: false,
@@ -34,16 +32,6 @@ export const useUiStore = create(
     {
       name: "ui-store",
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (state) => {
-        const { _hasHydrated, markAsOpened, ...rest } = state;
-        return rest as UiState;
-      },
-      onRehydrateStorage: () => (_state, error) => {
-        if (error) {
-          console.warn("UI store rehydration failed:", error);
-        }
-        useUiStore.setState({ _hasHydrated: true });
-      },
     }
   )
 );

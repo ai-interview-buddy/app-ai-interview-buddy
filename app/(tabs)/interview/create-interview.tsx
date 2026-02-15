@@ -5,12 +5,28 @@ import { InterviewTutorial } from "@/components/interview/InterviewTutorial";
 import { useUiStore } from "@/lib/storage/uiStore";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CreateStep1: React.FC = () => {
   const router = useRouter();
   const { positionId } = useLocalSearchParams();
-  const { _hasHydrated, hasDoneInterviewTutorial, markAsOpened } = useUiStore();
+  const hasDoneInterviewTutorial = useUiStore((s) => s.hasDoneInterviewTutorial);
+  const markAsOpened = useUiStore((s) => s.markAsOpened);
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    const unsub = useUiStore.persist.onFinishHydration(() => {
+      setHasHydrated(true);
+    });
+
+    // In case hydration already finished before mount
+    if (useUiStore.persist.hasHydrated()) {
+      setHasHydrated(true);
+    }
+
+    return unsub;
+  }, []);
 
   const handleBack = () => (positionId ? router.push(`/job-position/${positionId}`) : router.push("/interview"));
   const handleCancel = () => (positionId ? router.push(`/job-position`) : router.push("/interview"));
@@ -19,7 +35,7 @@ const CreateStep1: React.FC = () => {
     markAsOpened("hasDoneInterviewTutorial");
   };
 
-  if (!_hasHydrated) {
+  if (!hasHydrated) {
     return (
       <>
         <Stack.Screen options={{ headerShown: false }} />

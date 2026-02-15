@@ -49,6 +49,7 @@ export const InterviewListItem = forwardRef<React.ComponentRef<typeof TouchableO
                   fontSize: 18,
                   fontWeight: "700",
                   color: "#1D252C",
+                  flexShrink: 1,
                 }}
                 numberOfLines={2}
               >
@@ -58,6 +59,7 @@ export const InterviewListItem = forwardRef<React.ComponentRef<typeof TouchableO
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
+                  flexShrink: 0,
                   backgroundColor: item.type === TimelineType.MOCK_ANALYSE ? "#06B6D420" : "#10B98120",
                   paddingHorizontal: 8,
                   paddingVertical: 2,

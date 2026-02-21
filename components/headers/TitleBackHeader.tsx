@@ -61,10 +61,14 @@ export function TitleBackHeader({ pageTitle, handleCancel, handleBack }: Props) 
       </TouchableOpacity>
 
       <Text
+        numberOfLines={1}
         style={{
+          flex: 1,
           fontSize: 18,
           fontWeight: "700",
           color: "#1D252C",
+          textAlign: "center",
+          marginHorizontal: 8,
         }}
       >
         {pageTitle}

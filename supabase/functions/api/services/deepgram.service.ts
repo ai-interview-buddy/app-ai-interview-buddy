@@ -24,7 +24,7 @@ class DeepgramService {
       console.log(`interviewAnalyse: deepgram using local storage to upload a file ${filePath}`);
       const { data, error } = await supabase.storage.from("interviews").download(filePath);
       if (error || !data) {
-        return genericError("Failed to download" + (error.message || filePath));
+        return genericError(`Failed to download: ${error?.message ?? filePath}`);
       }
 
       const arr = await (data as Blob).arrayBuffer();
@@ -37,7 +37,7 @@ class DeepgramService {
     console.log(`interviewAnalyse: deepgram using global signed url ${filePath}`);
     const { data, error } = await supabase.storage.from("interviews").createSignedUrl(filePath, 3600);
     if (error || !data) {
-      return genericError("Failed to issue url" + (error.message || filePath));
+      return genericError(`Failed to issue url: ${error?.message ?? filePath}`);
     }
     const url = data?.signedUrl;
     const response = await deepgram.listen.prerecorded.transcribeUrl({ url: url }, deepgramSTT);
@@ -47,7 +47,7 @@ class DeepgramService {
   private processResult(response: DeepgramResponse<SyncPrerecordedResponse>): ServiceResponse<DeepgramParagraph[]> {
     const { error, result } = response;
     if (error || !result) {
-      return genericError("Failed to download " + error!.message);
+      return genericError(`Transcription failed: ${error?.message ?? "unknown error"}`);
     }
 
     const paragraphs = result.results.channels[0].alternatives[0].paragraphs?.paragraphs as unknown as DeepgramParagraph[];

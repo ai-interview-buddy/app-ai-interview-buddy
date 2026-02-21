@@ -25,8 +25,11 @@ export const integrationTest = (name: string, fn: () => Promise<void>) => {
 };
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "http://localhost:54321";
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+if (!SUPABASE_ANON_KEY) throw new Error("SUPABASE_ANON_KEY env var is required — see readme.md for .env.test setup");
+if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error("SUPABASE_SERVICE_ROLE_KEY env var is required — see readme.md for .env.test setup");
 
 /**
  * Supabase client with service_role key — bypasses RLS.

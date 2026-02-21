@@ -52,9 +52,13 @@ const agent = new Agent({
   instructions: prompt,
 });
 
-export async function cvScoringAgent(pdfContent: PdfContent) {
-  const content = userMessage(pdfContent);
-  const result = await run(agent, [{ role: "user", content: content }]);
+class CvScoringAgent {
+  async cvScoringAgent(pdfContent: PdfContent) {
+    const content = userMessage(pdfContent);
+    const result = await run(agent, [{ role: "user", content: content }]);
 
-  return result.finalOutput;
+    return result.finalOutput;
+  }
 }
+
+export default new CvScoringAgent();

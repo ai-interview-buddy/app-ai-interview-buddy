@@ -127,60 +127,64 @@ const truncate = (value: string | null | undefined, max = 15000) => {
 
 const client = new OpenAI();
 
-export const buildMockInterviewInstructions = async (
-  user: User,
-  candidateProfile?: CareerProfile,
-  jobPosition?: JobPosition,
-  customInstructions?: string
-): Promise<string> => {
-  const input: OpenAI.Responses.ResponseInput = [];
+class MockInterviewAgent {
+  async buildMockInterviewInstructions(
+    user: User,
+    candidateProfile?: CareerProfile,
+    jobPosition?: JobPosition,
+    customInstructions?: string
+  ): Promise<string> {
+    const input: OpenAI.Responses.ResponseInput = [];
 
-  const userName = user?.user_metadata?.name || "Candidate";
-  input.push({ role: "user", content: `The user name is '${userName}'` });
+    const userName = user?.user_metadata?.name || "Candidate";
+    input.push({ role: "user", content: `The user name is '${userName}'` });
 
-  if (customInstructions) {
-    input.push({
-      role: "user",
-      content: `## Custom instructions \n\n ${customInstructions}`,
-    });
-  }
-
-  const candidateSummary = truncate(candidateProfile?.curriculumText);
-  if (candidateSummary) {
-    input.push({
-      role: "user",
-      content: `## Candidate CV \n\n ${candidateProfile?.title} \n ${candidateSummary}`,
-    });
-  }
-
-  const jobDescription = truncate(jobPosition?.jobDescription);
-  if (jobDescription || jobPosition?.jobTitle || jobPosition?.companyName) {
-    const details: string[] = [];
-    if (jobPosition?.jobTitle) {
-      details.push(`Role: ${jobPosition.jobTitle}`);
+    if (customInstructions) {
+      input.push({
+        role: "user",
+        content: `## Custom instructions \n\n ${customInstructions}`,
+      });
     }
-    if (jobPosition?.companyName) {
-      details.push(`Company: ${jobPosition.companyName}`);
+
+    const candidateSummary = truncate(candidateProfile?.curriculumText);
+    if (candidateSummary) {
+      input.push({
+        role: "user",
+        content: `## Candidate CV \n\n ${candidateProfile?.title} \n ${candidateSummary}`,
+      });
     }
-    if (jobDescription) {
-      details.push("Job Description: " + jobDescription);
+
+    const jobDescription = truncate(jobPosition?.jobDescription);
+    if (jobDescription || jobPosition?.jobTitle || jobPosition?.companyName) {
+      const details: string[] = [];
+      if (jobPosition?.jobTitle) {
+        details.push(`Role: ${jobPosition.jobTitle}`);
+      }
+      if (jobPosition?.companyName) {
+        details.push(`Company: ${jobPosition.companyName}`);
+      }
+      if (jobDescription) {
+        details.push("Job Description: " + jobDescription);
+      }
+      input.push({
+        role: "user",
+        content: `Position & Company:\n${details.join("\n")}`,
+      });
     }
-    input.push({
-      role: "user",
-      content: `Position & Company:\n${details.join("\n")}`,
+
+    const randomQuestion = STARTER_QUESTIONS[Math.floor(Math.random() * STARTER_QUESTIONS.length)];
+
+    const response = await client.responses.create({
+      model: "gpt-5-mini",
+      instructions: getBaseInstruction(randomQuestion),
+      input: input,
+      reasoning: {
+        effort: "minimal",
+      },
     });
+
+    return `${OUTPUT_INSTRUCTIONS} ${response.output_text}`;
   }
+}
 
-  const randomQuestion = STARTER_QUESTIONS[Math.floor(Math.random() * STARTER_QUESTIONS.length)];
-
-  const response = await client.responses.create({
-    model: "gpt-5-mini",
-    instructions: getBaseInstruction(randomQuestion),
-    input: input,
-    reasoning: {
-      effort: "minimal",
-    },
-  });
-
-  return `${OUTPUT_INSTRUCTIONS} ${response.output_text}`;
-};
+export default new MockInterviewAgent();

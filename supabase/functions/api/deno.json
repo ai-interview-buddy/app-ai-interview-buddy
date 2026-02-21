@@ -1,4 +1,9 @@
 {
+  "lint": {
+    "rules": {
+      "exclude": ["no-import-prefix", "no-unversioned-import"]
+    }
+  },
   "imports": {
     "@deepgram/sdk": "npm:@deepgram/sdk@^4.11.2",
     "@openai/agents": "npm:@openai/agents@^0.1.6",

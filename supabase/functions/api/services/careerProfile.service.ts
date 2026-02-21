@@ -1,5 +1,5 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
-import { cvScoringAgent, cvScoringWeight } from "../agents/cvScoring.agent.ts";
+import cvScoringAgent, { cvScoringWeight } from "../agents/cvScoring.agent.ts";
 import { CareerProfile, CareerProfileCreate, CareerProfileUpdate } from "../types/CareerProfile.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { convertStorageError } from "../utils/error.utils.ts";
@@ -42,7 +42,7 @@ export const create = async (supabase: SupabaseClient, user: User, body: CareerP
   const arrayBuffer = await data.arrayBuffer();
   const pdfContent = await readPdf(arrayBuffer);
 
-  const agentOutput = await cvScoringAgent(pdfContent);
+  const agentOutput = await cvScoringAgent.cvScoringAgent(pdfContent);
 
   const curriculumScore = agentOutput?.analysis.reduce((acc, curr) => {
     const weight = cvScoringWeight[curr.item] ?? 0;

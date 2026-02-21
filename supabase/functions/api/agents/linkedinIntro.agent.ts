@@ -54,15 +54,19 @@ const agent = new Agent({
   instructions: prompt,
 });
 
-export async function generateLinkedinIntro(
-  cvContent: string,
-  jobDescription: string,
-  customInstructions: string,
-  greeting?: string,
-  extraMessages?: AgentInputItem[]
-): Promise<string | undefined> {
-  const content = userMessage(cvContent, jobDescription, customInstructions, greeting);
-  const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
+class LinkedinIntroAgent {
+  async generateLinkedinIntro(
+    cvContent: string,
+    jobDescription: string,
+    customInstructions: string,
+    greeting?: string,
+    extraMessages?: AgentInputItem[]
+  ): Promise<string | undefined> {
+    const content = userMessage(cvContent, jobDescription, customInstructions, greeting);
+    const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
 
-  return result.finalOutput;
+    return result.finalOutput;
+  }
 }
+
+export default new LinkedinIntroAgent();

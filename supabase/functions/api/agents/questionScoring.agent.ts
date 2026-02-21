@@ -58,22 +58,26 @@ ${input}
 
 const client = new OpenAI();
 
-export async function scoreQuestion(questionNumber: number, utterances: QuestionScoringInput[]): Promise<QuestionScoringOutput> {
-  const input = JSON.stringify(utterances);
-  const content = userMessage(input);
+class QuestionScoringAgent {
+  async scoreQuestion(questionNumber: number, utterances: QuestionScoringInput[]): Promise<QuestionScoringOutput> {
+    const input = JSON.stringify(utterances);
+    const content = userMessage(input);
 
-  const response = await client.responses.parse({
-    model: "gpt-5-mini",
-    instructions: prompt,
-    input: [{ role: "user", content: content }],
-    text: {
-      format: zodTextFormat(QAEvaluationSchema, "response"),
-      verbosity: "low",
-    },
-    reasoning: {
-      effort: "minimal",
-    },
-  });
+    const response = await client.responses.parse({
+      model: "gpt-5-mini",
+      instructions: prompt,
+      input: [{ role: "user", content: content }],
+      text: {
+        format: zodTextFormat(QAEvaluationSchema, "response"),
+        verbosity: "low",
+      },
+      reasoning: {
+        effort: "minimal",
+      },
+    });
 
-  return { qNum: questionNumber, evaluation: response.output_parsed! };
+    return { qNum: questionNumber, evaluation: response.output_parsed! };
+  }
 }
+
+export default new QuestionScoringAgent();

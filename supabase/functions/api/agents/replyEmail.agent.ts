@@ -72,14 +72,18 @@ const agent = new Agent({
   instructions: prompt,
 });
 
-export async function generateReplyEmail(
-  jobDescription: string,
-  customInstructions: string,
-  emailBody: string,
-  extraMessages?: AgentInputItem[]
-): Promise<ReplyEmail | undefined> {
-  const content = userMessage(jobDescription, customInstructions, emailBody);
-  const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
+class ReplyEmailAgent {
+  async generateReplyEmail(
+    jobDescription: string,
+    customInstructions: string,
+    emailBody: string,
+    extraMessages?: AgentInputItem[]
+  ): Promise<ReplyEmail | undefined> {
+    const content = userMessage(jobDescription, customInstructions, emailBody);
+    const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
 
-  return result.finalOutput;
+    return result.finalOutput;
+  }
 }
+
+export default new ReplyEmailAgent();

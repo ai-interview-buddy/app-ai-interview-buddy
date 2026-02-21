@@ -95,22 +95,26 @@ ${text}
 
 const client = new OpenAI();
 
-export async function parseQuestions(paragraph: SimplifiedParagraph[]): Promise<ParsedQuestion | undefined> {
-  const text = JSON.stringify(paragraph);
-  const content = userMessage(text);
+class QuestionParserAgent {
+  async parseQuestions(paragraph: SimplifiedParagraph[]): Promise<ParsedQuestion | undefined> {
+    const text = JSON.stringify(paragraph);
+    const content = userMessage(text);
 
-  const response = await client.responses.parse({
-    model: "gpt-5-mini",
-    instructions: prompt,
-    input: [{ role: "user", content: content }],
-    text: {
-      format: zodTextFormat(QuestionSchema, "response"),
-      verbosity: "low",
-    },
-    reasoning: {
-      effort: "minimal",
-    },
-  });
+    const response = await client.responses.parse({
+      model: "gpt-5-mini",
+      instructions: prompt,
+      input: [{ role: "user", content: content }],
+      text: {
+        format: zodTextFormat(QuestionSchema, "response"),
+        verbosity: "low",
+      },
+      reasoning: {
+        effort: "minimal",
+      },
+    });
 
-  return response.output_parsed!;
+    return response.output_parsed!;
+  }
 }
+
+export default new QuestionParserAgent();

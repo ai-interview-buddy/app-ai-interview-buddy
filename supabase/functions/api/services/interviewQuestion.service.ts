@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { parseQuestions } from "../agents/questionParser.agent.ts";
-import { QuestionScoringOutput, scoreQuestion } from "../agents/questionScoring.agent.ts";
+import questionParserAgent from "../agents/questionParser.agent.ts";
+import questionScoringAgent, { type QuestionScoringOutput } from "../agents/questionScoring.agent.ts";
 import {
   DeepgramParagraph,
   InterviewQuestion,
@@ -15,7 +15,7 @@ import { TimelineItem } from "../types/TimelineItem.ts";
 import { genericError } from "../utils/error.utils.ts";
 import { formatTime } from "../utils/format.utils.ts";
 import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
-import { convertAudioFileToText } from "./deepgram.service.ts";
+import deepgramService from "./deepgram.service.ts";
 import { update as updateTimeline } from "./timelineItem.service.ts";
 
 export const getAll = async (supabase: SupabaseClient, params: InterviewQuestionFilter): Promise<ServiceResponse<InterviewQuestion[]>> => {
@@ -57,7 +57,7 @@ const processTranscriptionAndSave = async (supabase: SupabaseClient, timelineRec
     return { id: idx, speaker: p.speaker, sentence: p.sentences.map((s) => s.text).join(" ") };
   });
 
-  const parsedQuestions = await parseQuestions(simplified);
+  const parsedQuestions = await questionParserAgent.parseQuestions(simplified);
   if (!parsedQuestions) {
     return genericError("Failed to parseQuestions, the answer was empty");
   }
@@ -80,7 +80,7 @@ const processTranscriptionAndSave = async (supabase: SupabaseClient, timelineRec
         end: p.end,
       }));
 
-      return scoreQuestion(q.qNum, utterances);
+      return questionScoringAgent.scoreQuestion(q.qNum, utterances);
     });
 
   const allPromises = await Promise.allSettled(scoringInputs);
@@ -161,7 +161,7 @@ const processTranscriptionAndSave = async (supabase: SupabaseClient, timelineRec
 export const parseQuestionsByAudio = async (supabase: SupabaseClient, timelineRecord: TimelineItem) => {
   console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} received background-tasks`);
 
-  const { data: paragraphs, error: deepgramError } = await convertAudioFileToText(supabase, timelineRecord.interviewOriginalAudioPath!);
+  const { data: paragraphs, error: deepgramError } = await deepgramService.convertAudioFileToText(supabase, timelineRecord.interviewOriginalAudioPath!);
   console.log(`interviewAnalyse: timelineRecord ${timelineRecord.id} response from deepgram ${paragraphs?.length} paragraphs`);
 
   if (!paragraphs || deepgramError) {

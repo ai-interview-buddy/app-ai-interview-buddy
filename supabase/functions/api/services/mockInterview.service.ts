@@ -1,5 +1,5 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
-import { buildMockInterviewInstructions } from "../agents/mockInterview.agent.ts";
+import mockInterviewAgent from "../agents/mockInterview.agent.ts";
 import { MockInterviewAnalyseRequest, MockInterviewRequest, MockInterviewResponse, MockInterviewVoice } from "../types/MockInterview.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { TimelineItem, TimelineType } from "../types/TimelineItem.ts";
@@ -95,7 +95,7 @@ export const createMockInterviewSession = async (
     }
 
     const voice = getRandomVoice();
-    const instructions = await buildMockInterviewInstructions(user, candidateProfile, jobPosition, customInstructions);
+    const instructions = await mockInterviewAgent.buildMockInterviewInstructions(user, candidateProfile, jobPosition, customInstructions);
 
     const token = await requestRealtimeSession(openAiKey, instructions, voice);
 

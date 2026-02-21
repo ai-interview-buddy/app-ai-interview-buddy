@@ -1,5 +1,5 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
-import { extractPositionFromDescription, extractPositionFromUrl } from "../agents/positionExtractor.agent.ts";
+import positionExtractorAgent from "../agents/positionExtractor.agent.ts";
 import { JobPosition, JobPositionCreateByDescription, JobPositionCreateByUrl, JobPositionUpdate } from "../types/JobPosition.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { genericError } from "../utils/error.utils.ts";
@@ -37,7 +37,7 @@ export const createByUrl = async (
   params: JobPositionCreateByUrl
 ): Promise<ServiceResponse<JobPosition>> => {
   try {
-    const extracted = await extractPositionFromUrl({
+    const extracted = await positionExtractorAgent.extractPositionFromUrl({
       profileId: params.profileId,
       jobUrl: params.jobUrl,
     });
@@ -76,7 +76,7 @@ export const createByDescription = async (
   params: JobPositionCreateByDescription
 ): Promise<ServiceResponse<JobPosition>> => {
   try {
-    const extracted = await extractPositionFromDescription({
+    const extracted = await positionExtractorAgent.extractPositionFromDescription({
       profileId: params.profileId,
       jobDescription: params.jobDescription,
     });

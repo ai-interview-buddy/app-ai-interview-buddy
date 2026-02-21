@@ -67,12 +67,16 @@ const agent = new Agent({
   tools: [webSearchTool(), fetchCleanText],
 });
 
-export async function extractPositionFromUrl(params: JobPositionCreateByUrl): Promise<PositionExtract | undefined> {
-  const result = await run(agent, [{ role: "user", content: userMessageByJobUrl(params.jobUrl) }]);
-  return result.finalOutput;
+class PositionExtractorAgent {
+  async extractPositionFromUrl(params: JobPositionCreateByUrl): Promise<PositionExtract | undefined> {
+    const result = await run(agent, [{ role: "user", content: userMessageByJobUrl(params.jobUrl) }]);
+    return result.finalOutput;
+  }
+
+  async extractPositionFromDescription(params: JobPositionCreateByDescription): Promise<PositionExtract | undefined> {
+    const result = await run(agent, [{ role: "user", content: userMessageByDescription(params.jobDescription) }]);
+    return result.finalOutput;
+  }
 }
 
-export async function extractPositionFromDescription(params: JobPositionCreateByDescription): Promise<PositionExtract | undefined> {
-  const result = await run(agent, [{ role: "user", content: userMessageByDescription(params.jobDescription) }]);
-  return result.finalOutput;
-}
+export default new PositionExtractorAgent();

@@ -1,0 +1,87 @@
+name: Test Supabase Functions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-and-unit-tests:
+    name: Lint & Unit Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: supabase/functions/api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install dependencies
+        run: deno install
+
+      - name: Lint
+        run: deno lint
+
+      - name: Unit tests
+        run: deno test --allow-read utils/__tests__/
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-unit-tests
+
+    env:
+      # Required for config.toml parsing (auth.external providers use env() refs)
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_ENABLED: "false"
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT: ""
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET: ""
+      SUPABASE_AUTH_EXTERNAL_APPLE_ENABLED: "false"
+      SUPABASE_AUTH_EXTERNAL_APPLE_SECRET: ""
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Supabase
+        run: supabase start
+
+      - name: Apply migrations
+        run: supabase migration up
+
+      - name: Generate .env.test
+        run: |
+          supabase status -o env | awk -F'"' '
+            /^API_URL=/ { print "SUPABASE_URL=" $2 }
+            /^ANON_KEY=/ { print "SUPABASE_ANON_KEY=" $2 }
+            /^SERVICE_ROLE_KEY=/ { print "SUPABASE_SERVICE_ROLE_KEY=" $2 }
+            END { print "OPENAI_API_KEY=sk-test-dummy"; print "DEEPGRAM_API_KEY=test-dummy" }
+          ' > supabase/functions/api/.env.test
+          echo "Generated .env.test:"
+          cat supabase/functions/api/.env.test
+
+      - name: Install dependencies
+        working-directory: supabase/functions/api
+        run: deno install
+
+      - name: Run integration tests
+        working-directory: supabase/functions/api
+        run: deno test --no-check --env-file=.env.test --allow-read --allow-net --allow-env --allow-sys __tests__/

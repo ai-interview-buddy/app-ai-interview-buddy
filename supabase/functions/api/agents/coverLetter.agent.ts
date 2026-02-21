@@ -50,14 +50,18 @@ const agent = new Agent({
   instructions: prompt,
 });
 
-export async function generateCoverLetter(
-  cvContent: string,
-  jobDescription: string,
-  customInstructions: string,
-  extraMessages?: AgentInputItem[]
-): Promise<string | undefined> {
-  const content = userMessage(cvContent, jobDescription, customInstructions);
-  const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
+class CoverLetterAgent {
+  async generateCoverLetter(
+    cvContent: string,
+    jobDescription: string,
+    customInstructions: string,
+    extraMessages?: AgentInputItem[]
+  ): Promise<string | undefined> {
+    const content = userMessage(cvContent, jobDescription, customInstructions);
+    const result = await run(agent, [{ role: "user", content: content }, ...(extraMessages ?? [])]);
 
-  return result.finalOutput;
+    return result.finalOutput;
+  }
 }
+
+export default new CoverLetterAgent();

@@ -1,8 +1,8 @@
 import { AgentInputItem } from "@openai/agents";
 import { SupabaseClient, User } from "@supabase/supabase-js";
-import { generateCoverLetter } from "../agents/coverLetter.agent.ts";
-import { generateLinkedinIntro } from "../agents/linkedinIntro.agent.ts";
-import { generateReplyEmail } from "../agents/replyEmail.agent.ts";
+import coverLetterAgent from "../agents/coverLetter.agent.ts";
+import linkedinIntroAgent from "../agents/linkedinIntro.agent.ts";
+import replyEmailAgent from "../agents/replyEmail.agent.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import {
   SignedUrl,
@@ -103,9 +103,10 @@ export const createCoverLetter = async (
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
     if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
-    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId!);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition.careerProfileId!);
+    if (!careerPosition) throw Error(`Invalid careerProfile for jobPosition ${body.positionId}`);
 
-    const letter = await generateCoverLetter(careerPosition!.curriculumText, jobPosition!.jobDescription, body.customInstructions);
+    const letter = await coverLetterAgent.generateCoverLetter(careerPosition.curriculumText, jobPosition.jobDescription, body.customInstructions);
 
     const record = {
       accountId: user.id,
@@ -132,11 +133,12 @@ export const createLinkedinIntro = async (
   try {
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
     if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
-    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId!);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition.careerProfileId!);
+    if (!careerPosition) throw Error(`Invalid careerProfile for jobPosition ${body.positionId}`);
 
-    const output = await generateLinkedinIntro(
-      careerPosition!.curriculumText,
-      jobPosition!.jobDescription,
+    const output = await linkedinIntroAgent.generateLinkedinIntro(
+      careerPosition.curriculumText,
+      jobPosition.jobDescription,
       body.customInstructions,
       body.greeting
     );
@@ -167,7 +169,7 @@ export const createReplyEmail = async (
     const { data: jobPosition } = await getJobPositionById(supabase, body.positionId);
     if (!jobPosition) throw Error(`Invalid jobPosition ${body.positionId} for ${user.id}`);
 
-    const output = await generateReplyEmail(jobPosition!.jobDescription, body.customInstructions, body.emailBody);
+    const output = await replyEmailAgent.generateReplyEmail(jobPosition!.jobDescription, body.customInstructions, body.emailBody);
 
     const record = {
       accountId: user.id,
@@ -280,15 +282,17 @@ export const updateCustomInstructions = async (
     ];
 
     const { data: jobPosition } = await getJobPositionById(supabase, record.positionId);
-    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition!.careerProfileId!);
+    if (!jobPosition) throw Error(`Invalid jobPosition ${record.positionId}`);
+    const { data: careerPosition } = await getCareerProfileById(supabase, jobPosition.careerProfileId!);
+    if (!careerPosition) throw Error(`Invalid careerProfile for jobPosition ${record.positionId}`);
 
     let output: string | undefined;
 
     switch (record.type) {
       case TimelineType.LINKEDIN_INTRO:
-        output = await generateLinkedinIntro(
-          careerPosition!.curriculumText,
-          jobPosition!.jobDescription,
+        output = await linkedinIntroAgent.generateLinkedinIntro(
+          careerPosition.curriculumText,
+          jobPosition.jobDescription,
           record?.customInstructions || "",
           "",
           extraMessages
@@ -296,11 +300,11 @@ export const updateCustomInstructions = async (
         break;
 
       case TimelineType.COVER_LETTER:
-        output = await generateCoverLetter(careerPosition!.curriculumText, jobPosition!.jobDescription, body.customInstructions);
+        output = await coverLetterAgent.generateCoverLetter(careerPosition.curriculumText, jobPosition.jobDescription, body.customInstructions);
         break;
 
       case TimelineType.REPLY_EMAIL: {
-        const result = await generateReplyEmail(jobPosition!.jobDescription, body.customInstructions, "not available");
+        const result = await replyEmailAgent.generateReplyEmail(jobPosition.jobDescription, body.customInstructions, "not available");
         output = result?.emailBody;
         break;
       }

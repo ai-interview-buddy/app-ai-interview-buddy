@@ -3,7 +3,7 @@ name: Test Supabase Functions
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -69,12 +69,14 @@ jobs:
 
       - name: Generate .env.test
         run: |
-          supabase status 2>/dev/null | awk '
-            /API URL:/ { print "SUPABASE_URL=" $NF }
-            /anon key:/ { print "SUPABASE_ANON_KEY=" $NF }
-            /service_role key:/ { print "SUPABASE_SERVICE_ROLE_KEY=" $NF }
+          supabase status -o env | awk -F'"' '
+            /^API_URL=/ { print "SUPABASE_URL=" $2 }
+            /^ANON_KEY=/ { print "SUPABASE_ANON_KEY=" $2 }
+            /^SERVICE_ROLE_KEY=/ { print "SUPABASE_SERVICE_ROLE_KEY=" $2 }
             END { print "OPENAI_API_KEY=sk-test-dummy"; print "DEEPGRAM_API_KEY=test-dummy" }
           ' > supabase/functions/api/.env.test
+          echo "Generated .env.test:"
+          cat supabase/functions/api/.env.test
 
       - name: Install dependencies
         working-directory: supabase/functions/api

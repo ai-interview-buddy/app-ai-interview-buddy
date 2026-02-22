@@ -1,47 +1,63 @@
 import { Agent, run, webSearchTool } from "npm:@openai/agents";
 import { z } from "zod";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
-import { fetchCleanText } from "./tools/fetchCleanText.ts";
+import FetchCleanText from "./tools/FetchCleanText.ts";
 
 const prompt = `
-You are a job position extraction assistant. Your task is to extract structured information from a job listing provided either as a URL or as raw HTML. 
+You are a job position extraction and enrichment assistant. Your task is to extract structured information from a job listing, and then enrich it by finding the company's official website and logo.
 
-When an input URL is provided, you are allowed to navigate (webSearchTool) up to 3 times to retrieve the complete listing HTML, following redirects or handling dynamically injected content. Use the provided webSearchTool() to fetch pages and handle each navigation step.
-Do not use webSearchTool when parsing Raw HTML. 
+## Phase 1: Extract Position Details
 
-If webSearchTool fails, call fetchCleanText exactly once to fetch the URL and return plain text (HTML stripped).
+When an input URL is provided, use webSearchTool (up to 3 navigations) to retrieve the listing content. If webSearchTool fails, call fetch_clean_text exactly once.
+When raw text is provided, extract directly from the text without fetching.
 
-Extract the following fields, and respond only with JSON matching this schema exactly:
-- companyName: string. The company name presenting the listing (not the portal host).
-- companyLogo?: string. If available, the full URL to the company logo image starting with https://. Must be a valid url, or, return null.
-- companyWebsite?: string. If available, the official company website URL starting with https://. Must be a valid url, or, return null.
+Extract these fields from the listing:
+- companyName: string. The company name presenting the listing (not the job portal host like LinkedIn, Indeed, etc.).
 - jobTitle: string. The title of the position as listed.
 - jobDescription: string. The full job description content, formatted in markdown, preserving headings and lists.
-- salaryRange?: string. If available, the salary range or compensation details exactly as shown.
+- salaryRange?: string. If available, the salary range or compensation details exactly as shown. Return null if not found.
 
-Guidelines:
+## Phase 2: Enrich Company Details
+
+After extracting the position details, you MUST use webSearchTool to find the company website and logo. Do NOT skip this phase — job listings rarely contain these directly.
+
+### companyWebsite
+- If the listing text already contains the official company website URL, use it.
+- Otherwise, use webSearchTool to search for "[companyName] official website".
+- The result must be the company's main homepage URL (e.g., https://www.marksandspencer.com), not a job portal or social media page.
+- Must start with https://. Return null only if you cannot find it after searching.
+
+### companyLogo
+- Use webSearchTool to search for "[companyName] official logo PNG high quality". Look for direct image URLs on company websites, press kit pages, or brand asset repositories.
+- If search fails, try searching "[companyName] company branding assets" or "[companyName] logo download".
+- Fallback: construct DuckDuckGo's favicon service URL: https://icons.duckduckgo.com/ip3/[domain].ico (e.g., https://icons.duckduckgo.com/ip3/marksandspencer.com.ico) — this reliably returns logos.
+- Last resort: Google's favicon service: https://www.google.com/s2/favicons?domain=[domain]&sz=256
+- Must be a full URL starting with https://. Return null only if you cannot find a valid logo URL.
+
+## Guidelines
 - Input will be provided as either:
-   1. A jobUrl: wrap the URL in <job_url> tags, e.g. <job_url>https://...</job_url>.
-   2. Raw HTML: wrap the HTML in <listing_html> tags.
-- For URLs, perform up to 3 fetch navigations to resolve redirects or loaded widgets, focusing on the core job listing container.
-- Exclude any boilerplate portal UI elements (e.g., apply buttons, navigation menus).
-- Preserve semantic structure: convert HTML headings (<h1>-<h6>) to markdown headings, lists to markdown lists, and paragraphs to markdown text.
+  1. A jobUrl: wrapped in <job_url> tags.
+  2. Raw text: wrapped in <listing_html> tags.
+- A companyName hint may be provided in <company_name_hint> tags — use this to help your search if available.
+- Exclude any boilerplate portal UI elements (apply buttons, navigation menus, etc.).
+- Preserve semantic structure in jobDescription: headings, lists, paragraphs.
 - Do not include any additional fields or commentary.
-- If a field is not found, omit it from the JSON output.
 `;
 
-const userMessageByDescription = (html: string): string => `
-Now extract the position details from this job listing using Raw HTML:
+const userMessageByDescription = (html: string, companyNameHint?: string): string => `
+Now extract and enrich the position details from this job listing:
+${companyNameHint ? `\n<company_name_hint>${companyNameHint}</company_name_hint>` : ""}
 
 <listing_html>
 ${html}
 </listing_html>
 `;
 
-const userMessageByJobUrl = (url: string): string => `
-Now extract the position details from this job listing using the jobUrl:
+const userMessageByJobUrl = (url: string, companyNameHint?: string): string => `
+Now extract and enrich the position details from this job listing:
+${companyNameHint ? `\n<company_name_hint>${companyNameHint}</company_name_hint>` : ""}
 
-<jobUrl>${url}</jobUrl>
+<job_url>${url}</job_url>
 `;
 
 const PositionExtractSchema = z.object({
@@ -58,23 +74,22 @@ export type PositionExtract = z.infer<typeof PositionExtractSchema>;
 const agent = new Agent({
   name: "Position Extractor",
   model: "gpt-5-mini",
-  modelSettings: {
-    // reasoning: { effort: "minimal" },
-    text: { verbosity: "low" },
-  },
   outputType: PositionExtractSchema,
   instructions: prompt,
-  tools: [webSearchTool(), fetchCleanText],
+  tools: [webSearchTool(), FetchCleanText.asTool()],
 });
 
 class PositionExtractorAgent {
-  async extractPositionFromUrl(params: JobPositionCreateByUrl): Promise<PositionExtract | undefined> {
-    const result = await run(agent, [{ role: "user", content: userMessageByJobUrl(params.jobUrl) }]);
+  async extractPositionFromUrl(params: JobPositionCreateByUrl, companyNameHint?: string): Promise<PositionExtract | undefined> {
+    const result = await run(agent, [{ role: "user", content: userMessageByJobUrl(params.jobUrl, companyNameHint) }]);
     return result.finalOutput;
   }
 
-  async extractPositionFromDescription(params: JobPositionCreateByDescription): Promise<PositionExtract | undefined> {
-    const result = await run(agent, [{ role: "user", content: userMessageByDescription(params.jobDescription) }]);
+  async extractPositionFromDescription(
+    params: JobPositionCreateByDescription,
+    companyNameHint?: string
+  ): Promise<PositionExtract | undefined> {
+    const result = await run(agent, [{ role: "user", content: userMessageByDescription(params.jobDescription, companyNameHint) }]);
     return result.finalOutput;
   }
 }

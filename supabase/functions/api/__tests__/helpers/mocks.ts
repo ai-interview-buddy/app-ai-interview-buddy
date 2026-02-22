@@ -1,6 +1,9 @@
 import { type Stub, stub } from "jsr:@std/testing/mock";
 import cvScoringAgent from "../../agents/cvScoring.agent.ts";
 import positionExtractorAgent from "../../agents/positionExtractor.agent.ts";
+import { _internals as positionExtractorBasicInternals } from "../../agents/positionExtractorBasic.agent.ts";
+import { _internals as fetchCleanTextInternals } from "../../agents/tools/fetchCleanText.ts";
+import { _internals as triggerTaskInternals } from "../../utils/triggerTask.utils.ts";
 import coverLetterAgent from "../../agents/coverLetter.agent.ts";
 import linkedinIntroAgent from "../../agents/linkedinIntro.agent.ts";
 import replyEmailAgent from "../../agents/replyEmail.agent.ts";
@@ -32,6 +35,16 @@ const defaultPositionExtractResponse = {
   jobDescription: "We are looking for a Senior Software Engineer with 5+ years of experience.",
   salaryRange: "$120,000 - $160,000",
 };
+
+const defaultBasicPositionExtractResponse = {
+  companyName: "Acme Corp",
+  jobTitle: "Senior Software Engineer",
+  jobDescription: "We are looking for a Senior Software Engineer with 5+ years of experience.",
+  salaryRange: "$120,000 - $160,000",
+};
+
+const defaultFetchJobPositionUrlResponse =
+  "Acme Corp - Senior Software Engineer\nWe are looking for a Senior Software Engineer with 5+ years of experience.\nSalary: $120,000 - $160,000";
 
 const defaultCoverLetterResponse = "Dear Hiring Manager,\n\nI am writing to express my interest...";
 
@@ -112,6 +125,35 @@ export const stubPositionExtractorFromDescription = (response?: any): Stub => {
   return stub(positionExtractorAgent, "extractPositionFromDescription", () =>
     Promise.resolve(response ?? defaultPositionExtractResponse),
   );
+};
+
+// deno-lint-ignore no-explicit-any
+export const stubPositionExtractorBasic = (response?: any): Stub => {
+  return stub(positionExtractorBasicInternals, "extractPositionBasic", () =>
+    Promise.resolve(response ?? defaultBasicPositionExtractResponse),
+  );
+};
+
+export const stubFetchJobPositionUrl = (response?: string): Stub => {
+  return stub(fetchCleanTextInternals, "fetchJobPositionUrl", () =>
+    Promise.resolve(response ?? defaultFetchJobPositionUrlResponse),
+  );
+};
+
+/** Tracks triggerTask calls for assertions. */
+export interface TriggerTaskCall {
+  taskId: string;
+  // deno-lint-ignore no-explicit-any
+  payload: Record<string, any>;
+}
+
+export const stubTriggerTask = (): { stub: Stub; calls: TriggerTaskCall[] } => {
+  const calls: TriggerTaskCall[] = [];
+  const s = stub(triggerTaskInternals, "triggerTask", (taskId: string, payload: Record<string, unknown>) => {
+    calls.push({ taskId, payload });
+    return Promise.resolve();
+  });
+  return { stub: s, calls };
 };
 
 export const stubCoverLetter = (response?: string): Stub => {
@@ -201,10 +243,14 @@ export interface StubCollection {
  * Call `.restore()` in a finally block to clean up.
  */
 export const stubAllAgents = (): StubCollection => {
+  const trigger = stubTriggerTask();
   const stubs = [
     stubCvScoring(),
     stubPositionExtractorFromUrl(),
     stubPositionExtractorFromDescription(),
+    stubPositionExtractorBasic(),
+    stubFetchJobPositionUrl(),
+    trigger.stub,
     stubCoverLetter(),
     stubLinkedinIntro(),
     stubReplyEmail(),

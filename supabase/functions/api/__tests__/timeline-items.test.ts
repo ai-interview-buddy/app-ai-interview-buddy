@@ -8,7 +8,7 @@ import {
   createTimelineItem,
   type TestUser,
 } from "./helpers/factories.ts";
-import { stubCoverLetter, stubDeepgram, stubLinkedinIntro, stubQuestionParser, stubQuestionScoring, stubReplyEmail } from "./helpers/mocks.ts";
+import { stubCoverLetter, stubLinkedinIntro, stubReplyEmail, stubTriggerTask } from "./helpers/mocks.ts";
 import { TimelineType } from "../types/TimelineItem.ts";
 
 let baseUrl: string;
@@ -211,11 +211,9 @@ integrationTest("timeline-items: POST /reply-email creates a REPLY_EMAIL with mo
 // ### POST /api/timeline-items/analyse-interview
 // ############################################
 
-integrationTest("timeline-items: POST /analyse-interview creates an INTERVIEW_ANALYSE with mocked deepgram/agents", async () => {
+integrationTest("timeline-items: POST /analyse-interview creates an INTERVIEW_ANALYSE and queues processing via Trigger.dev", async () => {
   await setup();
-  const deepgramStub = stubDeepgram();
-  const parserStub = stubQuestionParser();
-  const scoringStub = stubQuestionScoring();
+  const trigger = stubTriggerTask();
   try {
     // Upload a fake audio file
     const audioPath = `${testUser.user.id}/test-interview.mp3`;
@@ -232,10 +230,16 @@ integrationTest("timeline-items: POST /analyse-interview creates an INTERVIEW_AN
     assert(data.id);
     assertEquals(data.type, TimelineType.INTERVIEW_ANALYSE);
     assertEquals(data.title, "Interview Feedback");
+
+    // Verify triggerTask was called to queue background processing
+    assertEquals(trigger.calls.length, 1);
+    assertEquals(trigger.calls[0].taskId, "analyse-interview");
+    assertEquals(trigger.calls[0].payload.timelineItemId, data.id);
+    assertEquals(trigger.calls[0].payload.accountId, testUser.user.id);
+    assertEquals(trigger.calls[0].payload.interviewPath, audioPath);
+    assertEquals(trigger.calls[0].payload.positionId, positionId);
   } finally {
-    deepgramStub.restore();
-    parserStub.restore();
-    scoringStub.restore();
+    trigger.stub.restore();
     await teardown();
   }
 });

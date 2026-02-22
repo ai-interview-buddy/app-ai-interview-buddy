@@ -105,6 +105,7 @@ export const buildJobPosition = (overrides?: Partial<JobPosition>): JobPosition 
   expectedSalary: undefined,
   offerReceived: false,
   archived: false,
+  processingStatus: "COMPLETED",
   createdAt: new Date(),
   updatedAt: new Date(),
   ...overrides,
@@ -133,6 +134,7 @@ export const createJobPosition = async (
       expected_salary: position.expectedSalary ?? null,
       offer_received: position.offerReceived,
       archived: position.archived,
+      processing_status: position.processingStatus ?? "COMPLETED",
       created_at: now,
       updated_at: now,
     })

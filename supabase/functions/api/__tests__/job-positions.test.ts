@@ -2,7 +2,12 @@ import { assert, assertEquals } from "jsr:@std/assert@1";
 import type { Server } from "node:http";
 import { apiRequest, cleanupUser, integrationTest, startApp, stopApp, supabaseAdmin } from "./helpers/setup.ts";
 import { createCareerProfile, createJobPosition, createTestUser, type TestUser } from "./helpers/factories.ts";
-import { stubGlobalFetchSmart, stubPositionExtractorFromDescription, stubPositionExtractorFromUrl } from "./helpers/mocks.ts";
+import {
+  stubFetchJobPositionUrl,
+  stubGlobalFetchSmart,
+  stubPositionExtractorBasic,
+  stubTriggerTask,
+} from "./helpers/mocks.ts";
 
 let baseUrl: string;
 let server: Server;
@@ -58,9 +63,11 @@ integrationTest("job-positions: GET / returns positions after creation", async (
 // ### POST /api/job-positions/by-url
 // ############################################
 
-integrationTest("job-positions: POST /by-url creates a position with mocked extractor", async () => {
+integrationTest("job-positions: POST /by-url creates a position with mocked basic extractor and queues enrichment", async () => {
   await setup();
-  const extractorStub = stubPositionExtractorFromUrl();
+  const basicExtractorStub = stubPositionExtractorBasic();
+  const fetchUrlStub = stubFetchJobPositionUrl();
+  const trigger = stubTriggerTask();
   const fetchStub = stubGlobalFetchSmart();
   try {
     const profile = await createCareerProfile(supabaseAdmin, testUser.user);
@@ -75,8 +82,18 @@ integrationTest("job-positions: POST /by-url creates a position with mocked extr
     assert(data.id);
     assertEquals(data.companyName, "Acme Corp");
     assertEquals(data.jobTitle, "Senior Software Engineer");
+    assertEquals(data.processingStatus, "PENDING");
+
+    // Verify triggerTask was called with correct parameters
+    assertEquals(trigger.calls.length, 1);
+    assertEquals(trigger.calls[0].taskId, "enrich-job-position");
+    assertEquals(trigger.calls[0].payload.jobPositionId, data.id);
+    assertEquals(trigger.calls[0].payload.jobUrl, "https://example.com/jobs/senior-engineer");
+    assert(trigger.calls[0].payload.rawText);
   } finally {
-    extractorStub.restore();
+    basicExtractorStub.restore();
+    fetchUrlStub.restore();
+    trigger.stub.restore();
     fetchStub.restore();
     await teardown();
   }
@@ -86,9 +103,10 @@ integrationTest("job-positions: POST /by-url creates a position with mocked extr
 // ### POST /api/job-positions/by-description
 // ############################################
 
-integrationTest("job-positions: POST /by-description creates a position with mocked extractor", async () => {
+integrationTest("job-positions: POST /by-description creates a position with mocked basic extractor and queues enrichment", async () => {
   await setup();
-  const extractorStub = stubPositionExtractorFromDescription();
+  const basicExtractorStub = stubPositionExtractorBasic();
+  const trigger = stubTriggerTask();
   const fetchStub = stubGlobalFetchSmart();
   try {
     const profile = await createCareerProfile(supabaseAdmin, testUser.user);
@@ -102,8 +120,16 @@ integrationTest("job-positions: POST /by-description creates a position with moc
     const data = await res.json();
     assert(data.id);
     assertEquals(data.companyName, "Acme Corp");
+    assertEquals(data.processingStatus, "PENDING");
+
+    // Verify triggerTask was called with correct parameters
+    assertEquals(trigger.calls.length, 1);
+    assertEquals(trigger.calls[0].taskId, "enrich-job-position");
+    assertEquals(trigger.calls[0].payload.jobPositionId, data.id);
+    assert(trigger.calls[0].payload.rawText);
   } finally {
-    extractorStub.restore();
+    basicExtractorStub.restore();
+    trigger.stub.restore();
     fetchStub.restore();
     await teardown();
   }

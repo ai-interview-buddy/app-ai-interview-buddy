@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "npx trigger dev",
     "deploy": "npx trigger deploy",
-    "test": "node --test src/__tests__/**/*.test.ts"
+    "test": "vitest run src/__tests__/"
   },
   "dependencies": {
     "@deepgram/sdk": "^4.11.2",
@@ -20,7 +20,8 @@
   "devDependencies": {
     "trigger.dev": "^4.4.1",
     "typescript": "^5.8.3",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "vitest": "^2.0.0"
   },
   "overrides": {
     "cookie": "^0.7.0",

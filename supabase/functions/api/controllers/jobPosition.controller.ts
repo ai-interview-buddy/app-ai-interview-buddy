@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import FetchCleanText from "../agents/tools/FetchCleanText.ts";
+import FetchCleanText from "../agents/tools/fetchCleanText.ts";
 import * as service from "../services/jobPosition.service.ts";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
 

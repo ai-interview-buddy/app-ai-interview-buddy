@@ -7,6 +7,10 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1Ni
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Test user UUID - using a fixed UUID for consistent test data
+const TEST_USER_ID = "00000000-0000-0000-0000-000000000001";
+const TEST_PROFILE_ID = "00000000-0000-0000-0000-000000000002";
+
 describe("Trigger.dev Jobs - Database Operations", () => {
   describe("enrichJobPosition task", () => {
     it("should fetch job position from database", async () => {
@@ -14,12 +18,12 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition, error: insertError } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: TEST_USER_ID,
+          career_profile_id: TEST_PROFILE_ID,
           company_name: "Test Corp",
           job_title: "Software Engineer",
           job_description: "We are hiring...",
           salary_range: "$100k-$150k",
-          processing_status: "PENDING",
         })
         .select()
         .single();
@@ -48,12 +52,12 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: TEST_USER_ID,
+          career_profile_id: TEST_PROFILE_ID,
           company_name: "Apple Inc",
           job_title: "Senior Engineer",
           job_description: "Join our team...",
           salary_range: "$150k-$200k",
-          processing_status: "PENDING",
         })
         .select()
         .single();
@@ -88,12 +92,12 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: TEST_USER_ID,
+          career_profile_id: TEST_PROFILE_ID,
           company_name: "Test Corp",
           job_title: "Engineer",
           job_description: "Test job",
           salary_range: "$100k",
-          processing_status: "COMPLETED",
         })
         .select()
         .single();
@@ -104,11 +108,11 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: timelineItem, error: insertError } = await supabase
         .from("timeline_item")
         .insert({
-          job_position_id: jobPosition!.id,
+          account_id: TEST_USER_ID,
+          position_id: jobPosition!.id,
           type: "INTERVIEW_ANALYSE",
           title: "Interview Feedback",
           interview_original_audio_path: "test-user/interview.mp3",
-          processing_status: "PENDING",
         })
         .select()
         .single();
@@ -137,12 +141,12 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: TEST_USER_ID,
+          career_profile_id: TEST_PROFILE_ID,
           company_name: "Test Corp",
           job_title: "Engineer",
           job_description: "Test job",
           salary_range: "$100k",
-          processing_status: "COMPLETED",
         })
         .select()
         .single();
@@ -150,11 +154,11 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: timelineItem } = await supabase
         .from("timeline_item")
         .insert({
-          job_position_id: jobPosition!.id,
+          account_id: TEST_USER_ID,
+          position_id: jobPosition!.id,
           type: "INTERVIEW_ANALYSE",
           title: "Interview Feedback",
           interview_original_audio_path: "test-user/interview.mp3",
-          processing_status: "PENDING",
         })
         .select()
         .single();

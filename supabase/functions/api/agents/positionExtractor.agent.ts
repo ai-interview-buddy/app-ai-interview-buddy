@@ -1,7 +1,7 @@
 import { Agent, run, webSearchTool } from "npm:@openai/agents";
 import { z } from "zod";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
-import { fetchCleanText } from "./tools/fetchCleanText.ts";
+import fetchCleanText from "./tools/fetchCleanText.ts";
 
 const prompt = `
 You are a job position extraction assistant. Your task is to extract structured information from a job listing provided either as a URL or as raw HTML. 

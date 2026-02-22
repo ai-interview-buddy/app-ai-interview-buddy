@@ -4,7 +4,7 @@ import {
   JobPositionCreateByUrl,
   JobPositionUpdate,
 } from "@/supabase/functions/api/types/JobPosition";
-import { QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
+import { Query, QueryClient, useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
   archiveJobPosition,
   createJobPositionByDescription,
@@ -25,11 +25,16 @@ export const useJobPositions = (token?: string) => {
   });
 };
 
-export const useJobPosition = (token?: string, id?: string): UseQueryResult<JobPosition, Error> => {
+export const useJobPosition = (
+  token?: string,
+  id?: string,
+  options?: { refetchInterval?: number | false | ((query: Query<JobPosition, Error>) => number | false | undefined) }
+): UseQueryResult<JobPosition, Error> => {
   return useQuery<JobPosition, Error>({
     queryKey: ["job-position", id],
     enabled: !!token && !!id,
     staleTime: 1000 * 60 * 5,
+    refetchInterval: options?.refetchInterval ?? false,
     queryFn: () => fetchJobPosition(token!, id!),
   });
 };

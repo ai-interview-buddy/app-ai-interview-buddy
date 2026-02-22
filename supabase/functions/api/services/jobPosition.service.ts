@@ -1,16 +1,17 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
-import positionExtractorAgent from "../agents/positionExtractor.agent.ts";
+import PositionExtractorBasic from "../agents/PositionExtractorBasic.agent.ts";
+import FetchCleanText from "../agents/tools/FetchCleanText.ts";
 import { JobPosition, JobPositionCreateByDescription, JobPositionCreateByUrl, JobPositionUpdate } from "../types/JobPosition.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { genericError } from "../utils/error.utils.ts";
-import { isUrlReachable } from "../utils/fetch.utils.ts";
+import TriggerTaskService from "../utils/TriggerTask.utils.ts";
 import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
 
 export const getAll = async (supabase: SupabaseClient): Promise<ServiceResponse<JobPosition[]>> => {
   const query = await supabase
     .from("job_position")
     .select(
-      `id,career_profile_id,company_name,company_logo,company_website,job_url,job_title,salary_range,expected_salary,offer_received,archived,created_at,updated_at`
+      `id,career_profile_id,company_name,company_logo,company_website,job_url,job_title,salary_range,expected_salary,offer_received,archived,processing_status,created_at,updated_at`
     )
     .order("updated_at", { ascending: false });
   return convertMany(query);
@@ -21,49 +22,48 @@ export const getById = async (supabase: SupabaseClient, id: string): Promise<Ser
   return convertOne(query);
 };
 
-const cleanInvalidURLs = async (url: string | null): Promise<string | null> => {
-  if (!url) return null;
-  const ok = await isUrlReachable(url);
-  if (!ok) {
-    console.log("Invalid URL " + url);
-    return null;
-  }
-  return url;
-};
-
 export const createByUrl = async (
   supabase: SupabaseClient,
   user: User,
   params: JobPositionCreateByUrl
 ): Promise<ServiceResponse<JobPosition>> => {
   try {
-    const extracted = await positionExtractorAgent.extractPositionFromUrl({
-      profileId: params.profileId,
-      jobUrl: params.jobUrl,
-    });
+    // Phase 1: Fetch URL content
+    const pageText = await FetchCleanText.fetchJobPositionUrl(params.jobUrl);
 
-    if (!extracted) return genericError("positionExtractor returned empty");
+    // Phase 2: Extract basic fields with lightweight AI agent
+    const extracted = await PositionExtractorBasic.extractPositionBasic(pageText);
+    if (!extracted) return genericError("positionExtractorBasic returned empty");
 
+    // Phase 3: Insert with pending status
     const record = {
       accountId: user.id,
       careerProfileId: params.profileId,
       companyName: extracted.companyName,
-      companyLogo: await cleanInvalidURLs(extracted.companyLogo),
-      companyWebsite: await cleanInvalidURLs(extracted.companyWebsite),
+      companyLogo: null,
+      companyWebsite: null,
       jobUrl: params.jobUrl,
       jobTitle: extracted.jobTitle,
       jobDescription: extracted.jobDescription,
       salaryRange: extracted.salaryRange,
+      rawJobDescription: pageText,
       expectedSalary: null,
       offerReceived: false,
       archived: false,
+      processingStatus: "PENDING",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     const saved = await supabase.from("job_position").insert(oneToDbCase(record)).select().single();
+    const result = convertOne<JobPosition>(saved);
 
-    return convertOne(saved);
+    // Phase 4: Queue AI enrichment (fire-and-forget)
+    if (result.data) {
+      TriggerTaskService.triggerTask("enrich-job-position", { jobPositionId: result.data.id });
+    }
+
+    return result;
   } catch (error) {
     console.error(`Failed to create job position by URL: ${safeErrorLog(error)}`);
     throw error;
@@ -76,33 +76,39 @@ export const createByDescription = async (
   params: JobPositionCreateByDescription
 ): Promise<ServiceResponse<JobPosition>> => {
   try {
-    const extracted = await positionExtractorAgent.extractPositionFromDescription({
-      profileId: params.profileId,
-      jobDescription: params.jobDescription,
-    });
+    // Phase 1: Extract basic fields with lightweight AI agent
+    const extracted = await PositionExtractorBasic.extractPositionBasic(params.jobDescription);
+    if (!extracted) return genericError("positionExtractorBasic returned empty");
 
-    if (!extracted) return genericError("positionExtractor returned empty");
-
+    // Phase 2: Insert with pending status
     const record = {
       accountId: user.id,
       careerProfileId: params.profileId,
       companyName: extracted.companyName,
-      companyLogo: await cleanInvalidURLs(extracted.companyLogo),
-      companyWebsite: await cleanInvalidURLs(extracted.companyWebsite),
+      companyLogo: null,
+      companyWebsite: null,
       jobUrl: null,
       jobTitle: extracted.jobTitle,
       jobDescription: extracted.jobDescription,
       salaryRange: extracted.salaryRange,
+      rawJobDescription: params.jobDescription,
       expectedSalary: null,
       offerReceived: false,
       archived: false,
+      processingStatus: "PENDING",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     const saved = await supabase.from("job_position").insert(oneToDbCase(record)).select().single();
+    const result = convertOne<JobPosition>(saved);
 
-    return convertOne(saved);
+    // Phase 3: Queue AI enrichment (fire-and-forget)
+    if (result.data) {
+      TriggerTaskService.triggerTask("enrich-job-position", { jobPositionId: result.data.id });
+    }
+
+    return result;
   } catch (error) {
     console.error(`Failed to create job position by description: ${safeErrorLog(error)}`);
     throw error;

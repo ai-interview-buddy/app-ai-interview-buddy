@@ -17,9 +17,9 @@ import {
   TimelineType,
 } from "../types/TimelineItem.ts";
 import { genericError } from "../utils/error.utils.ts";
+import TriggerTaskService from "../utils/TriggerTask.utils.ts";
 import { convertMany, convertOne, oneToDbCase, safeErrorLog } from "../utils/typeConvertion.utils.ts";
 import { getById as getCareerProfileById } from "./careerProfile.service.ts";
-import { parseQuestionsByAudio } from "./interviewQuestion.service.ts";
 import { getById as getJobPositionById } from "./jobPosition.service.ts";
 
 export const create = async (supabase: SupabaseClient, record: Partial<TimelineItem>): Promise<ServiceResponse<TimelineItem>> => {
@@ -211,13 +211,16 @@ export const createInterviewAnalyse = async (
 
     const result = await supabase.from("timeline_item").insert(oneToDbCase(record)).select().single();
     const saved: ServiceResponse<TimelineItem> = convertOne(result);
-    console.log(`interviewAnalyse: saved timeline_item ${saved.data?.id}; ${saved.error?.message}; starting background-tasks`);
+    console.log(`interviewAnalyse: saved timeline_item ${saved.data?.id}; ${saved.error?.message}; queuing to trigger.dev`);
 
-    EdgeRuntime.waitUntil(parseQuestionsByAudio(supabase, saved.data!));
+    // Queue background processing via Trigger.dev instead of EdgeRuntime.waitUntil
+    if (saved.data) {
+      TriggerTaskService.triggerTask("analyse-interview", { timelineItemId: saved.data.id });
+    }
 
     return saved;
   } catch (err) {
-    console.error(`Error creating REPLY_EMAIL timeline item: ${safeErrorLog(err)}`);
+    console.error(`Error creating INTERVIEW_ANALYSE timeline item: ${safeErrorLog(err)}`);
     return genericError("Failed to create a timeline item", String(err));
   }
 };

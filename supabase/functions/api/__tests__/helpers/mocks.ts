@@ -1,6 +1,8 @@
 import { type Stub, stub } from "jsr:@std/testing/mock";
 import cvScoringAgent from "../../agents/cvScoring.agent.ts";
 import positionExtractorAgent from "../../agents/positionExtractor.agent.ts";
+import PositionExtractorBasic from "../../agents/PositionExtractorBasic.agent.ts";
+import FetchCleanText from "../../agents/tools/fetchCleanText.ts";
 import coverLetterAgent from "../../agents/coverLetter.agent.ts";
 import linkedinIntroAgent from "../../agents/linkedinIntro.agent.ts";
 import replyEmailAgent from "../../agents/replyEmail.agent.ts";
@@ -8,6 +10,7 @@ import mockInterviewAgent from "../../agents/mockInterview.agent.ts";
 import questionParserAgent from "../../agents/questionParser.agent.ts";
 import questionScoringAgent from "../../agents/questionScoring.agent.ts";
 import deepgramService from "../../services/deepgram.service.ts";
+import TriggerTaskService from "../../utils/TriggerTask.utils.ts";
 
 // ############################################
 // ### Default mock responses
@@ -32,6 +35,15 @@ const defaultPositionExtractResponse = {
   jobDescription: "We are looking for a Senior Software Engineer with 5+ years of experience.",
   salaryRange: "$120,000 - $160,000",
 };
+
+const defaultBasicPositionExtractResponse = {
+  companyName: "Acme Corp",
+  jobTitle: "Senior Software Engineer",
+  jobDescription: "We are looking for a Senior Software Engineer with 5+ years of experience.",
+  salaryRange: "$120,000 - $160,000",
+};
+
+const defaultFetchCleanTextResponse = "Acme Corp - Senior Software Engineer. We are looking for a Senior Software Engineer with 5+ years of experience. Salary: $120,000 - $160,000";
 
 const defaultCoverLetterResponse = "Dear Hiring Manager,\n\nI am writing to express my interest...";
 
@@ -112,6 +124,21 @@ export const stubPositionExtractorFromDescription = (response?: any): Stub => {
   return stub(positionExtractorAgent, "extractPositionFromDescription", () =>
     Promise.resolve(response ?? defaultPositionExtractResponse),
   );
+};
+
+// deno-lint-ignore no-explicit-any
+export const stubPositionExtractorBasic = (response?: any): Stub => {
+  return stub(PositionExtractorBasic, "extractPositionBasic", () =>
+    Promise.resolve(response ?? defaultBasicPositionExtractResponse),
+  );
+};
+
+export const stubFetchCleanText = (response?: string): Stub => {
+  return stub(FetchCleanText, "fetchJobPositionUrl", () => Promise.resolve(response ?? defaultFetchCleanTextResponse));
+};
+
+export const stubTriggerTask = (): Stub => {
+  return stub(TriggerTaskService, "triggerTask", () => Promise.resolve());
 };
 
 export const stubCoverLetter = (response?: string): Stub => {
@@ -205,6 +232,9 @@ export const stubAllAgents = (): StubCollection => {
     stubCvScoring(),
     stubPositionExtractorFromUrl(),
     stubPositionExtractorFromDescription(),
+    stubPositionExtractorBasic(),
+    stubFetchCleanText(),
+    stubTriggerTask(),
     stubCoverLetter(),
     stubLinkedinIntro(),
     stubReplyEmail(),

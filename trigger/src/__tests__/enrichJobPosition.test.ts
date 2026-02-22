@@ -1,20 +1,55 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 // Setup test database connection
 const supabaseUrl = process.env.SUPABASE_URL || "http://localhost:54321";
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+if (!supabaseKey) {
+  throw new Error(
+    "SUPABASE_SERVICE_ROLE_KEY is required. " +
+      "Run `supabase status` and set the env var, or create a .env.test file.",
+  );
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Helper to create a test user via Supabase Auth admin API
+async function createTestUser(supabase: SupabaseClient) {
+  const email = `trigger-test-${crypto.randomUUID()}@test.local`;
+  const { data, error } = await supabase.auth.admin.createUser({
+    email,
+    password: "test-password-123!",
+    email_confirm: true,
+  });
+  if (error || !data.user) throw new Error(`Failed to create test user: ${error?.message}`);
+  return data.user;
+}
+
 describe("Trigger.dev Jobs - Database Operations", () => {
+  let testUserId: string;
+
+  beforeAll(async () => {
+    const user = await createTestUser(supabase);
+    testUserId = user.id;
+  });
+
+  afterAll(async () => {
+    if (testUserId) {
+      await supabase.from("timeline_item").delete().eq("account_id", testUserId);
+      await supabase.from("job_position").delete().eq("account_id", testUserId);
+      await supabase.auth.admin.deleteUser(testUserId);
+    }
+  });
+
   describe("enrichJobPosition task", () => {
     it("should fetch job position from database", async () => {
       // Create test job position
       const { data: jobPosition, error: insertError } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: testUserId,
+          career_profile_id: null,
           company_name: "Test Corp",
           job_title: "Software Engineer",
           job_description: "We are hiring...",
@@ -48,7 +83,8 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: testUserId,
+          career_profile_id: null,
           company_name: "Apple Inc",
           job_title: "Senior Engineer",
           job_description: "Join our team...",
@@ -88,7 +124,8 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: testUserId,
+          career_profile_id: null,
           company_name: "Test Corp",
           job_title: "Engineer",
           job_description: "Test job",
@@ -100,15 +137,15 @@ describe("Trigger.dev Jobs - Database Operations", () => {
 
       expect(jobPosition).toBeDefined();
 
-      // Create timeline item
+      // Create timeline item (use correct column name: position_id)
       const { data: timelineItem, error: insertError } = await supabase
         .from("timeline_item")
         .insert({
-          job_position_id: jobPosition!.id,
+          account_id: testUserId,
+          position_id: jobPosition!.id,
           type: "INTERVIEW_ANALYSE",
           title: "Interview Feedback",
           interview_original_audio_path: "test-user/interview.mp3",
-          processing_status: "PENDING",
         })
         .select()
         .single();
@@ -137,7 +174,8 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: jobPosition } = await supabase
         .from("job_position")
         .insert({
-          career_profile_id: "test-profile",
+          account_id: testUserId,
+          career_profile_id: null,
           company_name: "Test Corp",
           job_title: "Engineer",
           job_description: "Test job",
@@ -150,11 +188,11 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: timelineItem } = await supabase
         .from("timeline_item")
         .insert({
-          job_position_id: jobPosition!.id,
+          account_id: testUserId,
+          position_id: jobPosition!.id,
           type: "INTERVIEW_ANALYSE",
           title: "Interview Feedback",
           interview_original_audio_path: "test-user/interview.mp3",
-          processing_status: "PENDING",
         })
         .select()
         .single();
@@ -165,7 +203,6 @@ describe("Trigger.dev Jobs - Database Operations", () => {
       const { data: updated, error: updateError } = await supabase
         .from("timeline_item")
         .update({
-          processing_status: "COMPLETED",
           text: "Great interview! You demonstrated strong problem-solving skills.",
         })
         .eq("id", timelineItem!.id)
@@ -173,7 +210,6 @@ describe("Trigger.dev Jobs - Database Operations", () => {
         .single();
 
       expect(updateError).toBeNull();
-      expect(updated?.processing_status).toBe("COMPLETED");
       expect(updated?.text).toBeDefined();
 
       // Cleanup

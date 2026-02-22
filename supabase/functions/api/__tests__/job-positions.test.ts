@@ -2,7 +2,12 @@ import { assert, assertEquals } from "jsr:@std/assert@1";
 import type { Server } from "node:http";
 import { apiRequest, cleanupUser, integrationTest, startApp, stopApp, supabaseAdmin } from "./helpers/setup.ts";
 import { createCareerProfile, createJobPosition, createTestUser, type TestUser } from "./helpers/factories.ts";
-import { stubGlobalFetchSmart, stubPositionExtractorFromDescription, stubPositionExtractorFromUrl } from "./helpers/mocks.ts";
+import {
+  stubFetchCleanText,
+  stubGlobalFetchSmart,
+  stubPositionExtractorBasic,
+  stubTriggerTask,
+} from "./helpers/mocks.ts";
 
 let baseUrl: string;
 let server: Server;
@@ -60,7 +65,9 @@ integrationTest("job-positions: GET / returns positions after creation", async (
 
 integrationTest("job-positions: POST /by-url creates a position with mocked extractor", async () => {
   await setup();
-  const extractorStub = stubPositionExtractorFromUrl();
+  const fetchCleanTextStub = stubFetchCleanText();
+  const extractorStub = stubPositionExtractorBasic();
+  const triggerStub = stubTriggerTask();
   const fetchStub = stubGlobalFetchSmart();
   try {
     const profile = await createCareerProfile(supabaseAdmin, testUser.user);
@@ -76,7 +83,9 @@ integrationTest("job-positions: POST /by-url creates a position with mocked extr
     assertEquals(data.companyName, "Acme Corp");
     assertEquals(data.jobTitle, "Senior Software Engineer");
   } finally {
+    fetchCleanTextStub.restore();
     extractorStub.restore();
+    triggerStub.restore();
     fetchStub.restore();
     await teardown();
   }
@@ -88,7 +97,8 @@ integrationTest("job-positions: POST /by-url creates a position with mocked extr
 
 integrationTest("job-positions: POST /by-description creates a position with mocked extractor", async () => {
   await setup();
-  const extractorStub = stubPositionExtractorFromDescription();
+  const extractorStub = stubPositionExtractorBasic();
+  const triggerStub = stubTriggerTask();
   const fetchStub = stubGlobalFetchSmart();
   try {
     const profile = await createCareerProfile(supabaseAdmin, testUser.user);
@@ -104,6 +114,7 @@ integrationTest("job-positions: POST /by-description creates a position with moc
     assertEquals(data.companyName, "Acme Corp");
   } finally {
     extractorStub.restore();
+    triggerStub.restore();
     fetchStub.restore();
     await teardown();
   }

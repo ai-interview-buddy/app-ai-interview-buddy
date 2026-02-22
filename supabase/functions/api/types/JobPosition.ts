@@ -1,3 +1,5 @@
+export type ProcessingStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
+
 export interface JobPosition {
   id: string;
   accountId: string;
@@ -12,6 +14,8 @@ export interface JobPosition {
   expectedSalary?: string;
   offerReceived: boolean;
   archived: boolean;
+  processingStatus?: ProcessingStatus;
+  rawJobDescription?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,6 +1,6 @@
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import React from "react";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { JobPositionCompanyAvatar } from "../JobPositionCompanyAvatar";
 
 interface Props {
@@ -35,6 +35,33 @@ export const JobDescriptionHeader = ({ record }: Props) => {
             >
               {record?.jobTitle}
             </Text>
+
+            {(record?.processingStatus === "PENDING" || record?.processingStatus === "PROCESSING") && (
+              <View
+                style={{
+                  backgroundColor: "#FFF7DE",
+                  paddingHorizontal: 10,
+                  paddingVertical: 6,
+                  borderRadius: 8,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                <ActivityIndicator size="small" color="#E3AA1F" />
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontWeight: "700",
+                    color: "#92400E",
+                    textTransform: "uppercase",
+                    letterSpacing: 0.5,
+                  }}
+                >
+                  AI Enriching
+                </Text>
+              </View>
+            )}
 
             {record?.offerReceived && (
               <View

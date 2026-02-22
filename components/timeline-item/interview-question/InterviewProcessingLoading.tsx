@@ -17,7 +17,9 @@ const InterviewProcessingLoading = ({ timelineItem }: Props) => {
   const queryClient = useQueryClient();
 
   const { isLoading } = useInterviewQuestions(user?.accessToken, { unpaged: true, timelineItemId: timelineItem?.id });
-  const { isLoading: isLoadingTimeline } = useTimelineItem(user?.accessToken, timelineItem.id); // this is just for forcing the refresh
+  const { isLoading: isLoadingTimeline } = useTimelineItem(user?.accessToken, timelineItem.id, {
+    refetchInterval: 10000,
+  });
 
   const handleRefresh = async () => {
     invalidateInterviewQuestionQueries(queryClient);

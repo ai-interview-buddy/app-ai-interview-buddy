@@ -32,11 +32,16 @@ export const useTimelineItems = (token?: string, params?: TimelineFilter): UseQu
   });
 };
 
-export const useTimelineItem = (token?: string, id?: string): UseQueryResult<TimelineItem, Error> => {
+export const useTimelineItem = (
+  token?: string,
+  id?: string,
+  options?: { refetchInterval?: number | false }
+): UseQueryResult<TimelineItem, Error> => {
   return useQuery<TimelineItem, Error>({
     queryKey: ["timeline-item", id],
     enabled: !!token && !!id,
     staleTime: 1000 * 60 * 5,
+    refetchInterval: options?.refetchInterval ?? false,
     queryFn: () => fetchTimelineItem(token!, id!),
   });
 };

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { fetchJobPositionUrl } from "../agents/tools/fetchCleanText.ts";
+import FetchCleanText from "../agents/tools/FetchCleanText.ts";
 import * as service from "../services/jobPosition.service.ts";
 import { JobPositionCreateByDescription, JobPositionCreateByUrl } from "../types/JobPosition.ts";
 
@@ -63,10 +63,10 @@ export const markOfferReceived = async (req: Request, res: Response) => {
 };
 
 export const fetch = async (req: Request, res: Response) => {
-  const url  = req.query.url as string;
+  const url = req.query.url as string;
   try {
-    console.log('here', url)
-    const html = await fetchJobPositionUrl(url);
+    console.log("fetching /api/job-positions/fetch-url", url);
+    const html = await FetchCleanText.fetchJobPositionUrl(url);
     res.json({ html });
   } catch (error: unknown) {
     if (error instanceof Error) {

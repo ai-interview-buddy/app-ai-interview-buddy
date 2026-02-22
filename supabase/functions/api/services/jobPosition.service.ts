@@ -60,11 +60,7 @@ export const createByUrl = async (
 
     // Phase 4: Queue AI enrichment (fire-and-forget)
     if (result.data) {
-      TriggerTaskService.triggerTask("enrich-job-position", {
-        jobPositionId: result.data.id,
-        jobUrl: params.jobUrl,
-        rawText: pageText,
-      });
+      TriggerTaskService.triggerTask("enrich-job-position", { jobPositionId: result.data.id });
     }
 
     return result;
@@ -109,10 +105,7 @@ export const createByDescription = async (
 
     // Phase 3: Queue AI enrichment (fire-and-forget)
     if (result.data) {
-      TriggerTaskService.triggerTask("enrich-job-position", {
-        jobPositionId: result.data.id,
-        rawText: params.jobDescription,
-      });
+      TriggerTaskService.triggerTask("enrich-job-position", { jobPositionId: result.data.id });
     }
 
     return result;

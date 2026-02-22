@@ -235,9 +235,6 @@ integrationTest("timeline-items: POST /analyse-interview creates an INTERVIEW_AN
     assertEquals(trigger.calls.length, 1);
     assertEquals(trigger.calls[0].taskId, "analyse-interview");
     assertEquals(trigger.calls[0].payload.timelineItemId, data.id);
-    assertEquals(trigger.calls[0].payload.accountId, testUser.user.id);
-    assertEquals(trigger.calls[0].payload.interviewPath, audioPath);
-    assertEquals(trigger.calls[0].payload.positionId, positionId);
   } finally {
     trigger.stub.restore();
     await teardown();

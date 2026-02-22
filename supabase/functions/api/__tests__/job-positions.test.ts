@@ -88,8 +88,6 @@ integrationTest("job-positions: POST /by-url creates a position with mocked basi
     assertEquals(trigger.calls.length, 1);
     assertEquals(trigger.calls[0].taskId, "enrich-job-position");
     assertEquals(trigger.calls[0].payload.jobPositionId, data.id);
-    assertEquals(trigger.calls[0].payload.jobUrl, "https://example.com/jobs/senior-engineer");
-    assert(trigger.calls[0].payload.rawText);
   } finally {
     basicExtractorStub.restore();
     fetchUrlStub.restore();
@@ -126,7 +124,6 @@ integrationTest("job-positions: POST /by-description creates a position with moc
     assertEquals(trigger.calls.length, 1);
     assertEquals(trigger.calls[0].taskId, "enrich-job-position");
     assertEquals(trigger.calls[0].payload.jobPositionId, data.id);
-    assert(trigger.calls[0].payload.rawText);
   } finally {
     basicExtractorStub.restore();
     trigger.stub.restore();

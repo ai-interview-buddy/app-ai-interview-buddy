@@ -24,7 +24,12 @@ const JobPositionDetails: React.FC = () => {
 
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const { data: record, isLoading, error } = useJobPosition(user?.accessToken, id as string);
+  const { data: record, isLoading, error } = useJobPosition(user?.accessToken, id as string, {
+    refetchInterval: (query) => {
+      const status = query.state.data?.processingStatus;
+      return status === "PENDING" || status === "PROCESSING" ? 5000 : false;
+    },
+  });
   const { mutateAsync: archiveMutateAsync } = useArchiveJobPosition(queryClient, user?.accessToken);
   const { mutateAsync: offerMutateAsync } = useMarkJobPositionOfferReceived(queryClient, user?.accessToken);
   const { mutateAsync: deleteMutateAsync } = useDeleteJobPosition(queryClient, user?.accessToken);

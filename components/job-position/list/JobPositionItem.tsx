@@ -1,7 +1,7 @@
 import { formatDateShort } from "@/lib/utils/format.utils";
 import { JobPosition } from "@/supabase/functions/api/types/JobPosition";
 import React, { forwardRef } from "react";
-import { Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { JobPositionCompanyAvatar } from "../JobPositionCompanyAvatar";
 
 type JobPositionItemProps = {
@@ -54,6 +54,23 @@ export const JobPositionItem = forwardRef<React.ComponentRef<typeof TouchableOpa
               >
                 {item.jobTitle}
               </Text>
+
+              {(item.processingStatus === "PENDING" || item.processingStatus === "PROCESSING") && (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 4,
+                    paddingHorizontal: 8,
+                    paddingVertical: 4,
+                    borderRadius: 6,
+                    backgroundColor: "#FFF7DE",
+                  }}
+                >
+                  <ActivityIndicator size={10} color="#E3AA1F" />
+                  <Text style={{ fontSize: 10, fontWeight: "600", color: "#92400E" }}>AI</Text>
+                </View>
+              )}
 
               {item.offerReceived && (
                 <View

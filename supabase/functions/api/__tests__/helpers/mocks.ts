@@ -1,9 +1,9 @@
 import { type Stub, stub } from "jsr:@std/testing/mock";
 import cvScoringAgent from "../../agents/cvScoring.agent.ts";
 import positionExtractorAgent from "../../agents/positionExtractor.agent.ts";
-import { _internals as positionExtractorBasicInternals } from "../../agents/positionExtractorBasic.agent.ts";
-import { _internals as fetchCleanTextInternals } from "../../agents/tools/fetchCleanText.ts";
-import { _internals as triggerTaskInternals } from "../../utils/triggerTask.utils.ts";
+import PositionExtractorBasic from "../../agents/PositionExtractorBasic.agent.ts";
+import FetchCleanText from "../../agents/tools/FetchCleanText.ts";
+import TriggerTaskService from "../../utils/TriggerTask.utils.ts";
 import coverLetterAgent from "../../agents/coverLetter.agent.ts";
 import linkedinIntroAgent from "../../agents/linkedinIntro.agent.ts";
 import replyEmailAgent from "../../agents/replyEmail.agent.ts";
@@ -129,13 +129,13 @@ export const stubPositionExtractorFromDescription = (response?: any): Stub => {
 
 // deno-lint-ignore no-explicit-any
 export const stubPositionExtractorBasic = (response?: any): Stub => {
-  return stub(positionExtractorBasicInternals, "extractPositionBasic", () =>
+  return stub(PositionExtractorBasic, "extractPositionBasic", () =>
     Promise.resolve(response ?? defaultBasicPositionExtractResponse),
   );
 };
 
 export const stubFetchJobPositionUrl = (response?: string): Stub => {
-  return stub(fetchCleanTextInternals, "fetchJobPositionUrl", () =>
+  return stub(FetchCleanText, "fetchJobPositionUrl", () =>
     Promise.resolve(response ?? defaultFetchJobPositionUrlResponse),
   );
 };
@@ -149,7 +149,7 @@ export interface TriggerTaskCall {
 
 export const stubTriggerTask = (): { stub: Stub; calls: TriggerTaskCall[] } => {
   const calls: TriggerTaskCall[] = [];
-  const s = stub(triggerTaskInternals, "triggerTask", (taskId: string, payload: Record<string, unknown>) => {
+  const s = stub(TriggerTaskService, "triggerTask", (taskId: string, payload: Record<string, unknown>) => {
     calls.push({ taskId, payload });
     return Promise.resolve();
   });

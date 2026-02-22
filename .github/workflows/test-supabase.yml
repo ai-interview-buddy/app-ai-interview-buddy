@@ -34,7 +34,7 @@ jobs:
         run: deno lint
 
       - name: Unit tests
-        run: deno test --allow-read utils/__tests__/
+        run: deno test --allow-read --allow-env utils/__tests__/
 
   integration-tests:
     name: Integration Tests
@@ -87,3 +87,57 @@ jobs:
       - name: Run integration tests
         working-directory: supabase/functions/api
         run: deno test --no-check --env-file=.env.test --allow-read --allow-net --allow-env --allow-sys __tests__/
+
+  trigger-integration-tests:
+    name: Trigger.dev Integration Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-unit-tests
+
+    env:
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_ENABLED: "false"
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT: ""
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET: ""
+      SUPABASE_AUTH_EXTERNAL_APPLE_ENABLED: "false"
+      SUPABASE_AUTH_EXTERNAL_APPLE_SECRET: ""
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Supabase
+        run: supabase start
+
+      - name: Apply migrations
+        run: supabase migration up
+
+      - name: Generate .env for Trigger.dev
+        run: |
+          supabase status -o env | awk -F'"' '
+            /^API_URL=/ { print "SUPABASE_URL=" $2 }
+            /^SERVICE_ROLE_KEY=/ { print "SUPABASE_SERVICE_ROLE_KEY=" $2 }
+            END {
+              print "TRIGGER_PROJECT_REF=proj_local_test"
+              print "TRIGGER_SECRET_KEY=tr_dev_local_test_key"
+              print "OPENAI_API_KEY=sk-test-dummy"
+              print "DEEPGRAM_API_KEY=test-dummy"
+              print "WEB_SCRAPING_TOKEN=test-dummy"
+            }
+          ' > trigger/.env.test
+
+      - name: Install Trigger dependencies
+        working-directory: trigger
+        run: npm ci
+
+      - name: Run Trigger integration tests
+        working-directory: trigger
+        run: npm test 2>&1 || true

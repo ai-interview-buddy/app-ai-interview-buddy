@@ -1,6 +1,6 @@
 import { SupabaseClient, User } from "@supabase/supabase-js";
 import PositionExtractorBasic from "../agents/PositionExtractorBasic.agent.ts";
-import FetchCleanText from "../agents/tools/FetchCleanText.ts";
+import FetchCleanText from "../agents/tools/fetchCleanText.ts";
 import { JobPosition, JobPositionCreateByDescription, JobPositionCreateByUrl, JobPositionUpdate } from "../types/JobPosition.ts";
 import { ServiceResponse } from "../types/ServiceResponse.ts";
 import { genericError } from "../utils/error.utils.ts";

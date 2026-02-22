@@ -109,11 +109,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
@@ -125,16 +120,8 @@ jobs:
       - name: Apply migrations
         run: supabase migration up
 
-      - name: Generate .env files
+      - name: Generate .env for Trigger.dev
         run: |
-          supabase status -o env | awk -F'"' '
-            /^API_URL=/ { print "SUPABASE_URL=" $2 }
-            /^ANON_KEY=/ { print "SUPABASE_ANON_KEY=" $2 }
-            /^SERVICE_ROLE_KEY=/ { print "SUPABASE_SERVICE_ROLE_KEY=" $2 }
-            END { print "OPENAI_API_KEY=sk-test-dummy"; print "DEEPGRAM_API_KEY=test-dummy" }
-          ' > supabase/functions/api/.env.test
-
-          # Generate .env for Trigger.dev
           supabase status -o env | awk -F'"' '
             /^API_URL=/ { print "SUPABASE_URL=" $2 }
             /^SERVICE_ROLE_KEY=/ { print "SUPABASE_SERVICE_ROLE_KEY=" $2 }
@@ -153,4 +140,4 @@ jobs:
 
       - name: Run Trigger integration tests
         working-directory: trigger
-        run: npm test -- --testPathPattern="__tests__" 2>&1 || true
+        run: npm test 2>&1 || true
